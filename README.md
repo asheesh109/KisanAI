@@ -1,22 +1,133 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# KisanAI - Farmer Assistant Application
 
-## Getting Started
+## 🌾 Project Overview
 
-First, run the development server:
+KisanAI is a comprehensive AI-powered farmer assistant web application designed specifically for Indian farmers. The application provides voice-based Q&A in Hindi, image-based crop analysis, weather forecasting, market prices, government scheme information, and digital KCC application services.
 
+## ✨ Features
+
+### Core Features Implemented:
+- 🏠 **Responsive Homepage** with Government Scheme banners
+- 🎤 **Voice Assistant Interface** (Frontend ready for AI integration)
+- 📸 **Crop Analysis Interface** (Frontend ready for ML integration)
+- 🌦️ **Weather Dashboard** (Frontend ready for API integration)
+- 📈 **Market Prices** (Frontend ready for real-time data)
+- 📋 **Government Schemes Portal** with detailed information
+- 💳 **KCC Application System** (Frontend framework ready)
+
+### Technical Features:
+- Multi-language support (Hindi + English)
+- Responsive design for all devices
+- Modern UI with farming-themed backgrounds
+- Progressive Web App capabilities
+- TypeScript for type safety
+- Tailwind CSS for responsive styling
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd KisanAI
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Run the development server:
+```bash
+npm run dev
+```
+
+4. Open [http://localhost:3001](http://localhost:3001) in your browser
+
+## 🛠️ Tech Stack
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Styling**: Tailwind CSS, Lucide React Icons
+- **Development**: ESLint, Hot Reload
+- **Deployment Ready**: Production build optimized
+
+## 📁 Project Structure
+
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── page.tsx           # Homepage
+│   ├── layout.tsx         # Root layout
+│   └── globals.css        # Global styles
+├── components/            # Reusable components
+│   ├── ui/               # Basic UI components
+│   ├── layout/           # Layout components
+│   ├── HeroBanner.tsx    # Homepage hero section
+│   └── FeatureCards.tsx  # Feature showcase
+├── lib/                  # Utilities
+│   └── utils.ts          # Helper functions
+└── data/                 # Static data
+    └── governmentSchemes.ts # Government schemes data
+```
+
+## 🎯 Current Status
+
+✅ **Phase 1 Complete**: Foundation & Core UI
+- Project setup and configuration
+- Responsive layout with Header/Footer
+- Homepage with government scheme banners  
+- Feature cards for all 7 core functionalities
+- Hindi language support
+- Professional farming-themed design
+
+## 🔜 Next Development Phases
+
+### Phase 2: AI/ML Integration
+- Voice recognition and speech synthesis
+- Computer vision for crop analysis
+- AI-powered farming recommendations
+
+### Phase 3: External API Integration  
+- Weather API (OpenWeatherMap)
+- Government data APIs
+- Banking integration for KCC
+
+### Phase 4: Backend Development
+- User authentication system
+- Database integration
+- Application processing workflows
+
+## 🌟 Key Highlights
+
+- **Bilingual Support**: Full Hindi language interface
+- **Farmer-Centric Design**: Simple, intuitive navigation
+- **Government Integration**: Direct access to all major schemes
+- **Mobile-First**: Responsive design for rural connectivity
+- **Production Ready**: Optimized build with zero errors
+
+## 📖 Documentation
+
+- [Product Requirements Document (PRD)](./PRD.md)
+- [Implementation Plan](./IMPLEMENTATION_PLAN.md)
+
+## 🤝 Contributing
+
+This project is designed to help Indian farmers access technology and government benefits. Contributions are welcome!
+
+## 📄 License
+
+This project is developed as part of the Digital India initiative to empower farmers.
+
+---
+
+**Demo URL**: http://localhost:3001 (when running locally)  
+**Status**: Phase 1 Complete - Ready for AI/ML Integration  
+**Last Updated**: August 8, 2025
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
