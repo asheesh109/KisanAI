@@ -44,10 +44,10 @@ export default function Schemes() {
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8">
       <div className="max-w-7xl mx-auto px-6 sm:px-8">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">
             सरकारी योजनाएं
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-slate-600 font-medium">
             केंद्र और राज्य सरकार की सभी कृषि योजनाओं की विस्तृत जानकारी
           </p>
         </div>
@@ -62,8 +62,8 @@ export default function Schemes() {
                   <div className={`w-16 h-16 ${category.bgColor} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
                     <IconComponent className={`h-8 w-8 ${category.color}`} />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{category.name}</h3>
-                  <p className="text-sm text-gray-600">{category.description}</p>
+                  <h3 className="text-lg font-semibold text-slate-900 mb-2">{category.name}</h3>
+                  <p className="text-sm text-slate-600 font-medium">{category.description}</p>
                 </CardContent>
               </Card>
             )
@@ -72,7 +72,7 @@ export default function Schemes() {
 
         {/* Featured Schemes */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">मुख्य योजनाएं</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-6">मुख्य योजनाएं</h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {governmentSchemes.map((scheme) => (
               <Card key={scheme.id} className="hover:shadow-lg transition-shadow">
@@ -95,8 +95,8 @@ export default function Schemes() {
                 <CardContent>
                   <div className="space-y-4">
                     <div>
-                      <h4 className="font-medium text-gray-900 mb-2">मुख्य लाभ:</h4>
-                      <ul className="text-sm text-gray-600 space-y-1">
+                      <h4 className="font-medium text-slate-900 mb-2">मुख्य लाभ:</h4>
+                      <ul className="text-sm text-slate-600 space-y-1">
                         {scheme.benefitsHindi.slice(0, 2).map((benefit, index) => (
                           <li key={index} className="flex items-center">
                             <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
@@ -138,8 +138,8 @@ export default function Schemes() {
                 rel="noopener noreferrer"
                 className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
               >
-                <span className="font-medium text-gray-900">PM-KISAN पोर्टल</span>
-                <ExternalLink className="h-4 w-4 text-gray-600" />
+                <span className="font-medium text-slate-900">PM-KISAN पोर्टल</span>
+                <ExternalLink className="h-4 w-4 text-slate-600 font-medium" />
               </a>
               <a
                 href="https://pmfby.gov.in"
@@ -147,8 +147,8 @@ export default function Schemes() {
                 rel="noopener noreferrer"
                 className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
               >
-                <span className="font-medium text-gray-900">फसल बीमा पोर्टल</span>
-                <ExternalLink className="h-4 w-4 text-gray-600" />
+                <span className="font-medium text-slate-900">फसल बीमा पोर्टल</span>
+                <ExternalLink className="h-4 w-4 text-slate-600 font-medium" />
               </a>
               <a
                 href="https://soilhealth.dac.gov.in"
@@ -156,13 +156,13 @@ export default function Schemes() {
                 rel="noopener noreferrer"
                 className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
               >
-                <span className="font-medium text-gray-900">मृदा स्वास्थ्य कार्ड</span>
-                <ExternalLink className="h-4 w-4 text-gray-600" />
+                <span className="font-medium text-slate-900">मृदा स्वास्थ्य कार्ड</span>
+                <ExternalLink className="h-4 w-4 text-slate-600 font-medium" />
               </a>
               <Link href="/kcc-application">
                 <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
-                  <span className="font-medium text-gray-900">KCC आवेदन</span>
-                  <ChevronRight className="h-4 w-4 text-gray-600" />
+                  <span className="font-medium text-slate-900">KCC आवेदन</span>
+                  <ChevronRight className="h-4 w-4 text-slate-600 font-medium" />
                 </div>
               </Link>
               <a
@@ -171,15 +171,15 @@ export default function Schemes() {
                 rel="noopener noreferrer"
                 className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
               >
-                <span className="font-medium text-gray-900">कृषि मंत्रालय</span>
-                <ExternalLink className="h-4 w-4 text-gray-600" />
+                <span className="font-medium text-slate-900">कृषि मंत्रालय</span>
+                <ExternalLink className="h-4 w-4 text-slate-600 font-medium" />
               </a>
               <a
                 href="tel:1551"
                 className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
               >
-                <span className="font-medium text-gray-900">किसान हेल्पलाइन</span>
-                <Phone className="h-4 w-4 text-gray-600" />
+                <span className="font-medium text-slate-900">किसान हेल्पलाइन</span>
+                <Phone className="h-4 w-4 text-slate-600 font-medium" />
               </a>
             </div>
           </CardContent>

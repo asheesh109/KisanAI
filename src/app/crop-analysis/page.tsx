@@ -7,10 +7,10 @@ export default function CropAnalysis() {
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-yellow-50 py-8">
       <div className="max-w-4xl mx-auto px-6 sm:px-8">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">
             फसल विश्लेषण
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-slate-600 font-medium">
             अपनी फसल की फोटो अपलोड करें और AI से स्वास्थ्य जांच कराएं
           </p>
         </div>
@@ -22,7 +22,7 @@ export default function CropAnalysis() {
           <CardContent className="text-center space-y-6">
             <div className="border-2 border-dashed border-gray-300 rounded-lg p-12 bg-gray-50">
               <Camera className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600 mb-4">
+              <p className="text-slate-600 mb-4">
                 यहाँ अपनी फसल की फोटो खींचें या अपलोड करें
               </p>
               <div className="space-x-4">

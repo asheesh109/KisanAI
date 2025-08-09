@@ -46,10 +46,10 @@ export default function Weather() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 py-8">
       <div className="max-w-6xl mx-auto px-6 sm:px-8">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">
             मौसम की जानकारी
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-slate-700 font-medium">
             आपके क्षेत्र का विस्तृत मौसम पूर्वानुमान और कृषि सलाह
           </p>
         </div>
@@ -57,7 +57,7 @@ export default function Weather() {
         {/* Current Weather */}
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle className="text-center text-2xl">
+            <CardTitle className="text-center text-2xl text-slate-900 font-bold">
               वर्तमान मौसम - {currentWeather.location}
             </CardTitle>
           </CardHeader>
@@ -65,27 +65,27 @@ export default function Weather() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
               <div>
                 <Cloud className="h-16 w-16 text-blue-500 mx-auto mb-2" />
-                <p className="text-3xl font-bold text-gray-900">{currentWeather.temperature}°C</p>
-                <p className="text-gray-600">{currentWeather.condition}</p>
+                <p className="text-3xl font-bold text-slate-900">{currentWeather.temperature}°C</p>
+                <p className="text-slate-600 font-medium">{currentWeather.condition}</p>
               </div>
               
               <div className="space-y-3">
-                <div className="flex items-center justify-center space-x-2">
+                <div className="flex items-center justify-center space-x-2 text-slate-700 font-medium">
                   <Droplets className="h-5 w-5 text-blue-500" />
                   <span>नमी: {currentWeather.humidity}%</span>
                 </div>
-                <div className="flex items-center justify-center space-x-2">
+                <div className="flex items-center justify-center space-x-2 text-slate-700 font-medium">
                   <Wind className="h-5 w-5 text-gray-500" />
                   <span>हवा: {currentWeather.windSpeed} km/h</span>
                 </div>
               </div>
               
               <div className="space-y-3">
-                <div className="flex items-center justify-center space-x-2">
+                <div className="flex items-center justify-center space-x-2 text-slate-700 font-medium">
                   <Eye className="h-5 w-5 text-gray-500" />
                   <span>दृश्यता: {currentWeather.visibility} km</span>
                 </div>
-                <div className="flex items-center justify-center space-x-2">
+                <div className="flex items-center justify-center space-x-2 text-slate-700 font-medium">
                   <Sun className="h-5 w-5 text-yellow-500" />
                   <span>UV Index: {currentWeather.uvIndex}</span>
                 </div>
@@ -111,9 +111,9 @@ export default function Weather() {
                 const IconComponent = day.icon
                 return (
                   <div key={index} className="text-center p-4 rounded-lg bg-gray-50">
-                    <p className="font-medium text-gray-900 mb-2">{day.day}</p>
-                    <IconComponent className="h-8 w-8 mx-auto mb-2 text-blue-500" />
-                    <p className="text-sm text-gray-600 mb-1">{day.condition}</p>
+                                        <p className="font-semibold text-slate-900 mb-2">{day.day}</p>
+                    <IconComponent className="h-8 w-8 text-blue-500 mx-auto mb-2" />
+                    <p className="text-sm text-slate-600 font-medium mb-1">{day.condition}</p>
                     <p className="text-sm">
                       <span className="font-medium">{day.high}°</span>
                       <span className="text-gray-500 ml-1">{day.low}°</span>
@@ -141,13 +141,13 @@ export default function Weather() {
                       : 'bg-green-50 border-green-400'
                   }`}
                 >
-                  <h3 className="font-medium text-gray-900 mb-1">
+                  <h3 className="font-semibold text-slate-900 mb-1">
                     {advice.urgent && (
                       <span className="text-red-600 mr-2">🚨</span>
                     )}
                     {advice.title}
                   </h3>
-                  <p className="text-gray-600">{advice.description}</p>
+                  <p className="text-slate-600 font-medium">{advice.description}</p>
                 </div>
               ))}
             </div>
@@ -155,7 +155,7 @@ export default function Weather() {
         </Card>
 
         <div className="mt-8 text-center">
-          <p className="text-gray-500">
+          <p className="text-slate-600 font-medium">
             मौसम की जानकारी प्रतिदिन अपडेट होती है। 
             कृषि कार्यों के लिए स्थानीय मौसम विभाग की सलाह भी लें।
           </p>

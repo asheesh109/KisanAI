@@ -87,10 +87,10 @@ export default function MarketPrices() {
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 py-8">
       <div className="max-w-7xl mx-auto px-6 sm:px-8">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">
             बाजार भाव
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-slate-700 font-medium">
             आज के ताजे मंडी भाव और मूल्य रुझान की जानकारी
           </p>
         </div>
@@ -122,7 +122,7 @@ export default function MarketPrices() {
         {/* Current Prices */}
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle>आज के मंडी भाव</CardTitle>
+            <CardTitle className="text-slate-900 font-bold">आज के मंडी भाव</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -133,8 +133,8 @@ export default function MarketPrices() {
                 >
                   <div className="flex justify-between items-start mb-2">
                     <div>
-                      <h3 className="font-semibold text-lg text-gray-900">{item.crop}</h3>
-                      <p className="text-sm text-gray-600">{item.market}</p>
+                      <h3 className="font-semibold text-lg text-slate-900">{item.crop}</h3>
+                      <p className="text-sm text-slate-600 font-medium">{item.market}</p>
                     </div>
                     <div className={`flex items-center space-x-1 ${
                       item.trending === 'up' ? 'text-green-600' : 'text-red-600'
@@ -149,8 +149,8 @@ export default function MarketPrices() {
                   </div>
                   <div className="flex justify-between items-end">
                     <div>
-                      <p className="text-2xl font-bold text-gray-900">₹{item.price}</p>
-                      <p className="text-sm text-gray-600">{item.unit}</p>
+                      <p className="text-2xl font-bold text-slate-900">₹{item.price}</p>
+                      <p className="text-sm text-slate-600 font-medium">{item.unit}</p>
                     </div>
                     <div className={`text-sm font-medium ${
                       item.trending === 'up' ? 'text-green-600' : 'text-red-600'
@@ -168,7 +168,7 @@ export default function MarketPrices() {
           {/* Nearby Markets */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center">
+              <CardTitle className="flex items-center text-slate-900 font-bold">
                 <MapPin className="mr-2 h-5 w-5" />
                 नजदीकी मंडियां
               </CardTitle>
@@ -176,13 +176,13 @@ export default function MarketPrices() {
             <CardContent>
               <div className="space-y-4">
                 {nearbyMarkets.map((market, index) => (
-                  <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                  <div key={index} className="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
                     <div>
-                      <h4 className="font-medium text-gray-900">{market.name}</h4>
-                      <p className="text-sm text-gray-600">{market.crops} फसलों के भाव</p>
+                      <h4 className="font-semibold text-slate-900">{market.name}</h4>
+                      <p className="text-sm text-slate-600 font-medium">{market.crops} फसलों के भाव</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-medium text-gray-900">{market.distance}</p>
+                      <p className="text-sm font-semibold text-slate-900">{market.distance}</p>
                       <Button size="sm" variant="outline" className="mt-1">
                         देखें
                       </Button>
@@ -196,7 +196,7 @@ export default function MarketPrices() {
           {/* Price Alerts */}
           <Card>
             <CardHeader>
-              <CardTitle>मूल्य अलर्ट</CardTitle>
+              <CardTitle className="text-slate-900 font-bold">मूल्य अलर्ट</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -211,8 +211,8 @@ export default function MarketPrices() {
                   >
                     <div className="flex justify-between items-center">
                       <div>
-                        <h4 className="font-medium text-gray-900">{alert.crop}</h4>
-                        <p className="text-sm text-gray-600">
+                        <h4 className="font-semibold text-slate-900">{alert.crop}</h4>
+                        <p className="text-sm text-slate-600 font-medium">
                           लक्ष्य: ₹{alert.targetPrice} | वर्तमान: ₹{alert.currentPrice}
                         </p>
                       </div>
@@ -228,7 +228,7 @@ export default function MarketPrices() {
                     </div>
                   </div>
                 ))}
-                <Button className="w-full bg-orange-600 hover:bg-orange-700">
+                <Button className="w-full bg-orange-600 hover:bg-orange-700 font-semibold">
                   नया अलर्ट सेट करें
                 </Button>
               </div>
@@ -237,7 +237,7 @@ export default function MarketPrices() {
         </div>
 
         <div className="mt-8 text-center">
-          <p className="text-gray-500">
+          <p className="text-slate-600 font-medium">
             भाव की जानकारी APMC डेटा पर आधारित है। 
             बिक्री से पहले स्थानीय मंडी से भाव की पुष्टि करें।
           </p>

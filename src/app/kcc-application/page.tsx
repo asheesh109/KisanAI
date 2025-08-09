@@ -75,10 +75,10 @@ export default function KCCApplication() {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-50 py-8">
       <div className="max-w-6xl mx-auto px-6 sm:px-8">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">
             किसान क्रेडिट कार्ड आवेदन
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-slate-600 font-medium">
             आसान तरीके से KCC के लिए ऑनलाइन आवेदन करें
           </p>
         </div>
@@ -91,8 +91,8 @@ export default function KCCApplication() {
                 <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
                   <CreditCard className="h-6 w-6 text-purple-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">{benefit.title}</h3>
-                <p className="text-sm text-gray-600">{benefit.description}</p>
+                <h3 className="font-semibold text-slate-900 mb-2">{benefit.title}</h3>
+                <p className="text-sm text-slate-600 font-medium">{benefit.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -123,8 +123,8 @@ export default function KCCApplication() {
                           </div>
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-medium text-gray-900">{step.title}</h4>
-                          <p className="text-sm text-gray-600">{step.description}</p>
+                          <h4 className="font-medium text-slate-900">{step.title}</h4>
+                          <p className="text-sm text-slate-600 font-medium">{step.description}</p>
                         </div>
                         <div className="flex-shrink-0">
                           <Clock className="h-5 w-5 text-gray-400" />
@@ -212,13 +212,13 @@ export default function KCCApplication() {
               <CardContent>
                 <div className="space-y-4">
                   <div className="p-4 bg-gray-50 rounded-lg">
-                    <h4 className="font-medium text-gray-900 mb-2">किसान हेल्पलाइन</h4>
-                    <p className="text-sm text-gray-600">टोल फ्री: 1800-180-1551</p>
-                    <p className="text-sm text-gray-600">समय: सुबह 6 बजे से रात 10 बजे तक</p>
+                    <h4 className="font-medium text-slate-900 mb-2">किसान हेल्पलाइन</h4>
+                    <p className="text-sm text-slate-600 font-medium">टोल फ्री: 1800-180-1551</p>
+                    <p className="text-sm text-slate-600 font-medium">समय: सुबह 6 बजे से रात 10 बजे तक</p>
                   </div>
                   <div className="p-4 bg-gray-50 rounded-lg">
-                    <h4 className="font-medium text-gray-900 mb-2">ईमेल सहायता</h4>
-                    <p className="text-sm text-gray-600">kcc-support@kisanai.gov.in</p>
+                    <h4 className="font-medium text-slate-900 mb-2">ईमेल सहायता</h4>
+                    <p className="text-sm text-slate-600 font-medium">kcc-support@kisanai.gov.in</p>
                   </div>
                   <Button variant="outline" className="w-full">
                     FAQ देखें
