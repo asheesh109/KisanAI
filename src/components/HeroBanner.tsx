@@ -38,24 +38,29 @@ export default function HeroBanner() {
 
       {/* Slider Content */}
       <div className="relative h-full flex items-center justify-center">
-        <div className="max-w-4xl mx-auto px-6 sm:px-8 text-center">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-2xl" style={{textShadow: '2px 2px 4px rgba(0,0,0,0.8)'}}>
-            {bannerImages[currentSlide].titleHindi}
-          </h1>
-          <p className="text-xl sm:text-2xl text-white mb-8 max-w-2xl mx-auto font-semibold drop-shadow-xl" style={{textShadow: '1px 1px 3px rgba(0,0,0,0.7)'}}>
-            {bannerImages[currentSlide].descriptionHindi}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href={bannerImages[currentSlide].link}>
-              <Button size="lg" className="bg-white text-green-800 hover:bg-green-50 font-semibold shadow-lg hover:shadow-xl transition-all duration-200">
-                और जानकारी पाएं
-              </Button>
-            </Link>
-            <Link href="/voice-assistant">
-              <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-green-800 font-semibold shadow-lg hover:shadow-xl transition-all duration-200">
-                आवाज सहायक का उपयोग करें
-              </Button>
-            </Link>
+        <div className="max-w-4xl mx-auto px-6 sm:px-8 text-center relative">
+          {/* Semi-transparent background for better text readability */}
+          <div className="absolute inset-0 bg-black bg-opacity-25 rounded-xl backdrop-blur-sm"></div>
+          
+          <div className="relative z-10 py-8">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-2xl" style={{textShadow: '3px 3px 6px rgba(0,0,0,0.9), 1px 1px 3px rgba(0,0,0,0.8), 0px 0px 10px rgba(0,0,0,0.7)'}}>
+              {bannerImages[currentSlide].titleHindi}
+            </h1>
+            <p className="text-xl sm:text-2xl text-white mb-8 max-w-2xl mx-auto font-semibold drop-shadow-xl" style={{textShadow: '1px 1px 3px rgba(0,0,0,0.7)'}}>
+              {bannerImages[currentSlide].descriptionHindi}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href={bannerImages[currentSlide].link}>
+                <Button size="lg" className="bg-white text-green-800 hover:bg-green-50 font-semibold shadow-lg hover:shadow-xl transition-all duration-200">
+                  और जानकारी पाएं
+                </Button>
+              </Link>
+              <Link href="/voice-assistant">
+                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-green-800 font-semibold shadow-lg hover:shadow-xl transition-all duration-200">
+                  आवाज सहायक का उपयोग करें
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
 
