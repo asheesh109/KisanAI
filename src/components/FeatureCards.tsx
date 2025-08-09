@@ -8,7 +8,7 @@ import {
   FileText, 
   CreditCard 
 } from 'lucide-react'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
 const features = [
@@ -78,7 +78,7 @@ export default function FeatureCards() {
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
             मुख्य सुविधाएं
           </h2>
-          <p className="text-xl text-slate-700 max-w-2xl mx-auto font-medium">
+          <p className="text-xl text-slate-800 max-w-2xl mx-auto font-semibold">
             किसानों के लिए विशेष रूप से डिजाइन की गई AI-आधारित सुविधाएं
           </p>
         </div>
@@ -93,9 +93,9 @@ export default function FeatureCards() {
                     <IconComponent className={`h-8 w-8 ${feature.color}`} />
                   </div>
                   <CardTitle className="text-xl text-slate-900 font-bold">{feature.title}</CardTitle>
-                  <CardDescription className="text-slate-600 font-medium">
+                  <div className="text-slate-800 font-semibold text-base mt-2">
                     {feature.description}
-                  </CardDescription>
+                  </div>
                 </CardHeader>
                 <CardContent className="text-center">
                   <Link href={feature.href}>

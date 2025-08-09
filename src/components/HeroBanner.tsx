@@ -39,10 +39,10 @@ export default function HeroBanner() {
       {/* Slider Content */}
       <div className="relative h-full flex items-center justify-center">
         <div className="max-w-4xl mx-auto px-6 sm:px-8 text-center">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-lg">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-2xl" style={{textShadow: '2px 2px 4px rgba(0,0,0,0.8)'}}>
             {bannerImages[currentSlide].titleHindi}
           </h1>
-          <p className="text-xl sm:text-2xl text-green-100 mb-8 max-w-2xl mx-auto font-medium drop-shadow-md">
+          <p className="text-xl sm:text-2xl text-white mb-8 max-w-2xl mx-auto font-semibold drop-shadow-xl" style={{textShadow: '1px 1px 3px rgba(0,0,0,0.7)'}}>
             {bannerImages[currentSlide].descriptionHindi}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
