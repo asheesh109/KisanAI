@@ -26,29 +26,29 @@ const navigation = {
 
 export default function Footer() {
   return (
-    <footer className="bg-green-800 text-white">
+    <footer className="bg-slate-900 text-white">
       <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20 lg:px-8">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <div className="space-y-8">
             <div className="flex items-center space-x-2">
-              <Sprout className="h-8 w-8 text-green-200" />
+              <Sprout className="h-8 w-8 text-green-400" />
               <span className="text-2xl font-bold">KisanAI</span>
-              <span className="text-sm text-green-200">किसान AI</span>
+              <span className="text-sm text-green-300 font-medium">किसान AI</span>
             </div>
-            <p className="text-sm leading-6 text-green-200">
+            <p className="text-sm leading-6 text-slate-300 font-medium">
               भारतीय किसानों के लिए AI-आधारित डिजिटल सहायक। 
               खेती, मौसम, बाजार की जानकारी और सरकारी योजनाओं का लाभ उठाएं।
             </p>
             <div className="space-y-2">
-              <div className="flex items-center space-x-2 text-sm text-green-200">
+              <div className="flex items-center space-x-2 text-sm text-slate-300">
                 <Phone className="h-4 w-4" />
                 <span>हेल्पलाइन: 1800-XXX-XXXX</span>
               </div>
-              <div className="flex items-center space-x-2 text-sm text-green-200">
+              <div className="flex items-center space-x-2 text-sm text-slate-300">
                 <Mail className="h-4 w-4" />
                 <span>support@kisanai.gov.in</span>
               </div>
-              <div className="flex items-center space-x-2 text-sm text-green-200">
+              <div className="flex items-center space-x-2 text-sm text-slate-300">
                 <MapPin className="h-4 w-4" />
                 <span>नई दिल्ली, भारत</span>
               </div>
@@ -63,7 +63,7 @@ export default function Footer() {
                     <li key={item.name}>
                       <Link
                         href={item.href}
-                        className="text-sm leading-6 text-green-200 hover:text-white transition-colors"
+                        className="text-sm leading-6 text-slate-300 hover:text-white transition-colors duration-200 font-medium"
                       >
                         {item.name}
                       </Link>
@@ -78,7 +78,7 @@ export default function Footer() {
                     <li key={item.name}>
                       <Link
                         href={item.href}
-                        className="text-sm leading-6 text-green-200 hover:text-white transition-colors"
+                        className="text-sm leading-6 text-slate-300 hover:text-white transition-colors duration-200 font-medium"
                       >
                         {item.name}
                       </Link>
@@ -95,7 +95,7 @@ export default function Footer() {
                     <li key={item.name}>
                       <Link
                         href={item.href}
-                        className="text-sm leading-6 text-green-200 hover:text-white transition-colors"
+                        className="text-sm leading-6 text-slate-300 hover:text-white transition-colors duration-200 font-medium"
                       >
                         {item.name}
                       </Link>
@@ -106,13 +106,13 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-16 border-t border-green-700 pt-8 sm:mt-20 lg:mt-24">
+        <div className="mt-16 border-t border-slate-700 pt-8 sm:mt-20 lg:mt-24">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-xs leading-5 text-green-200">
+            <p className="text-xs leading-5 text-slate-400 font-medium">
               &copy; 2025 KisanAI. सभी अधिकार सुरक्षित। डिजिटल इंडिया पहल का हिस्सा।
             </p>
             <div className="mt-4 sm:mt-0">
-              <p className="text-xs leading-5 text-green-200">
+              <p className="text-xs leading-5 text-slate-400 font-medium">
                 भारत सरकार के सहयोग से विकसित
               </p>
             </div>
