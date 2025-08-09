@@ -43,10 +43,10 @@ export default function HeroBanner() {
           <div className="absolute inset-0 bg-black bg-opacity-25 rounded-xl backdrop-blur-sm"></div>
           
           <div className="relative z-10 py-8">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-2xl" style={{textShadow: '3px 3px 6px rgba(0,0,0,0.9), 1px 1px 3px rgba(0,0,0,0.8), 0px 0px 10px rgba(0,0,0,0.7)'}}>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 drop-shadow-2xl" style={{color: '#ffffff', textShadow: '3px 3px 6px rgba(0,0,0,0.9), 1px 1px 3px rgba(0,0,0,0.8), 0px 0px 10px rgba(0,0,0,0.7)'}}>
               {bannerImages[currentSlide].titleHindi}
             </h1>
-            <p className="text-xl sm:text-2xl text-white mb-8 max-w-2xl mx-auto font-semibold drop-shadow-xl" style={{textShadow: '1px 1px 3px rgba(0,0,0,0.7)'}}>
+            <p className="text-xl sm:text-2xl mb-8 max-w-2xl mx-auto font-semibold drop-shadow-xl" style={{color: '#ffffff', textShadow: '1px 1px 3px rgba(0,0,0,0.7)'}}>
               {bannerImages[currentSlide].descriptionHindi}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -67,26 +67,29 @@ export default function HeroBanner() {
         {/* Navigation Arrows */}
         <button
           onClick={prevSlide}
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full transition-all"
+          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-60 hover:bg-opacity-80 text-white p-3 rounded-full transition-all duration-200 shadow-lg hover:shadow-xl border-2 border-white border-opacity-30"
         >
           <ChevronLeft className="h-6 w-6" />
         </button>
         <button
           onClick={nextSlide}
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full transition-all"
+          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-60 hover:bg-opacity-80 text-white p-3 rounded-full transition-all duration-200 shadow-lg hover:shadow-xl border-2 border-white border-opacity-30"
         >
           <ChevronRight className="h-6 w-6" />
         </button>
 
         {/* Dots Indicator */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-3">
           {bannerImages.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all ${
-                index === currentSlide ? 'bg-white' : 'bg-white bg-opacity-50'
-              }`}
+              className="w-3 h-3 rounded-full transition-all duration-200 border border-white border-opacity-50"
+              style={{
+                backgroundColor: index === currentSlide ? '#ffffff' : 'rgba(255, 255, 255, 0.4)',
+                transform: index === currentSlide ? 'scale(1.2)' : 'scale(1)',
+                boxShadow: index === currentSlide ? '0 0 8px rgba(255, 255, 255, 0.6)' : 'none'
+              }}
             />
           ))}
         </div>
