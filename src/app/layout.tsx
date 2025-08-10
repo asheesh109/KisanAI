@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
   title: "KisanAI - Farmer Assistant | किसान AI सहायक",
@@ -14,13 +15,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="hi">
-      <body className="antialiased min-h-screen flex flex-col font-sans">
-        <Header />
-        <main className="flex-1">
-          {children}
-        </main>
-        <Footer />
+    <html lang="hi" suppressHydrationWarning>
+      <body className="antialiased min-h-screen flex flex-col font-sans bg-background text-foreground">
+        <ThemeProvider
+          defaultTheme="system"
+          storageKey="kisanai-theme"
+        >
+          <Header />
+          <main className="flex-1">
+            {children}
+          </main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -1,110 +1,128 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fefefe;
-  --foreground: #1a1a1a;
-  --primary: #16a34a;
-  --primary-dark: #15803d;
-  --secondary: #059669;
-  --accent: #84cc16;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --card: #ffffff;
-  --card-foreground: #0f172a;
-  --border: #e2e8f0;
-  --input: #f8fafc;
-  --ring: #16a34a;
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --primary: 142.1 76.2% 36.3%;
+  --primary-foreground: 355.7 100% 97.3%;
+  --secondary: 210 40% 98%;
+  --secondary-foreground: 222.2 84% 4.9%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222.2 84% 4.9%;
+  --destructive: 0 72.22% 50.59%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 142.1 76.2% 36.3%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --radius: 0.5rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0f172a;
-    --foreground: #f1f5f9;
-    --primary: #22c55e;
-    --primary-dark: #16a34a;
-    --secondary: #10b981;
-    --accent: #a3e635;
-    --muted: #1e293b;
-    --muted-foreground: #94a3b8;
-    --card: #1e293b;
-    --card-foreground: #f1f5f9;
-    --border: #334155;
-    --input: #1e293b;
-    --ring: #22c55e;
-  }
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --primary: 142.1 70.6% 45.3%;
+  --primary-foreground: 144.9 80.4% 10%;
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 72.22% 50.59%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 142.1 70.6% 45.3%;
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   line-height: 1.6;
   font-weight: 400;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Enhanced text readability */
+/* Enhanced text readability - removed the forced dark color */
 h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   line-height: 1.3;
-  color: #1f2937 !important; /* Force dark color always */
+  color: hsl(var(--foreground));
 }
 
 /* Override any other heading color rules */
 h1, h2, h3, h4, h5, h6 {
-  color: #1f2937 !important;
+  color: hsl(var(--foreground));
 }
 
 /* Override for card content to ensure visibility */
 .bg-white h1, .bg-white h2, .bg-white h3, .bg-white h4, .bg-white h5, .bg-white h6 {
-  color: #1f2937 !important;
+  color: hsl(var(--card-foreground));
 }
 
 .text-primary {
-  color: var(--primary) !important;
+  color: hsl(var(--primary));
 }
 
 .text-secondary {
-  color: var(--secondary) !important;
+  color: hsl(var(--secondary));
 }
 
 .text-accent {
-  color: var(--accent) !important;
+  color: hsl(var(--accent));
 }
 
 .bg-primary {
-  background-color: var(--primary) !important;
+  background-color: hsl(var(--primary));
 }
 
 .bg-secondary {
-  background-color: var(--secondary) !important;
+  background-color: hsl(var(--secondary));
 }
 
 /* Better contrast for farming theme */
 .farming-text-primary {
-  color: #15803d;
+  color: hsl(142.1 76.2% 36.3%);
   font-weight: 600;
 }
 
 .farming-text-secondary {
-  color: #374151;
+  color: hsl(var(--muted-foreground));
   font-weight: 500;
 }
 
 .farming-text-muted {
-  color: #6b7280;
+  color: hsl(var(--muted-foreground));
   font-weight: 400;
 }
 
 /* Enhanced button styling */
 .btn-primary {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  color: white;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
   font-weight: 600;
   transition: all 0.3s ease;
+  border-radius: var(--radius);
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, #166534 100%);
+  background: hsl(142.1 76.2% 32%);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+  box-shadow: 0 4px 12px hsla(var(--primary), 0.3);
+}
+
+/* Smooth transitions for theme switching */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
