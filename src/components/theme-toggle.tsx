@@ -3,9 +3,15 @@
 import { Moon, Sun, Monitor } from 'lucide-react'
 import { useTheme } from './theme-provider'
 import { Button } from './ui/button'
+import { useState, useEffect } from 'react'
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const toggleTheme = () => {
     if (theme === 'light') {
@@ -18,6 +24,10 @@ export function ThemeToggle() {
   }
 
   const getIcon = () => {
+    if (!mounted) {
+      return <Monitor className="h-5 w-5" />
+    }
+    
     switch (theme) {
       case 'light':
         return <Sun className="h-5 w-5" />
@@ -29,6 +39,10 @@ export function ThemeToggle() {
   }
 
   const getLabel = () => {
+    if (!mounted) {
+      return 'सिस्टम मोड'
+    }
+    
     switch (theme) {
       case 'light':
         return 'लाइट मोड'
@@ -60,6 +74,11 @@ export function ThemeToggle() {
 // Simplified version for mobile/compact spaces
 export function ThemeToggleCompact() {
   const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const toggleTheme = () => {
     if (theme === 'light') {
@@ -72,6 +91,10 @@ export function ThemeToggleCompact() {
   }
 
   const getIcon = () => {
+    if (!mounted) {
+      return <Monitor className="h-4 w-4" />
+    }
+    
     switch (theme) {
       case 'light':
         return <Sun className="h-4 w-4" />

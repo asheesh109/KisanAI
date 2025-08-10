@@ -26,9 +26,9 @@ export default function HeroBanner() {
   }
 
   return (
-    <div className="relative h-96 overflow-hidden bg-gradient-to-r from-farming-700 to-farming-800 dark:from-farming-800 dark:to-farming-900">
+    <div className="relative h-96 overflow-hidden bg-gradient-to-r from-primary to-primary-dark dark:from-gray-800 dark:to-gray-900">
       {/* Background Pattern */}
-      <div className="absolute inset-0 bg-black bg-opacity-40 dark:bg-opacity-60"></div>
+      <div className="absolute inset-0 bg-black bg-opacity-60 dark:bg-opacity-70"></div>
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
@@ -40,23 +40,23 @@ export default function HeroBanner() {
       <div className="relative h-full flex items-center justify-center">
         <div className="max-w-4xl mx-auto px-6 sm:px-8 text-center relative">
           {/* Semi-transparent background for better text readability */}
-          <div className="absolute inset-0 bg-black bg-opacity-25 dark:bg-opacity-40 rounded-xl backdrop-blur-sm"></div>
+          <div className="absolute inset-0 bg-black bg-opacity-40 dark:bg-opacity-50 rounded-xl backdrop-blur-sm"></div>
           
-          <div className="relative z-10 py-8">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 drop-shadow-2xl text-white">
+          <div className="relative z-10 py-8 text-white">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 text-white !text-white" style={{textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)', color: 'white !important'}}>
               {bannerImages[currentSlide].titleHindi}
             </h1>
-            <p className="text-xl sm:text-2xl mb-8 max-w-2xl mx-auto font-semibold drop-shadow-xl text-white">
+            <p className="text-xl sm:text-2xl mb-8 max-w-2xl mx-auto font-semibold text-white !text-white" style={{textShadow: '1px 1px 3px rgba(0,0,0,0.8), 0 0 6px rgba(0,0,0,0.6)', color: 'white !important'}}>
               {bannerImages[currentSlide].descriptionHindi}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href={bannerImages[currentSlide].link}>
-                <Button size="lg" className="bg-white text-farming-800 hover:bg-farming-50 dark:bg-farming-100 dark:text-farming-900 dark:hover:bg-farming-200 font-semibold shadow-lg hover:shadow-xl transition-all duration-200">
+                <Button size="lg" className="bg-white text-primary hover:bg-gray-50 dark:bg-gray-100 dark:text-primary dark:hover:bg-gray-200 font-semibold shadow-lg hover:shadow-xl transition-all duration-200">
                   और जानकारी पाएं
                 </Button>
               </Link>
               <Link href="/voice-assistant">
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-farming-800 dark:hover:text-farming-900 font-semibold shadow-lg hover:shadow-xl transition-all duration-200">
+                <Button size="lg" variant="outline" className="border-2 border-white text-white bg-black bg-opacity-20 hover:bg-white hover:text-primary dark:hover:text-primary font-semibold shadow-lg hover:shadow-xl transition-all duration-200 backdrop-blur-sm">
                   आवाज सहायक का उपयोग करें
                 </Button>
               </Link>

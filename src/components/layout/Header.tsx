@@ -20,14 +20,14 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <header className="bg-farming-800 dark:bg-farming-900 shadow-lg border-b border-farming-700 dark:border-farming-800 transition-colors duration-300">
+    <header className="bg-primary dark:bg-primary shadow-lg border-b border-primary-dark dark:border-primary transition-colors duration-300">
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
-        <div className="flex w-full items-center justify-between border-b border-farming-700 dark:border-farming-800 py-6 lg:border-none">
+        <div className="flex w-full items-center justify-between border-b border-primary-dark dark:border-primary py-6 lg:border-none">
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <Sprout className="h-8 w-8 text-farming-200 dark:text-farming-300" />
+              <Sprout className="h-8 w-8 text-white" />
               <span className="text-2xl font-bold text-white">KisanAI</span>
-              <span className="text-sm text-farming-200 dark:text-farming-300 font-medium">किसान AI</span>
+              <span className="text-sm text-white font-medium opacity-90">किसान AI</span>
             </Link>
           </div>
           <div className="ml-10 hidden space-x-8 lg:block">
@@ -35,7 +35,7 @@ export default function Header() {
               <Link
                 key={link.name}
                 href={link.href}
-                className="text-base font-semibold text-white hover:text-farming-200 dark:hover:text-farming-300 transition-colors duration-200"
+                className="text-base font-semibold text-white hover:text-gray-100 transition-colors duration-200"
               >
                 {link.name}
               </Link>
@@ -45,7 +45,7 @@ export default function Header() {
             <ThemeToggleCompact />
             <Button
               variant="outline"
-              className="bg-white text-farming-700 hover:bg-farming-50 border-white dark:bg-farming-800 dark:text-farming-200 dark:border-farming-600 dark:hover:bg-farming-700"
+              className="bg-white text-primary hover:bg-gray-50 border-white dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700"
             >
               लॉगिन
             </Button>
