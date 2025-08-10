@@ -44,9 +44,19 @@ body {
 
 /* Enhanced text readability */
 h1, h2, h3, h4, h5, h6 {
-  color: var(--card-foreground);
   font-weight: 700;
   line-height: 1.3;
+  color: #1f2937 !important; /* Force dark color always */
+}
+
+/* Override any other heading color rules */
+h1, h2, h3, h4, h5, h6 {
+  color: #1f2937 !important;
+}
+
+/* Override for card content to ensure visibility */
+.bg-white h1, .bg-white h2, .bg-white h3, .bg-white h4, .bg-white h5, .bg-white h6 {
+  color: #1f2937 !important;
 }
 
 .text-primary {

@@ -154,10 +154,10 @@ export default function CropAnalysis() {
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-yellow-50 py-8">
       <div className="max-w-4xl mx-auto px-6 sm:px-8">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 mb-4">
+          <h1 className="text-4xl font-bold !text-slate-900 mb-4">
             फसल विश्लेषण
           </h1>
-          <p className="text-xl text-slate-600 font-medium">
+          <p className="text-xl !text-slate-600 font-medium">
             अपनी फसल की फोटो अपलोड करें और AI से स्वास्थ्य जांच कराएं
           </p>
         </div>
@@ -165,7 +165,7 @@ export default function CropAnalysis() {
         {!selectedImage ? (
           <Card className="mb-8">
             <CardHeader className="text-center">
-              <CardTitle className="text-2xl text-slate-800">फसल की फोटो अपलोड करें</CardTitle>
+              <CardTitle className="text-2xl !text-slate-800">फसल की फोटो अपलोड करें</CardTitle>
             </CardHeader>
             <CardContent className="text-center space-y-6">
               <div 
@@ -180,10 +180,10 @@ export default function CropAnalysis() {
                 onDrop={handleDrop}
               >
                 <Camera className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                <p className="text-slate-600 mb-4 font-medium">
+                <p className="!text-slate-600 mb-4 font-medium">
                   यहाँ अपनी फसल की फोटो खींचें या अपलोड करें
                 </p>
-                <p className="text-sm text-slate-500 mb-6">
+                <p className="text-sm !text-slate-500 mb-6">
                   JPG, PNG या WebP फॉर्मेट में फोटो अपलोड करें (अधिकतम 10MB)
                 </p>
                 <div className="space-x-4">
@@ -210,7 +210,7 @@ export default function CropAnalysis() {
             {/* Image Preview and Analysis */}
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="text-2xl text-slate-800">फोटो विश्लेषण</CardTitle>
+                <CardTitle className="text-2xl !text-slate-800">फोटो विश्लेषण</CardTitle>
                 <Button variant="outline" size="sm" onClick={resetAnalysis}>
                   <X className="h-4 w-4 mr-2" />
                   नई फोटो
@@ -243,18 +243,18 @@ export default function CropAnalysis() {
                     {isAnalyzing ? (
                       <div className="text-center py-8">
                         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-                        <p className="text-slate-600 font-medium">AI विश्लेषण जारी है...</p>
-                        <p className="text-sm text-slate-500">कृपया प्रतीक्षा करें</p>
+                        <p className="!text-slate-600 font-medium">AI विश्लेषण जारी है...</p>
+                        <p className="text-sm !text-slate-500">कृपया प्रतीक्षा करें</p>
                       </div>
                     ) : analysisResult ? (
                       <div className="space-y-4">
                         <div className="flex items-center space-x-3">
                           {getConditionIcon(analysisResult.condition)}
                           <div>
-                            <h3 className="text-lg font-semibold text-slate-800">
+                            <h3 className="text-lg font-semibold !text-slate-800">
                               {getConditionText(analysisResult.condition)}
                             </h3>
-                            <p className="text-sm text-slate-600">
+                            <p className="text-sm !text-slate-600">
                               विश्वसनीयता: {analysisResult.confidence}%
                             </p>
                           </div>
@@ -293,7 +293,7 @@ export default function CropAnalysis() {
                         </Button>
                       </div>
                     ) : (
-                      <div className="text-center py-8 text-slate-500">
+                      <div className="text-center py-8 !text-slate-500">
                         <ImageIcon className="h-16 w-16 mx-auto mb-4 opacity-50" />
                         <p>विश्लेषण के लिए &apos;विश्लेषण शुरू करें&apos; बटन दबाएं</p>
                       </div>
@@ -309,7 +309,7 @@ export default function CropAnalysis() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center text-slate-800">
+              <CardTitle className="flex items-center !text-slate-800">
                 <ImageIcon className="mr-2 h-5 w-5" />
                 फोटो की गुणवत्ता
               </CardTitle>

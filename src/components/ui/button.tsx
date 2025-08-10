@@ -16,8 +16,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             'bg-green-600 text-white hover:bg-green-700': variant === 'default',
             'bg-blue-600 text-white hover:bg-blue-700': variant === 'primary',
             'bg-gray-200 text-gray-900 hover:bg-gray-300': variant === 'secondary',
-            'border border-gray-300 bg-transparent hover:bg-gray-50': variant === 'outline',
-            'hover:bg-gray-100': variant === 'ghost',
+            'border border-gray-300 bg-transparent text-gray-900 hover:bg-gray-50': variant === 'outline',
+            'text-gray-900 hover:bg-gray-100': variant === 'ghost',
           },
           {
             'h-8 px-3 text-sm': size === 'sm',

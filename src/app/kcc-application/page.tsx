@@ -75,10 +75,10 @@ export default function KCCApplication() {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-50 py-8">
       <div className="max-w-6xl mx-auto px-6 sm:px-8">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 mb-4">
+          <h1 className="text-4xl font-bold !text-slate-900 mb-4">
             किसान क्रेडिट कार्ड आवेदन
           </h1>
-          <p className="text-xl text-slate-600 font-medium">
+          <p className="text-xl !text-slate-600 font-medium">
             आसान तरीके से KCC के लिए ऑनलाइन आवेदन करें
           </p>
         </div>
@@ -91,8 +91,8 @@ export default function KCCApplication() {
                 <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
                   <CreditCard className="h-6 w-6 text-purple-600" />
                 </div>
-                <h3 className="font-semibold text-slate-900 mb-2">{benefit.title}</h3>
-                <p className="text-sm text-slate-600 font-medium">{benefit.description}</p>
+                <h3 className="font-semibold !text-slate-900 mb-2">{benefit.title}</h3>
+                <p className="text-sm !text-slate-600 font-medium">{benefit.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -123,8 +123,8 @@ export default function KCCApplication() {
                           </div>
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-medium text-slate-900">{step.title}</h4>
-                          <p className="text-sm text-slate-600 font-medium">{step.description}</p>
+                          <h4 className="font-medium !text-slate-900">{step.title}</h4>
+                          <p className="text-sm !text-slate-600 font-medium">{step.description}</p>
                         </div>
                         <div className="flex-shrink-0">
                           <Clock className="h-5 w-5 text-gray-400" />
@@ -149,7 +149,7 @@ export default function KCCApplication() {
                   <input
                     type="text"
                     placeholder="आवेदन संख्या दर्ज करें"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent !text-slate-900 placeholder-gray-500"
                   />
                   <Button variant="outline" className="w-full">
                     स्थिति देखें
@@ -174,7 +174,7 @@ export default function KCCApplication() {
                   {eligibilityCriteria.map((criteria, index) => (
                     <li key={index} className="flex items-center">
                       <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                      <span className="text-gray-700">{criteria}</span>
+                      <span className="!text-gray-700">{criteria}</span>
                     </li>
                   ))}
                 </ul>
@@ -194,7 +194,7 @@ export default function KCCApplication() {
                   {requiredDocuments.map((document, index) => (
                     <li key={index} className="flex items-center">
                       <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
-                      <span className="text-gray-700">{document}</span>
+                      <span className="!text-gray-700">{document}</span>
                     </li>
                   ))}
                 </ul>

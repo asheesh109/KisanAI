@@ -245,7 +245,7 @@ export default function Weather() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 py-8">
       <div className="max-w-6xl mx-auto px-6 sm:px-8">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold !text-slate-900 mb-4">
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">
             मौसम की जानकारी
           </h1>
           <p className="text-xl text-slate-700 font-medium">
@@ -269,7 +269,6 @@ export default function Weather() {
                   size="sm"
                   onClick={getLocationFromBrowser}
                   disabled={isLoading}
-                  className="!text-gray-900"
                 >
                   <MapPin className="h-4 w-4 mr-2" />
                   स्थान
@@ -279,7 +278,6 @@ export default function Weather() {
                   size="sm"
                   onClick={loadWeatherData}
                   disabled={isLoading}
-                  className="!text-gray-900"
                 >
                   <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
                   रिफ्रेश

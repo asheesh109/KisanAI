@@ -75,10 +75,10 @@ export default function FeatureCards() {
     <section className="py-16 bg-slate-50">
       <div className="max-w-7xl mx-auto px-6 sm:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold !text-slate-900 mb-4">
             मुख्य सुविधाएं
           </h2>
-          <p className="text-xl text-slate-800 max-w-2xl mx-auto font-semibold">
+          <p className="text-xl !text-slate-800 max-w-2xl mx-auto font-semibold">
             किसानों के लिए विशेष रूप से डिजाइन की गई AI-आधारित सुविधाएं
           </p>
         </div>
@@ -92,8 +92,8 @@ export default function FeatureCards() {
                   <div className={`w-16 h-16 ${feature.bgColor} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
                     <IconComponent className={`h-8 w-8 ${feature.color}`} />
                   </div>
-                  <CardTitle className="text-xl text-slate-900 font-bold">{feature.title}</CardTitle>
-                  <div className="text-slate-800 font-semibold text-base mt-2">
+                  <CardTitle className="text-xl !text-slate-900 font-bold">{feature.title}</CardTitle>
+                  <div className="!text-slate-800 font-semibold text-base mt-2">
                     {feature.description}
                   </div>
                 </CardHeader>

@@ -111,7 +111,7 @@ export default function VoiceAssistant() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 py-8">
       <div className="max-w-4xl mx-auto px-6 sm:px-8">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold !text-gray-900 mb-4">
             आवाज सहायक
           </h1>
           <p className="text-xl text-gray-600">
@@ -122,7 +122,7 @@ export default function VoiceAssistant() {
         {/* Voice Control Interface */}
         <Card className="mb-8">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl">AI सहायक से बात करें</CardTitle>
+            <CardTitle className="text-2xl font-semibold !text-gray-900">AI सहायक से बात करें</CardTitle>
           </CardHeader>
           <CardContent className="text-center space-y-6">
             {/* Voice Recognition Status */}
@@ -194,7 +194,7 @@ export default function VoiceAssistant() {
                   onChange={(e) => setTextInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleTextSubmit()}
                   placeholder="या यहाँ टाइप करें..."
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent !text-slate-900 placeholder-gray-500"
                 />
                 <Button onClick={handleTextSubmit} disabled={!textInput.trim()}>
                   भेजें
@@ -226,7 +226,7 @@ export default function VoiceAssistant() {
         {conversations.length > 0 && (
           <Card className="mb-8">
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>बातचीत का इतिहास</CardTitle>
+              <CardTitle className="!text-gray-900">बातचीत का इतिहास</CardTitle>
               <Button variant="outline" size="sm" onClick={clearConversation}>
                 साफ़ करें
               </Button>
@@ -270,7 +270,7 @@ export default function VoiceAssistant() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center">
+              <CardTitle className="flex items-center !text-gray-900">
                 <MessageCircle className="mr-2 h-5 w-5" />
                 आम सवाल
               </CardTitle>
@@ -299,7 +299,7 @@ export default function VoiceAssistant() {
 
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center">
+              <CardTitle className="flex items-center !text-gray-900">
                 <Volume2 className="mr-2 h-5 w-5" />
                 सुविधाएं
               </CardTitle>
@@ -322,7 +322,7 @@ export default function VoiceAssistant() {
         </div>
 
         <div className="mt-8 text-center">
-          <p className="text-gray-500">
+          <p className="text-gray-700">
             यह सुविधा AI और ML तकनीक का उपयोग करके बनाई गई है। 
             अधिक सटीक जानकारी के लिए स्थानीय कृषि विशेषज्ञ से सलाह लें।
           </p>
