@@ -3,7 +3,7 @@ import FeatureCards from "@/components/FeatureCards";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background">
+    <div className="min-h-screen">
       {/* Hero Banner with Government Schemes */}
       <HeroBanner />
       
