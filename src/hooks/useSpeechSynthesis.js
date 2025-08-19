@@ -2,27 +2,7 @@
 
 import { useState, useCallback, useRef } from 'react'
 
-interface UseSpeechSynthesisOptions {
-  lang?: string
-  rate?: number
-  pitch?: number
-  volume?: number
-}
-
-interface UseSpeechSynthesisReturn {
-  speaking: boolean
-  paused: boolean
-  error: string | null
-  isSupported: boolean
-  speak: (text: string) => void
-  pause: () => void
-  resume: () => void
-  cancel: () => void
-}
-
-export const useSpeechSynthesis = (
-  options: UseSpeechSynthesisOptions = {}
-): UseSpeechSynthesisReturn => {
+export const useSpeechSynthesis = (options = {}) => {
   const {
     lang = 'hi-IN', // Hindi (India)
     rate = 1,
@@ -32,11 +12,11 @@ export const useSpeechSynthesis = (
 
   const [speaking, setSpeaking] = useState(false)
   const [paused, setPaused] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState(null)
   const [isSupported, setIsSupported] = useState(true)
 
-  const synthRef = useRef<SpeechSynthesis | null>(null)
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
+  const synthRef = useRef(null)
+  const utteranceRef = useRef(null)
 
   // Initialize speech synthesis
   if (typeof window !== 'undefined' && !synthRef.current) {
@@ -48,7 +28,7 @@ export const useSpeechSynthesis = (
   }
 
   const speak = useCallback(
-    (text: string) => {
+    (text) => {
       if (!synthRef.current || !isSupported) {
         setError('Speech synthesis not supported')
         return
@@ -74,7 +54,7 @@ export const useSpeechSynthesis = (
         setPaused(false)
       }
 
-      utterance.onerror = (event: SpeechSynthesisErrorEvent) => {
+      utterance.onerror = (event) => {
         setError(event.error)
         setSpeaking(false)
         setPaused(false)

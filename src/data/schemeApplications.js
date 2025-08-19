@@ -1,42 +1,63 @@
-// Types for scheme applications and eligibility
-export interface ApplicationStatus {
-  id: string;
-  schemeId: string;
-  applicantName: string;
-  applicationNumber: string;
-  status: 'submitted' | 'under-review' | 'approved' | 'rejected' | 'documents-required';
-  submittedDate: string;
-  lastUpdated: string;
-  nextAction?: string;
-  remarks?: string;
-}
+/**
+ * Types for scheme applications and eligibility
+ */
 
-export interface EligibilityCheck {
-  schemeId: string;
-  criteria: {
-    field: string;
-    label: string;
-    labelHindi: string;
-    type: 'number' | 'select' | 'boolean' | 'text';
-    required: boolean;
-    options?: { value: string; label: string; labelHindi: string }[];
-    min?: number;
-    max?: number;
-    unit?: string;
-  }[];
-}
+/**
+ * Application Status Object Structure
+ * @typedef {Object} ApplicationStatus
+ * @property {string} id - Unique identifier
+ * @property {string} schemeId - Associated scheme ID
+ * @property {string} applicantName - Name of applicant
+ * @property {string} applicationNumber - Application reference number
+ * @property {'submitted'|'under-review'|'approved'|'rejected'|'documents-required'} status - Application status
+ * @property {string} submittedDate - Submission date
+ * @property {string} lastUpdated - Last update date
+ * @property {string} [nextAction] - Next required action
+ * @property {string} [remarks] - Additional remarks
+ */
 
-export interface EligibilityResult {
-  eligible: boolean;
-  score: number;
-  maxScore: number;
-  missingCriteria: string[];
-  recommendations: string[];
-  recommendationsHindi: string[];
-}
+/**
+ * Eligibility Check Criteria Option
+ * @typedef {Object} EligibilityOption
+ * @property {string} value - Option value
+ * @property {string} label - Option label in English
+ * @property {string} labelHindi - Option label in Hindi
+ */
+
+/**
+ * Eligibility Check Criterion
+ * @typedef {Object} EligibilityCriterion
+ * @property {string} field - Field name
+ * @property {string} label - Label in English
+ * @property {string} labelHindi - Label in Hindi
+ * @property {'number'|'select'|'boolean'|'text'} type - Input type
+ * @property {boolean} required - Whether field is required
+ * @property {EligibilityOption[]} [options] - Options for select type
+ * @property {number} [min] - Minimum value for number type
+ * @property {number} [max] - Maximum value for number type
+ * @property {string} [unit] - Unit of measurement
+ */
+
+/**
+ * Eligibility Check Object Structure
+ * @typedef {Object} EligibilityCheck
+ * @property {string} schemeId - Associated scheme ID
+ * @property {EligibilityCriterion[]} criteria - Eligibility criteria
+ */
+
+/**
+ * Eligibility Result Object Structure
+ * @typedef {Object} EligibilityResult
+ * @property {boolean} eligible - Whether applicant is eligible
+ * @property {number} score - Achieved score
+ * @property {number} maxScore - Maximum possible score
+ * @property {string[]} missingCriteria - List of missing criteria
+ * @property {string[]} recommendations - Recommendations in English
+ * @property {string[]} recommendationsHindi - Recommendations in Hindi
+ */
 
 // Mock application statuses
-export const mockApplications: ApplicationStatus[] = [
+const mockApplications = [
   {
     id: 'app-001',
     schemeId: 'pm-kisan',
@@ -73,7 +94,7 @@ export const mockApplications: ApplicationStatus[] = [
 ]
 
 // Eligibility criteria for different schemes
-export const eligibilityCriteria: EligibilityCheck[] = [
+const eligibilityCriteria = [
   {
     schemeId: 'pm-kisan',
     criteria: [
@@ -193,7 +214,14 @@ export const eligibilityCriteria: EligibilityCheck[] = [
 ]
 
 // Utility functions
-export const checkEligibility = (schemeId: string, formData: Record<string, string | number | boolean>): EligibilityResult => {
+
+/**
+ * Check eligibility for a scheme based on form data
+ * @param {string} schemeId - Scheme identifier
+ * @param {Record<string, string|number|boolean>} formData - Form data to check against criteria
+ * @returns {EligibilityResult} Eligibility result with score and recommendations
+ */
+const checkEligibility = (schemeId, formData) => {
   const criteria = eligibilityCriteria.find(c => c.schemeId === schemeId)
   if (!criteria) {
     return {
@@ -208,9 +236,9 @@ export const checkEligibility = (schemeId: string, formData: Record<string, stri
 
   let score = 0
   const maxScore = criteria.criteria.length
-  const missingCriteria: string[] = []
-  const recommendations: string[] = []
-  const recommendationsHindi: string[] = []
+  const missingCriteria = []
+  const recommendations = []
+  const recommendationsHindi = []
 
   criteria.criteria.forEach(criterion => {
     const value = formData[criterion.field]
@@ -277,15 +305,30 @@ export const checkEligibility = (schemeId: string, formData: Record<string, stri
   }
 }
 
-export const getApplicationById = (applicationNumber: string): ApplicationStatus | undefined => {
+/**
+ * Get application by application number
+ * @param {string} applicationNumber - Application number to search for
+ * @returns {ApplicationStatus|undefined} Application status or undefined if not found
+ */
+const getApplicationById = (applicationNumber) => {
   return mockApplications.find(app => app.applicationNumber === applicationNumber)
 }
 
-export const getApplicationsByScheme = (schemeId: string): ApplicationStatus[] => {
+/**
+ * Get all applications for a specific scheme
+ * @param {string} schemeId - Scheme identifier
+ * @returns {ApplicationStatus[]} Array of applications for the scheme
+ */
+const getApplicationsByScheme = (schemeId) => {
   return mockApplications.filter(app => app.schemeId === schemeId)
 }
 
-export const getStatusColor = (status: ApplicationStatus['status']): string => {
+/**
+ * Get CSS classes for status styling
+ * @param {ApplicationStatus['status']} status - Application status
+ * @returns {string} CSS classes for styling the status
+ */
+const getStatusColor = (status) => {
   switch (status) {
     case 'approved':
       return 'text-green-600 bg-green-50'
@@ -302,7 +345,12 @@ export const getStatusColor = (status: ApplicationStatus['status']): string => {
   }
 }
 
-export const getStatusText = (status: ApplicationStatus['status']): string => {
+/**
+ * Get Hindi text for application status
+ * @param {ApplicationStatus['status']} status - Application status
+ * @returns {string} Hindi text for the status
+ */
+const getStatusText = (status) => {
   switch (status) {
     case 'approved':
       return 'स्वीकृत'
@@ -318,3 +366,27 @@ export const getStatusText = (status: ApplicationStatus['status']): string => {
       return 'अज्ञात'
   }
 }
+
+// Export for CommonJS (Node.js)
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    mockApplications,
+    eligibilityCriteria,
+    checkEligibility,
+    getApplicationById,
+    getApplicationsByScheme,
+    getStatusColor,
+    getStatusText
+  };
+}
+
+// Export for ES6 modules (if needed)
+// export {
+//   mockApplications,
+//   eligibilityCriteria,
+//   checkEligibility,
+//   getApplicationById,
+//   getApplicationsByScheme,
+//   getStatusColor,
+//   getStatusText
+// };

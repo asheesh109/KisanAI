@@ -5,58 +5,20 @@ import { Cloud, Sun, CloudRain, Wind, Droplets, Eye, MapPin, RefreshCw, AlertTri
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
-interface WeatherData {
-  location: string
-  temperature: number
-  condition: string
-  description: string
-  humidity: number
-  windSpeed: number
-  windDirection: string
-  visibility: number
-  uvIndex: number
-  pressure: number
-  feelsLike: number
-  sunrise: string
-  sunset: string
-  lastUpdated: string
-}
-
-interface ForecastDay {
-  day: string
-  date: string
-  high: number
-  low: number
-  condition: string
-  description: string
-  humidity: number
-  windSpeed: number
-  rainChance: number
-  icon: React.ComponentType<{ className?: string }>
-}
-
-interface FarmingAdvice {
-  title: string
-  description: string
-  urgent: boolean
-  icon: string
-  action: string
-}
-
 export default function Weather() {
-  const [currentWeather, setCurrentWeather] = useState<WeatherData | null>(null)
-  const [forecast, setForecast] = useState<ForecastDay[]>([])
-  const [farmingAdvice, setFarmingAdvice] = useState<FarmingAdvice[]>([])
+  const [currentWeather, setCurrentWeather] = useState(null)
+  const [forecast, setForecast] = useState([])
+  const [farmingAdvice, setFarmingAdvice] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [location, setLocation] = useState('दिल्ली, भारत')
-  const [lastRefresh, setLastRefresh] = useState<Date>(new Date())
+  const [lastRefresh, setLastRefresh] = useState(new Date())
 
   // Mock weather API - In production, this would call OpenWeatherMap or similar
-  const fetchWeatherData = useCallback(async (locationName: string): Promise<{ current: WeatherData, forecast: ForecastDay[] }> => {
+  const fetchWeatherData = useCallback(async (locationName) => {
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 1500))
     
-    const mockCurrent: WeatherData = {
+    const mockCurrent = {
       location: locationName,
       temperature: Math.floor(Math.random() * 15) + 20, // 20-35°C
       condition: ['साफ आसमान', 'आंशिक बादल', 'बादल', 'हल्की बारिश'][Math.floor(Math.random() * 4)],
@@ -81,7 +43,7 @@ export default function Weather() {
       { name: 'साफ', icon: Sun }
     ]
 
-    const mockForecast: ForecastDay[] = forecastDays.map((day, index) => {
+    const mockForecast = forecastDays.map((day, index) => {
       const condition = conditions[Math.floor(Math.random() * conditions.length)]
       const high = Math.floor(Math.random() * 10) + 25 // 25-35°C
       const low = high - Math.floor(Math.random() * 8) - 5 // 5-12°C less than high
@@ -104,8 +66,8 @@ export default function Weather() {
   }, [])
 
   // Generate farming advice based on weather conditions
-  const generateFarmingAdvice = useCallback((weather: WeatherData, forecast: ForecastDay[]): FarmingAdvice[] => {
-    const advice: FarmingAdvice[] = []
+  const generateFarmingAdvice = useCallback((weather, forecast) => {
+    const advice = []
 
     // Temperature-based advice
     if (weather.temperature > 35) {
@@ -211,7 +173,7 @@ export default function Weather() {
     }
   }
 
-  const getWeatherIcon = (condition: string) => {
+  const getWeatherIcon = (condition) => {
     switch (condition) {
       case 'धूप':
       case 'साफ आसमान':

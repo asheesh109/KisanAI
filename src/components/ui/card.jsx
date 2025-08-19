@@ -1,7 +1,7 @@
-import { HTMLAttributes, forwardRef } from 'react'
+import { forwardRef } from 'react'
 import { cn } from '@/lib/utils'
 
-const Card = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
+const Card = forwardRef(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
@@ -15,7 +15,7 @@ const Card = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
 )
 Card.displayName = 'Card'
 
-const CardHeader = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
+const CardHeader = forwardRef(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
@@ -26,7 +26,7 @@ const CardHeader = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
 )
 CardHeader.displayName = 'CardHeader'
 
-const CardTitle = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLHeadingElement>>(
+const CardTitle = forwardRef(
   ({ className, ...props }, ref) => (
     <h3
       ref={ref}
@@ -37,7 +37,7 @@ const CardTitle = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLHeadingEle
 )
 CardTitle.displayName = 'CardTitle'
 
-const CardDescription = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParagraphElement>>(
+const CardDescription = forwardRef(
   ({ className, ...props }, ref) => (
     <p
       ref={ref}
@@ -48,14 +48,14 @@ const CardDescription = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLPara
 )
 CardDescription.displayName = 'CardDescription'
 
-const CardContent = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
+const CardContent = forwardRef(
   ({ className, ...props }, ref) => (
     <div ref={ref} className={cn('p-6 pt-0', className)} {...props} />
   )
 )
 CardContent.displayName = 'CardContent'
 
-const CardFooter = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
+const CardFooter = forwardRef(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}

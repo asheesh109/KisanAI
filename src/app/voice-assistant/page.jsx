@@ -8,15 +8,8 @@ import { useSpeechRecognition } from '@/hooks/useSpeechRecognition'
 import { useSpeechSynthesis } from '@/hooks/useSpeechSynthesis'
 import { generateAIResponse } from '@/data/farmingKnowledge'
 
-interface Conversation {
-  id: string
-  type: 'user' | 'ai'
-  text: string
-  timestamp: Date
-}
-
 export default function VoiceAssistant() {
-  const [conversations, setConversations] = useState<Conversation[]>([])
+  const [conversations, setConversations] = useState([])
   const [isProcessing, setIsProcessing] = useState(false)
   const [textInput, setTextInput] = useState('')
 
@@ -45,10 +38,10 @@ export default function VoiceAssistant() {
     pitch: 1,
   })
 
-  const handleUserQuery = useCallback(async (query: string) => {
+  const handleUserQuery = useCallback(async (query) => {
     if (!query.trim()) return
 
-    const userMessage: Conversation = {
+    const userMessage = {
       id: Date.now().toString(),
       type: 'user',
       text: query,
@@ -62,7 +55,7 @@ export default function VoiceAssistant() {
     setTimeout(() => {
       const aiResponse = generateAIResponse(query)
       
-      const aiMessage: Conversation = {
+      const aiMessage = {
         id: (Date.now() + 1).toString(),
         type: 'ai',
         text: aiResponse,

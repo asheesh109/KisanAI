@@ -1,26 +1,31 @@
-export interface GovernmentScheme {
-  id: string;
-  name: string;
-  nameHindi: string;
-  description: string;
-  descriptionHindi: string;
-  benefits: string[];
-  benefitsHindi: string[];
-  eligibility: string[];
-  eligibilityHindi: string[];
-  documents: string[];
-  documentsHindi: string[];
-  applicationProcess: string[];
-  applicationProcessHindi: string[];
-  helplineNumber: string;
-  website: string;
-  ministry: string;
-  ministryHindi: string;
-  category: 'income-support' | 'insurance' | 'credit' | 'subsidy' | 'technology';
-  image: string;
-}
+/**
+ * Government Scheme Object Structure
+ * @typedef {Object} GovernmentScheme
+ * @property {string} id - Unique identifier
+ * @property {string} name - Scheme name in English
+ * @property {string} nameHindi - Scheme name in Hindi
+ * @property {string} description - Description in English
+ * @property {string} descriptionHindi - Description in Hindi
+ * @property {string[]} benefits - Benefits in English
+ * @property {string[]} benefitsHindi - Benefits in Hindi
+ * @property {string[]} eligibility - Eligibility criteria in English
+ * @property {string[]} eligibilityHindi - Eligibility criteria in Hindi
+ * @property {string[]} documents - Required documents in English
+ * @property {string[]} documentsHindi - Required documents in Hindi
+ * @property {string[]} applicationProcess - Application process in English
+ * @property {string[]} applicationProcessHindi - Application process in Hindi
+ * @property {string} helplineNumber - Contact number
+ * @property {string} website - Official website URL
+ * @property {string} ministry - Ministry name in English
+ * @property {string} ministryHindi - Ministry name in Hindi
+ * @property {'income-support'|'insurance'|'credit'|'subsidy'|'technology'} category - Scheme category
+ * @property {string} image - Image path
+ */
 
-export const governmentSchemes: GovernmentScheme[] = [
+/**
+ * @type {GovernmentScheme[]}
+ */
+const governmentSchemes = [
   {
     id: 'pm-kisan',
     name: 'PM-KISAN Samman Nidhi',
@@ -196,7 +201,7 @@ export const governmentSchemes: GovernmentScheme[] = [
   }
 ];
 
-export const bannerImages = [
+const bannerImages = [
   {
     id: 1,
     title: 'PM-KISAN Samman Nidhi',
@@ -225,3 +230,14 @@ export const bannerImages = [
     link: '/schemes/fasal-bima'
   }
 ];
+
+// Export for CommonJS (Node.js)
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    governmentSchemes,
+    bannerImages
+  };
+}
+
+// Export for ES6 modules (if needed)
+// export { governmentSchemes, bannerImages };

@@ -1,56 +1,70 @@
-// Market data types and utilities for KisanAI Market Prices feature
-export interface CropPrice {
-  id: number
-  crop: string
-  price: number
-  change: string
-  changePercent: string
-  market: string
-  unit: string
-  trending: 'up' | 'down'
-  minPrice: number
-  maxPrice: number
-  avgPrice: number
-  volume: string
-  quality: string
-  lastUpdated: string
-  forecast: string
-  demand: 'very_low' | 'low' | 'medium' | 'high' | 'very_high'
-  supply: 'very_low' | 'low' | 'medium' | 'high' | 'very_high'
-}
+/**
+ * Market data types and utilities for KisanAI Market Prices feature
+ */
 
-export interface Market {
-  name: string
-  distance: string
-  crops: number
-  status: 'खुला' | 'बंद'
-  timing: string
-  contact: string
-}
+/**
+ * Crop Price Object Structure
+ * @typedef {Object} CropPrice
+ * @property {number} id - Unique identifier
+ * @property {string} crop - Crop name
+ * @property {number} price - Current price
+ * @property {string} change - Price change amount
+ * @property {string} changePercent - Price change percentage
+ * @property {string} market - Market name
+ * @property {string} unit - Unit of measurement
+ * @property {'up'|'down'} trending - Price trend direction
+ * @property {number} minPrice - Minimum price
+ * @property {number} maxPrice - Maximum price
+ * @property {number} avgPrice - Average price
+ * @property {string} volume - Trading volume
+ * @property {string} quality - Quality grade
+ * @property {string} lastUpdated - Last update timestamp
+ * @property {string} forecast - Price forecast
+ * @property {'very_low'|'low'|'medium'|'high'|'very_high'} demand - Demand level
+ * @property {'very_low'|'low'|'medium'|'high'|'very_high'} supply - Supply level
+ */
 
-export interface PriceAlert {
-  id: number
-  crop: string
-  targetPrice: number
-  currentPrice: number
-  status: 'ऊपर' | 'नीचे'
-  alertType: 'above' | 'below'
-  created: string
-}
+/**
+ * Market Object Structure
+ * @typedef {Object} Market
+ * @property {string} name - Market name
+ * @property {string} distance - Distance from user
+ * @property {number} crops - Number of crops available
+ * @property {'खुला'|'बंद'} status - Market status
+ * @property {string} timing - Market timing
+ * @property {string} contact - Contact information
+ */
 
-export interface MarketInsight {
-  title: string
-  description: string
-  impact: 'low' | 'medium' | 'high'
-  timeframe: string
-}
+/**
+ * Price Alert Object Structure
+ * @typedef {Object} PriceAlert
+ * @property {number} id - Alert identifier
+ * @property {string} crop - Crop name
+ * @property {number} targetPrice - Target price for alert
+ * @property {number} currentPrice - Current market price
+ * @property {'ऊपर'|'नीचे'} status - Alert status
+ * @property {'above'|'below'} alertType - Type of alert
+ * @property {string} created - Creation date
+ */
+
+/**
+ * Market Insight Object Structure
+ * @typedef {Object} MarketInsight
+ * @property {string} title - Insight title
+ * @property {string} description - Insight description
+ * @property {'low'|'medium'|'high'} impact - Impact level
+ * @property {string} timeframe - Time frame
+ */
 
 // Utility functions for market data processing
-export const calculatePriceChange = (currentPrice: number, previousPrice: number): {
-  change: string
-  changePercent: string
-  trending: 'up' | 'down'
-} => {
+
+/**
+ * Calculate price change and trending direction
+ * @param {number} currentPrice - Current price
+ * @param {number} previousPrice - Previous price
+ * @returns {Object} Price change data
+ */
+const calculatePriceChange = (currentPrice, previousPrice) => {
   const diff = currentPrice - previousPrice
   const percentChange = (diff / previousPrice) * 100
   
@@ -61,13 +75,15 @@ export const calculatePriceChange = (currentPrice: number, previousPrice: number
   }
 }
 
-export const getDemandSupplyStatus = (demand: number, supply: number): {
-  demandLevel: CropPrice['demand']
-  supplyLevel: CropPrice['supply']
-  forecast: string
-} => {
-  let demandLevel: CropPrice['demand']
-  let supplyLevel: CropPrice['supply']
+/**
+ * Determine demand and supply levels with forecast
+ * @param {number} demand - Demand value (1-5 scale)
+ * @param {number} supply - Supply value (1-5 scale)
+ * @returns {Object} Demand/supply status and forecast
+ */
+const getDemandSupplyStatus = (demand, supply) => {
+  let demandLevel
+  let supplyLevel
   
   // Determine demand level (1-5 scale)
   if (demand >= 4.5) demandLevel = 'very_high'
@@ -95,7 +111,11 @@ export const getDemandSupplyStatus = (demand: number, supply: number): {
   return { demandLevel, supplyLevel, forecast }
 }
 
-export const getCropCategories = (): string[] => [
+/**
+ * Get list of crop categories
+ * @returns {string[]} Array of crop categories
+ */
+const getCropCategories = () => [
   'अनाज',
   'दलहन',
   'तिलहन',
@@ -106,8 +126,13 @@ export const getCropCategories = (): string[] => [
   'चारा फसल'
 ]
 
-export const getCropsByCategory = (category: string): string[] => {
-  const categories: Record<string, string[]> = {
+/**
+ * Get crops by category
+ * @param {string} category - Category name
+ * @returns {string[]} Array of crops in the category
+ */
+const getCropsByCategory = (category) => {
+  const categories = {
     'अनाज': ['गेहूं', 'चावल', 'मक्का', 'बाजरा', 'ज्वार'],
     'दलहन': ['अरहर', 'चना', 'मसूर', 'मूंग', 'उड़द'],
     'तिलहन': ['सोयाबीन', 'मूंगफली', 'सरसों', 'तिल', 'अलसी'],
@@ -121,9 +146,14 @@ export const getCropsByCategory = (category: string): string[] => {
   return categories[category] || []
 }
 
-export const getMarketsByState = (state: string): Market[] => {
+/**
+ * Get markets by state
+ * @param {string} state - State name
+ * @returns {Market[]} Array of markets in the state
+ */
+const getMarketsByState = (state) => {
   // This would typically come from an API
-  const markets: Record<string, Market[]> = {
+  const markets = {
     'दिल्ली': [
       {
         name: 'आज़ादपुर मंडी',
@@ -166,11 +196,16 @@ export const getMarketsByState = (state: string): Market[] => {
 }
 
 // Mock API functions (in real app, these would call actual APIs)
-export const fetchMarketPrices = async (filters?: {
-  crop?: string
-  market?: string
-  state?: string
-}): Promise<CropPrice[]> => {
+
+/**
+ * Fetch market prices with optional filters
+ * @param {Object} [filters] - Filter options
+ * @param {string} [filters.crop] - Crop name filter
+ * @param {string} [filters.market] - Market name filter
+ * @param {string} [filters.state] - State filter
+ * @returns {Promise<CropPrice[]>} Promise resolving to array of crop prices
+ */
+const fetchMarketPrices = async (filters) => {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 500))
   
@@ -180,10 +215,13 @@ export const fetchMarketPrices = async (filters?: {
   return []
 }
 
-export const fetchPriceHistory = async (cropId: number, days: number = 30): Promise<{
-  date: string
-  price: number
-}[]> => {
+/**
+ * Fetch price history for a crop
+ * @param {number} cropId - Crop identifier
+ * @param {number} [days=30] - Number of days of history
+ * @returns {Promise<Array<{date: string, price: number}>>} Promise resolving to price history
+ */
+const fetchPriceHistory = async (cropId, days = 30) => {
   await new Promise(resolve => setTimeout(resolve, 300))
   
   // Generate mock historical data
@@ -206,7 +244,12 @@ export const fetchPriceHistory = async (cropId: number, days: number = 30): Prom
   return history
 }
 
-export const createPriceAlert = async (alert: Omit<PriceAlert, 'id' | 'created'>): Promise<PriceAlert> => {
+/**
+ * Create a new price alert
+ * @param {Omit<PriceAlert, 'id' | 'created'>} alert - Alert data without id and created fields
+ * @returns {Promise<PriceAlert>} Promise resolving to created alert
+ */
+const createPriceAlert = async (alert) => {
   await new Promise(resolve => setTimeout(resolve, 200))
   
   return {
@@ -216,7 +259,12 @@ export const createPriceAlert = async (alert: Omit<PriceAlert, 'id' | 'created'>
   }
 }
 
-export const formatCurrency = (amount: number): string => {
+/**
+ * Format currency amount in Indian Rupees
+ * @param {number} amount - Amount to format
+ * @returns {string} Formatted currency string
+ */
+const formatCurrency = (amount) => {
   return new Intl.NumberFormat('hi-IN', {
     style: 'currency',
     currency: 'INR',
@@ -225,14 +273,23 @@ export const formatCurrency = (amount: number): string => {
   }).format(amount)
 }
 
-export const formatVolume = (volume: number): string => {
+/**
+ * Format volume with appropriate unit
+ * @param {number} volume - Volume to format
+ * @returns {string} Formatted volume string
+ */
+const formatVolume = (volume) => {
   if (volume >= 1000) {
     return `${(volume / 1000).toFixed(1)}K क्विंटल`
   }
   return `${volume} क्विंटल`
 }
 
-export const getQualityGrades = (): string[] => [
+/**
+ * Get available quality grades
+ * @returns {string[]} Array of quality grades
+ */
+const getQualityGrades = () => [
   'A1 Grade',
   'A Grade', 
   'B Grade',
@@ -245,7 +302,11 @@ export const getQualityGrades = (): string[] => [
   'Below FAQ'
 ]
 
-export const getUnitTypes = (): string[] => [
+/**
+ * Get available unit types
+ * @returns {string[]} Array of unit types
+ */
+const getUnitTypes = () => [
   'प्रति क्विंटल',
   'प्रति टन',
   'प्रति किलो',
@@ -255,7 +316,7 @@ export const getUnitTypes = (): string[] => [
 ]
 
 // Export default configuration
-export const marketConfig = {
+const marketConfig = {
   refreshInterval: 30000, // 30 seconds
   priceAlertLimits: {
     min: 10,
@@ -272,8 +333,44 @@ export const marketConfig = {
     'महाराष्ट्र'
   ],
   defaultFilters: {
-    sortBy: 'name' as const,
-    viewMode: 'grid' as const,
+    sortBy: 'name',
+    viewMode: 'grid',
     showOnlyActive: true
   }
 }
+
+// Export for CommonJS (Node.js)
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    calculatePriceChange,
+    getDemandSupplyStatus,
+    getCropCategories,
+    getCropsByCategory,
+    getMarketsByState,
+    fetchMarketPrices,
+    fetchPriceHistory,
+    createPriceAlert,
+    formatCurrency,
+    formatVolume,
+    getQualityGrades,
+    getUnitTypes,
+    marketConfig
+  };
+}
+
+// Export for ES6 modules (if needed)
+// export {
+//   calculatePriceChange,
+//   getDemandSupplyStatus,
+//   getCropCategories,
+//   getCropsByCategory,
+//   getMarketsByState,
+//   fetchMarketPrices,
+//   fetchPriceHistory,
+//   createPriceAlert,
+//   formatCurrency,
+//   formatVolume,
+//   getQualityGrades,
+//   getUnitTypes,
+//   marketConfig
+// };

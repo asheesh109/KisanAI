@@ -10,24 +10,23 @@ import {
 import { governmentSchemes } from '@/data/governmentSchemes'
 import { 
   eligibilityCriteria, 
-  checkEligibility, 
-  type EligibilityResult 
+  checkEligibility
 } from '@/data/schemeApplications'
 import Link from 'next/link'
 
 export default function EligibilityChecker() {
-  const [selectedScheme, setSelectedScheme] = useState<string>('')
-  const [formData, setFormData] = useState<Record<string, string | number | boolean>>({})
-  const [result, setResult] = useState<EligibilityResult | null>(null)
+  const [selectedScheme, setSelectedScheme] = useState('')
+  const [formData, setFormData] = useState({})
+  const [result, setResult] = useState(null)
 
-  const handleInputChange = (field: string, value: string | boolean) => {
+  const handleInputChange = (field, value) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
     if (selectedScheme) {
       const eligibilityResult = checkEligibility(selectedScheme, formData)
@@ -137,7 +136,7 @@ export default function EligibilityChecker() {
                         min={criterion.min}
                         max={criterion.max}
                         step="0.1"
-                        value={formData[criterion.field] as string || ''}
+                        value={formData[criterion.field] || ''}
                         onChange={(e) => handleInputChange(criterion.field, e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                         placeholder={`${criterion.min || 0} से ${criterion.max || '∞'} तक`}
@@ -147,7 +146,7 @@ export default function EligibilityChecker() {
                     {criterion.type === 'select' && (
                       <select
                         required={criterion.required}
-                        value={formData[criterion.field] as string || ''}
+                        value={formData[criterion.field] || ''}
                         onChange={(e) => handleInputChange(criterion.field, e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       >
@@ -213,7 +212,6 @@ export default function EligibilityChecker() {
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                {/* Result Summary */}
                 <div className={`p-6 rounded-lg border-2 ${
                   result.eligible 
                     ? 'bg-green-50 border-green-200' 
@@ -246,7 +244,6 @@ export default function EligibilityChecker() {
                   </div>
                 </div>
 
-                {/* Missing Criteria */}
                 {result.missingCriteria.length > 0 && (
                   <Card className="border-orange-200 bg-orange-50">
                     <CardContent className="p-6">
@@ -268,7 +265,6 @@ export default function EligibilityChecker() {
                   </Card>
                 )}
 
-                {/* Recommendations */}
                 <Card className="border-blue-200 bg-blue-50">
                   <CardContent className="p-6">
                     <h4 className="text-lg font-semibold text-blue-900 mb-4">
@@ -285,7 +281,6 @@ export default function EligibilityChecker() {
                   </CardContent>
                 </Card>
 
-                {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4">
                   {result.eligible && (
                     <>

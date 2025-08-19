@@ -2,34 +2,21 @@
 
 import { createContext, useContext, useEffect, useState } from 'react'
 
-type Theme = 'light' | 'dark' | 'system'
-
-type ThemeProviderProps = {
-  children: React.ReactNode
-  defaultTheme?: Theme
-  storageKey?: string
-}
-
-type ThemeProviderState = {
-  theme: Theme
-  setTheme: (theme: Theme) => void
-}
-
-const initialState: ThemeProviderState = {
+const initialState = {
   theme: 'system',
   setTheme: () => null,
 }
 
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
+const ThemeProviderContext = createContext(initialState)
 
 export function ThemeProvider({
   children,
   defaultTheme = 'system',
   storageKey = 'kisanai-theme',
   ...props
-}: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (typeof window !== 'undefined' && localStorage.getItem(storageKey)) as Theme || defaultTheme
+}) {
+  const [theme, setTheme] = useState(
+    () => (typeof window !== 'undefined' && localStorage.getItem(storageKey)) || defaultTheme
   )
 
   useEffect(() => {
@@ -52,7 +39,7 @@ export function ThemeProvider({
 
   const value = {
     theme,
-    setTheme: (theme: Theme) => {
+    setTheme: (theme) => {
       localStorage.setItem(storageKey, theme)
       setTheme(theme)
     },

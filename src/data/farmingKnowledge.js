@@ -1,12 +1,6 @@
 // Farming knowledge base for AI responses
-export interface FarmingQuery {
-  query: string
-  response: string
-  category: 'disease' | 'fertilizer' | 'irrigation' | 'weather' | 'seeds' | 'general'
-  keywords: string[]
-}
 
-export const farmingKnowledgeBase: FarmingQuery[] = [
+export const farmingKnowledgeBase = [
   // Disease related queries
   {
     query: 'मेरी गेहूं की फसल में पीले पत्ते हो रहे हैं',
@@ -81,7 +75,7 @@ export const farmingKnowledgeBase: FarmingQuery[] = [
 ]
 
 // Function to find the best match for a query
-export function findBestMatch(userQuery: string): FarmingQuery | null {
+export function findBestMatch(userQuery) {
   const query = userQuery.toLowerCase()
   
   // First, try to find exact keyword matches
@@ -112,7 +106,7 @@ export function findBestMatch(userQuery: string): FarmingQuery | null {
 export const defaultResponse = "मुझे खुशी होगी आपकी मदद करने में। कृपया अपना सवाल और विस्तार से बताएं। आप खेती, फसल, बीमारी, खाद, पानी या मौसम के बारे में पूछ सकते हैं। यदि आपका सवाल बहुत जटिल है तो कृषि विशेषज्ञ से संपर्क करने की सलाह देता हूं।"
 
 // Function to generate AI response
-export function generateAIResponse(userQuery: string): string {
+export function generateAIResponse(userQuery) {
   const match = findBestMatch(userQuery)
   return match ? match.response : defaultResponse
 }
