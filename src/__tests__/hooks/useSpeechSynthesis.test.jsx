@@ -18,7 +18,7 @@ const mockSpeechSynthesis = {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-;(global as any).speechSynthesis = mockSpeechSynthesis
+global.speechSynthesis = mockSpeechSynthesis
 
 describe('useSpeechSynthesis Hook', () => {
   beforeEach(() => {

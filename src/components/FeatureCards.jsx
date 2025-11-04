@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link'
 import { 
   Mic, 
@@ -8,103 +10,106 @@ import {
   FileText, 
   CreditCard 
 } from 'lucide-react'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 const features = [
   {
-    title: 'आवाज सहायक',
-    description: 'हिंदी में खेती संबंधी सवाल पूछें और तुरंत जवाब पाएं',
+    title: 'voiceAssistant',
+    description: 'voiceAssistantDesc',
     icon: Mic,
     href: '/voice-assistant',
-    color: 'text-sky-700 dark:text-sky-400',
-    bgColor: 'bg-sky-50 dark:bg-sky-900/30',
+    color: 'from-sky-500 to-blue-600',
   },
   {
-    title: 'फसल विश्लेषण',
-    description: 'फोटो खींचकर अपनी फसल की स्वास्थ्य जांच करें',
+    title: 'cropAnalysis',
+    description: 'cropAnalysisDesc',
     icon: Camera,
     href: '/crop-analysis',
-    color: 'text-farming-700 dark:text-farming-400',
-    bgColor: 'bg-farming-50 dark:bg-farming-900/30',
+    color: 'from-emerald-500 to-green-600',
   },
   {
-    title: 'व्यक्तिगत सलाह',
-    description: 'आपके क्षेत्र और मिट्टी के अनुसार खेती की सलाह',
+    title: 'personalizedAdvice',
+    description: 'personalizedAdviceDesc',
     icon: Brain,
-    href: '/advisory',
-    color: 'text-purple-700 dark:text-purple-400',
-    bgColor: 'bg-purple-50 dark:bg-purple-900/30',
+    href: '/voice-assistant',
+    color: 'from-purple-500 to-indigo-600',
   },
   {
-    title: 'मौसम की जानकारी',
-    description: '15 दिन तक का मौसम पूर्वानुमान और चेतावनी',
+    title: 'weatherInfo',
+    description: 'weatherInfoDesc',
     icon: Cloud,
     href: '/weather',
-    color: 'text-cyan-700 dark:text-cyan-400',
-    bgColor: 'bg-cyan-50 dark:bg-cyan-900/30',
+    color: 'from-cyan-500 to-teal-600',
   },
   {
-    title: 'बाजार भाव',
-    description: 'मंडी के ताजे भाव और मूल्य रुझान की जानकारी',
+    title: 'marketPrices',
+    description: 'marketPricesDesc',
     icon: TrendingUp,
     href: '/market-prices',
-    color: 'text-orange-700 dark:text-orange-400',
-    bgColor: 'bg-orange-50 dark:bg-orange-900/30',
+    color: 'from-orange-500 to-red-600',
   },
   {
-    title: 'सरकारी योजनाएं',
-    description: 'सभी सरकारी योजनाओं की जानकारी और आवेदन',
+    title: 'governmentSchemes',
+    description: 'governmentSchemesDesc',
     icon: FileText,
     href: '/schemes',
-    color: 'text-red-700 dark:text-red-400',
-    bgColor: 'bg-red-50 dark:bg-red-900/30',
+    color: 'from-rose-500 to-pink-600',
   },
   {
-    title: 'KCC आवेदन',
-    description: 'किसान क्रेडिट कार्ड के लिए आसान आवेदन',
+    title: 'kccApplication',
+    description: 'kccApplicationDesc',
     icon: CreditCard,
     href: '/kcc-application',
-    color: 'text-indigo-700 dark:text-indigo-400',
-    bgColor: 'bg-indigo-50 dark:bg-indigo-900/30',
+    color: 'from-indigo-500 to-purple-600',
   },
+  {
+    title: 'kccQueries',
+   description: 'kccQueriesDesc',
+    icon: CreditCard,
+    href: '/kcc-application',
+    color: 'from-cyan-500 to-teal-600',
+  }
 ]
 
 export default function FeatureCards() {
+  const { t } = useLanguage()
+
   return (
-    <section className="py-16 bg-muted/50">
-      <div className="max-w-7xl mx-auto px-6 sm:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-            मुख्य सुविधाएं
+    <section className="py-20">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-4 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+            {t('features')}
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto font-semibold">
-            किसानों के लिए विशेष रूप से डिजाइन की गई AI-आधारित सुविधाएं
+          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            {t('tagline')}
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {features.map((feature) => {
+          {features.map((feature, idx) => {
             const IconComponent = feature.icon
             return (
-              <Card key={feature.title} className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 bg-card border-border">
-                <CardHeader className="text-center">
-                  <div className={`w-16 h-16 ${feature.bgColor} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
-                    <IconComponent className={`h-8 w-8 ${feature.color}`} />
+              <div
+                key={idx}
+                className="group relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+              >
+                <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-10 transition-opacity`}></div>
+                <div className="p-6 relative z-10">
+                  <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg`}>
+                    <IconComponent className="h-8 w-8 text-white" />
                   </div>
-                  <CardTitle className="text-xl font-bold">{feature.title}</CardTitle>
-                  <div className="text-muted-foreground font-semibold text-base mt-2">
-                    {feature.description}
-                  </div>
-                </CardHeader>
-                <CardContent className="text-center">
+                  <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">{t(feature.title)}</h3>
+                  <p className="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                    {t(feature.description)}
+                  </p>
                   <Link href={feature.href}>
-                    <Button variant="primary" className="w-full font-semibold transition-all duration-200 hover:shadow-md">
-                      उपयोग करें
-                    </Button>
+                    <button className={`w-full py-3 rounded-xl bg-gradient-to-r ${feature.color} text-white font-semibold hover:shadow-lg transition-all hover:scale-105`}>
+                      {t('getStarted')}
+                    </button>
                   </Link>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             )
           })}
         </div>

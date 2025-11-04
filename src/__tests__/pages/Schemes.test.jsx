@@ -4,7 +4,7 @@ import '@testing-library/jest-dom'
 
 // Mock Next.js Link component
 jest.mock('next/link', () => {
-  const MockLink = ({ children, href }: { children: React.ReactNode; href: string }) => (
+  const MockLink = ({ children, href }) => (
     <a href={href}>{children}</a>
   )
   MockLink.displayName = 'MockLink'

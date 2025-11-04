@@ -10,7 +10,7 @@ const mockFileReader = {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-global.FileReader = jest.fn(() => mockFileReader) as any
+global.FileReader = jest.fn(() => mockFileReader)
 
 describe('Crop Analysis Page', () => {
   beforeEach(() => {
@@ -45,7 +45,8 @@ describe('Crop Analysis Page', () => {
     const file = new File(['mock image'], 'crop.jpg', { type: 'image/jpeg' })
     
     // Simulate file upload
-    const hiddenInput = document.querySelector('input[type="file"]') as HTMLInputElement
+    // @ts-ignore
+    const hiddenInput = document.querySelector('input[type="file"]')
     if (hiddenInput) {
       Object.defineProperty(hiddenInput, 'files', {
         value: [file],

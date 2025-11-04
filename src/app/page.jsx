@@ -1,62 +1,17 @@
+'use client';
+
 import HeroBanner from "@/components/HeroBanner";
 import FeatureCards from "@/components/FeatureCards";
+import StatsSection from "@/components/StatsSection";
+import AboutSection from "@/components/AboutSection";
 
 export default function Home() {
   return (
     <div className="min-h-screen">
-      {/* Hero Banner with Government Schemes */}
       <HeroBanner />
-      
-      {/* Feature Cards */}
+      <StatsSection />
       <FeatureCards />
-      
-      {/* About Section */}
-      <section className="py-16 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-              KisanAI के बारे में
-            </h2>
-            <p className="text-xl text-slate-700 max-w-3xl mx-auto font-medium">
-              KisanAI भारतीय किसानों के लिए एक व्यापक डिजिटल प्लेटफॉर्म है जो AI और ML 
-              तकनीक का उपयोग करके खेती में सुधार, मौसम की जानकारी, बाजार भाव, 
-              और सरकारी योजनाओं की जानकारी प्रदान करता है।
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl">🌾</span>
-              </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-2">AI-आधारित सलाह</h3>
-              <p className="text-slate-600 font-medium">
-                आर्टिफिशियल इंटेलिजेंस की मदद से आपको सबसे अच्छी खेती की सलाह मिलती है
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl">🌦️</span>
-              </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-2">मौसम पूर्वानुमान</h3>
-              <p className="text-slate-600 font-medium">
-                15 दिन तक का सटीक मौसम पूर्वानुमान और कृषि संबंधी चेतावनी
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl">💰</span>
-              </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-2">सरकारी योजनाएं</h3>
-              <p className="text-slate-600 font-medium">
-                सभी केंद्रीय और राज्य सरकार की योजनाओं की जानकारी और आवेदन
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <AboutSection />
     </div>
   );
 }

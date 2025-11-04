@@ -11,7 +11,7 @@ const mockGeolocation = {
 
 // Define geolocation property if it doesn't exist
 if (!global.navigator) {
-  global.navigator = {} as Navigator
+  global.navigator = {}
 }
 
 if (!global.navigator.geolocation) {
@@ -29,7 +29,7 @@ describe('Weather Page', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     // Reset fetch mock
-    ;(global.fetch as jest.Mock).mockClear()
+    global.fetch.mockClear()
   })
 
   it('renders weather interface', () => {

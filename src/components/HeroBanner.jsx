@@ -1,97 +1,75 @@
 'use client'
-
-import { useState, useEffect } from 'react'
+import { useLanguage } from '@/contexts/LanguageContext'
+import { ChevronRight, Mic, Sparkles } from 'lucide-react'
 import Link from 'next/link'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { bannerImages } from '@/data/governmentSchemes'
+
+// Mock Button component
+const Button = ({ children, className, ...props }) => (
+  <button className={className} {...props}>
+    {children}
+  </button>
+)
 
 export default function HeroBanner() {
-  const [currentSlide, setCurrentSlide] = useState(0)
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % bannerImages.length)
-    }, 5000) // Change slide every 5 seconds
-
-    return () => clearInterval(timer)
-  }, [])
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % bannerImages.length)
-  }
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + bannerImages.length) % bannerImages.length)
-  }
+  const { t } = useLanguage()
 
   return (
-    <div className="relative h-96 overflow-hidden bg-gradient-to-r from-primary to-primary-dark dark:from-gray-800 dark:to-gray-900">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 bg-black bg-opacity-60 dark:bg-opacity-70"></div>
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: "url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><defs><pattern id=\"grain\" width=\"100\" height=\"100\" patternUnits=\"userSpaceOnUse\"><circle cx=\"20\" cy=\"20\" r=\"1\" fill=\"%23ffffff\" opacity=\"0.1\"/><circle cx=\"80\" cy=\"40\" r=\"1\" fill=\"%23ffffff\" opacity=\"0.1\"/><circle cx=\"40\" cy=\"60\" r=\"1\" fill=\"%23ffffff\" opacity=\"0.1\"/><circle cx=\"60\" cy=\"80\" r=\"1\" fill=\"%23ffffff\" opacity=\"0.1\"/></pattern></defs><rect width=\"100\" height=\"100\" fill=\"url(%23grain)\"/></svg>')"
-        }}
-      ></div>
+    <div className="relative min-h-[650px] overflow-hidden bg-white dark:bg-gray-950">
+      {/* Animated Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-green-500/5 to-teal-500/10 dark:from-emerald-500/20 dark:via-green-500/10 dark:to-teal-500/20"></div>
+      
+      {/* Geometric Shapes */}
+      <div className="absolute top-20 right-20 w-72 h-72 bg-emerald-500/10 dark:bg-emerald-500/20 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 left-20 w-96 h-96 bg-green-500/10 dark:bg-green-500/20 rounded-full blur-3xl"></div>
 
-      {/* Slider Content */}
-      <div className="relative h-full flex items-center justify-center">
-        <div className="max-w-4xl mx-auto px-6 sm:px-8 text-center relative">
-          {/* Semi-transparent background for better text readability */}
-          <div className="absolute inset-0 bg-black bg-opacity-40 dark:bg-opacity-50 rounded-xl backdrop-blur-sm"></div>
+      {/* Content */}
+      <div className="relative flex items-center justify-center h-full px-6 py-24">
+        <div className="max-w-5xl mx-auto text-center">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 mb-8 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 rounded-full text-sm font-medium">
+            <Sparkles className="h-4 w-4" />
+            <span>{t('transformingAgriculture')}</span>
+          </div>
+
+          <h1 className="text-5xl md:text-7xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+            {t('heroWelcome')}
+          </h1>
           
-          <div className="relative z-10 py-8 text-white">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 text-white !text-white" style={{textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)', color: 'white !important'}}>
-              {bannerImages[currentSlide].titleHindi}
-            </h1>
-            <p className="text-xl sm:text-2xl mb-8 max-w-2xl mx-auto font-semibold text-white !text-white" style={{textShadow: '1px 1px 3px rgba(0,0,0,0.8), 0 0 6px rgba(0,0,0,0.6)', color: 'white !important'}}>
-              {bannerImages[currentSlide].descriptionHindi}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href={bannerImages[currentSlide].link}>
-                <Button size="lg" className="bg-white text-primary hover:bg-gray-50 dark:bg-gray-100 dark:text-primary dark:hover:bg-gray-200 font-semibold shadow-lg hover:shadow-xl transition-all duration-200">
-                  और जानकारी पाएं
-                </Button>
-              </Link>
-              <Link href="/voice-assistant">
-                <Button size="lg" variant="outline" className="border-2 border-white text-white bg-black bg-opacity-20 hover:bg-white hover:text-primary dark:hover:text-primary font-semibold shadow-lg hover:shadow-xl transition-all duration-200 backdrop-blur-sm">
-                  आवाज सहायक का उपयोग करें
-                </Button>
-              </Link>
+          <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-10 max-w-3xl mx-auto leading-relaxed">
+            {t('heroTagline')}
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <Link href="/schemes">
+              <Button className=" px-8 py-4 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white rounded-xl font-semibold text-lg transition-all shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center space-x-2">
+                <span>{t('exploreSchemes')}</span>
+                <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
+
+            <Link href="/voice-assistant">
+              <Button className="px-8 py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-2 border-gray-200 dark:border-gray-700 hover:border-emerald-500 dark:hover:border-emerald-500 rounded-xl font-semibold text-lg transition-all shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center space-x-2">
+                <Mic className="h-5 w-5" />
+                <span>{t('voiceAssistant')}</span>
+              </Button>
+            </Link>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-8 max-w-3xl mx-auto pt-8 border-t border-gray-200 dark:border-gray-800">
+            <div>
+              <div className="text-3xl md:text-4xl font-bold text-emerald-600 dark:text-emerald-400 mb-1">20+</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">{t('statsGovernmentSchemes')}</div>
+            </div>
+            <div>
+              <div className="text-3xl md:text-4xl font-bold text-emerald-600 dark:text-emerald-400 mb-1">24/7</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">{t('statsSupportAvailable')}</div>
+            </div>
+            <div>
+              <div className="text-3xl md:text-4xl font-bold text-emerald-600 dark:text-emerald-400 mb-1">1K+</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">{t('statsFarmersHelped')}</div>
             </div>
           </div>
-        </div>
-
-        {/* Navigation Arrows */}
-        <button
-          onClick={prevSlide}
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-60 hover:bg-opacity-80 dark:bg-opacity-70 dark:hover:bg-opacity-90 text-white p-3 rounded-full transition-all duration-200 shadow-lg hover:shadow-xl border-2 border-white border-opacity-30"
-        >
-          <ChevronLeft className="h-6 w-6" />
-        </button>
-        <button
-          onClick={nextSlide}
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-60 hover:bg-opacity-80 dark:bg-opacity-70 dark:hover:bg-opacity-90 text-white p-3 rounded-full transition-all duration-200 shadow-lg hover:shadow-xl border-2 border-white border-opacity-30"
-        >
-          <ChevronRight className="h-6 w-6" />
-        </button>
-
-        {/* Dots Indicator */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-3">
-          {bannerImages.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className="w-3 h-3 rounded-full transition-all duration-200 border border-white border-opacity-50"
-              style={{
-                backgroundColor: index === currentSlide ? '#ffffff' : 'rgba(255, 255, 255, 0.4)',
-                transform: index === currentSlide ? 'scale(1.2)' : 'scale(1)',
-                boxShadow: index === currentSlide ? '0 0 8px rgba(255, 255, 255, 0.6)' : 'none'
-              }}
-            />
-          ))}
         </div>
       </div>
     </div>
