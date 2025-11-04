@@ -63,24 +63,7 @@ npm run dev
 - **Development**: ESLint, Hot Reload
 - **Deployment Ready**: Production build optimized
 
-## 📁 Project Structure
 
-```
-src/
-├── app/                    # Next.js App Router
-│   ├── page.tsx           # Homepage
-│   ├── layout.tsx         # Root layout
-│   └── globals.css        # Global styles
-├── components/            # Reusable components
-│   ├── ui/               # Basic UI components
-│   ├── layout/           # Layout components
-│   ├── HeroBanner.tsx    # Homepage hero section
-│   └── FeatureCards.tsx  # Feature showcase
-├── lib/                  # Utilities
-│   └── utils.ts          # Helper functions
-└── data/                 # Static data
-    └── governmentSchemes.ts # Government schemes data
-```
 
 ## 🎯 Current Status
 
