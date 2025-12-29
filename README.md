@@ -2,7 +2,7 @@
 
 ## 🌾 Project Overview
 
-KisanAI is a comprehensive AI-powered farmer assistant web application designed specifically for Indian farmers. The application provides voice-based Q&A in Hindi, image-based crop analysis, weather forecasting, market prices, government scheme information, and digital KCC application services.
+KisanAI is a comprehensive AI powered farmer assistant web application designed specifically for Indian farmers. The application provides voice-based Q&A in Hindi, image-based crop analysis, weather forecasting, market prices, government scheme information, and digital KCC application services.
 
 ## 🎯 Current Status: Phase 7 Complete ✅
 
