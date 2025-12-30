@@ -290,25 +290,46 @@ export default function Weather() {
         'Tornado': 'બવંડર'
       },
       ml: {
-        'Clear': 'വ്യക്തമായ ആകാശം',
+        'Clear': 'വ്യക്തമായ',
         'Clouds': 'മേഘം',
         'Rain': 'മഴ',
         'Drizzle': 'തുള്ളിമഴ',
-        'Thunderstorm': 'പ്രകോപിതമായ',
+        'Thunderstorm': 'പ്രകോപിത',
         'Snow': 'മഞ്ഞ്',
-        'Mist': 'മൂടൽമഞ്ഞ്',
+        'Mist': 'മൂടൽ',
         'Smoke': 'പുക',
-        'Haze': 'മൂടൽമഞ്ഞ്',
+        'Haze': 'മൂടൽ',
         'Dust': 'പൊടി',
-        'Fog': 'മൂടൽമഞ്ഞ്',
-        'Sand': 'മണൽ കൊടുങ്കാറ്റ്',
-        'Ash': 'അഗ്നിപർവത ചാരം',
+        'Fog': 'മൂടൽ',
+        'Sand': 'മണൽ',
+        'Ash': 'ചാരം',
         'Squall': 'സ്ക്വാൾ',
         'Tornado': 'ടൊർണേഡോ'
       }
     }
    
     const langConditions = conditions[language] || conditions.en
+    // For Malayalam, return shorter versions to prevent overflow
+    if (language === 'ml') {
+      const shortConditions = {
+        'Clear': 'വ്യക്തം',
+        'Clouds': 'മേഘം',
+        'Rain': 'മഴ',
+        'Drizzle': 'തുള്ളിമഴ',
+        'Thunderstorm': 'പ്രകോപിതം',
+        'Snow': 'മഞ്ഞ്',
+        'Mist': 'മൂടൽ',
+        'Smoke': 'പുക',
+        'Haze': 'മൂടൽ',
+        'Dust': 'പൊടി',
+        'Fog': 'മൂടൽ',
+        'Sand': 'മണൽ',
+        'Ash': 'ചാരം',
+        'Squall': 'സ്ക്വാൾ',
+        'Tornado': 'ടൊർണേഡോ'
+      }
+      return shortConditions[main] || main
+    }
     return langConditions[main] || main
   }, [language])
 
@@ -349,15 +370,15 @@ export default function Weather() {
         'Drizzle': 'હળવો વરસાદ પાક માટે ફાયદાકારક',
         'Thunderstorm': 'તોફાનથી પાકનું નુકસાન શક્ય',
         'Snow': 'બરફથી પાક સુરક્ષા જરૂરી',
-        'default': 'આજનું હવામાન કૃഷિ પ્રવૃત્તિઓ માટે સામાન્ય છે'
+        'default': 'આજનું હવામાન કૃષિ પ્રવૃત્તિઓ માટે સામાન્ય છે'
       },
       ml: {
         'Clear': 'കൃഷിക്ക് മികച്ച ദിവസം',
-        'Clouds': 'മേഘങ്ങളോടെ അനുകൂലമായ കാലാവസ്ഥ',
-        'Rain': 'മഴ കാരണം കുറഞ്ഞ ജലസേചനം ആവശ്യമാണ്',
-        'Drizzle': 'ചെറുമഴ വിളകൾക്ക് ഗുണകരമാണ്',
-        'Thunderstorm': 'കൊടുങ്കാറ്റിൽ നിന്ന് വിള നഷ്ടം സാധ്യമാണ്',
-        'Snow': 'മഞ്ഞിൽ നിന്ന് വിള സംരക്ഷണം ആവശ്യമാണ്',
+        'Clouds': 'മേഘങ്ങളോടെ അനുകൂലം',
+        'Rain': 'മഴ കാരണം കുറഞ്ഞ ജലസേചനം',
+        'Drizzle': 'ചെറുമഴ വിളകൾക്ക് ഗുണകരം',
+        'Thunderstorm': 'കൊടുങ്കാറ്റിൽ നിന്ന് വിള നഷ്ടം',
+        'Snow': 'മഞ്ഞിൽ നിന്ന് വിള സംരക്ഷണം',
         'default': 'ഇന്നത്തെ കാലാവസ്ഥ കാർഷിക പ്രവർത്തനങ്ങൾക്ക് സാധാരണമാണ്'
       }
     }
@@ -366,18 +387,19 @@ export default function Weather() {
     return langDescriptions[condition] || langDescriptions.default
   }, [language])
 
-  // Get wind direction
+  // Get wind direction - shorter versions for Malayalam
   const getWindDirection = useCallback((degrees) => {
     const directions = {
       en: ['North', 'Northeast', 'East', 'Southeast', 'South', 'Southwest', 'West', 'Northwest'],
       hi: ['उत्तर', 'उत्तर-पूर्व', 'पूर्व', 'दक्षिण-पूर्व', 'दक्षिण', 'दक्षिण-पश्चिम', 'पश्चिम', 'उत्तर-पश्चिम'],
       mr: ['उत्तर', 'उत्तर-पूर्व', 'पूर्व', 'दक्षिण-पूर्व', 'दक्षिण', 'दक्षिण-पश्चिम', 'पश्चिम', 'उत्तर-पश्चिम'],
       gu: ['ઉત્તર', 'ઉત્તર-પૂર્વ', 'પૂર્વ', 'દક્ષિણ-પૂર્વ', 'દક્ષિણ', 'દક્ષિણ-પશ્ચિમ', 'પશ્ચિમ', 'ઉત્તર-પશ્ચિમ'],
-      ml: ['വടക്ക്', 'വടക്കുകിഴക്കൻ', 'കിഴക്ക്', 'തെക്കുകിഴക്കൻ', 'തെക്ക്', 'തെക്കുപടിഞ്ഞാറൻ', 'പടിഞ്ഞാറ്', 'വടക്കുപടിഞ്ഞാറൻ']
+      ml: ['വടക്ക്', 'വടക്ക്-കിഴ.', 'കിഴ.', 'തെക്ക്-കിഴ.', 'തെക്ക്', 'തെക്ക്-പടി.', 'പടി.', 'വടക്ക്-പടി.']
     }
    
     const langDirections = directions[language] || directions.en
-    return langDirections[Math.round(degrees / 45) % 8]
+    const index = Math.round(degrees / 45) % 8
+    return langDirections[index]
   }, [language])
 
   // Fetch current weather data
@@ -391,11 +413,16 @@ export default function Weather() {
       if (data.cod !== 200) {
         throw new Error(data.message || t('weatherDataFailed'))
       }
+      
+      // Get base condition (shorter for Malayalam)
+      const baseCondition = data.weather[0].main
+      const translatedCondition = getWeatherCondition(baseCondition)
+      
       return {
         location: data.name + ', ' + data.sys.country,
         temperature: Math.round(data.main.temp),
-        condition: getWeatherCondition(data.weather[0].main, data.weather[0].description),
-        description: getWeatherDescription(data.weather[0].main),
+        condition: translatedCondition,
+        description: getWeatherDescription(baseCondition),
         humidity: data.main.humidity,
         windSpeed: Math.round(data.wind.speed * 3.6),
         windDirection: getWindDirection(data.wind.deg),
@@ -432,6 +459,7 @@ export default function Weather() {
       if (data.cod !== '200') {
         throw new Error(data.message || t('forecastDataFailed'))
       }
+      
       const getMostFrequentCondition = (conditions) => {
         const frequency = {}
         conditions.forEach(condition => {
@@ -439,6 +467,7 @@ export default function Weather() {
         })
         return Object.keys(frequency).reduce((a, b) => frequency[a] > frequency[b] ? a : b)
       }
+      
       // Group forecast by day and get daily data
       const dailyForecast = {}
       data.list.forEach(item => {
@@ -459,7 +488,8 @@ export default function Weather() {
         dailyForecast[date].windSpeed.push(item.wind.speed)
         dailyForecast[date].rainChance.push(item.pop * 100)
       })
-      // Generate 5-day forecast
+      
+      // Generate 5-day forecast with shorter day names for Malayalam
       const forecastDays = {
         en: ['Today', 'Tomorrow', 'Day after', 'Third day', 'Fourth day'],
         hi: ['आज', 'कल', 'परसों', 'तीसरे दिन', 'चौथे दिन'],
@@ -476,14 +506,23 @@ export default function Weather() {
         const high = Math.round(Math.max(...dayData.temps))
         const low = Math.round(Math.min(...dayData.temps))
         const mainCondition = getMostFrequentCondition(dayData.conditions)
+        const translatedCondition = getWeatherCondition(mainCondition)
+       
+        // Shorter description for Malayalam
+        let description = ''
+        if (language === 'ml') {
+          description = `${days[index]} ${translatedCondition}`
+        } else {
+          description = `${days[index]} ${language === 'en' ? 'with' : language === 'hi' ? 'के साथ' : language === 'mr' ? 'सह' : language === 'gu' ? 'સાથે' : 'കൂടെ'} ${translatedCondition}`
+        }
        
         return {
           day: days[index],
           date: date,
           high,
           low,
-          condition: getWeatherCondition(mainCondition),
-          description: `${days[index]} ${language === 'en' ? 'with' : language === 'hi' ? 'के साथ' : language === 'mr' ? 'सह' : language === 'gu' ? 'સાથે' : 'കൂടെ'} ${getWeatherCondition(mainCondition)}`,
+          condition: translatedCondition,
+          description: description,
           humidity: Math.round(dayData.humidity.reduce((a, b) => a + b) / dayData.humidity.length),
           windSpeed: Math.round(dayData.windSpeed.reduce((a, b) => a + b) / dayData.windSpeed.length * 3.6),
           rainChance: Math.round(dayData.rainChance.reduce((a, b) => a + b) / dayData.rainChance.length)
@@ -549,7 +588,7 @@ ${forecastData.slice(0, 3).map(day =>
 1. मुख्य शिफारस (1 वाक्य)
 2. त्वरित कारवाई (2-3 वाक्य)
 3. भविष्यातील तयारी (1 वाक्य)
-उत्तर फक्त मराठीत द्या, कोणतेही मार्कडाउन नाही.`,
+उत्तर फक्त मराठीत द्या, कोणतेही मार्कडाउન नाही.`,
         gu: `તમે એક કૃષિ નિષ્ણાત છો. નીચેની હવામાનની સ્થિતિના આધારે ખેડૂતો માટે વ્યવહારુ સલાહ આપો:
 સ્થાન: ${locationName}
 વર્તમાન હવામાન:
@@ -751,7 +790,7 @@ ${forecastData.slice(0, 3).map(day =>
                 <button
                   onClick={handleSearch}
                   disabled={!searchQuery.trim() || isSearching}
-                  className="bg-primary hover:bg-accent text-primary-foreground px-4 py-2 rounded-md transition-colors disabled:bg-muted disabled:text-muted-foreground whitespace-nowrap flex items-center gap-2"
+                  className="bg-primary hover:bg-accent text-primary-foreground px-4 py-2 rounded-md transition-colors disabled:bg-muted disabled:text-muted-foreground flex items-center gap-2 whitespace-nowrap min-w-[100px] justify-center"
                 >
                   <Search className="h-4 w-4" />
                   {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : t('search')}
@@ -759,11 +798,11 @@ ${forecastData.slice(0, 3).map(day =>
               </div>
             </div>
            
-            <div className="flex gap-2 flex-wrap justify-center sm:justify-end">
+            <div className="flex gap-2 flex-wrap justify-center sm:justify-end w-full sm:w-auto">
               <button
                 onClick={loadCurrentLocationWeather}
                 disabled={isLoading}
-                className="bg-muted hover:bg-muted/80 text-foreground px-4 py-2 rounded-md transition-colors disabled:bg-muted disabled:text-muted-foreground whitespace-nowrap flex items-center gap-2 border border-border"
+                className="bg-muted hover:bg-muted/80 text-foreground px-4 py-2 rounded-md transition-colors disabled:bg-muted disabled:text-muted-foreground flex items-center gap-2 border border-border whitespace-nowrap"
               >
                 <Navigation className="h-4 w-4" />
                 {t('currentLocation')}
@@ -771,7 +810,7 @@ ${forecastData.slice(0, 3).map(day =>
               <button
                 onClick={() => loadWeatherDataByCoords(userLocation?.latitude, userLocation?.longitude)}
                 disabled={isLoading || !userLocation}
-                className="bg-muted hover:bg-muted/80 text-foreground px-4 py-2 rounded-md transition-colors disabled:bg-muted disabled:text-muted-foreground whitespace-nowrap flex items-center gap-2 border border-border"
+                className="bg-muted hover:bg-muted/80 text-foreground px-4 py-2 rounded-md transition-colors disabled:bg-muted disabled:text-muted-foreground flex items-center gap-2 border border-border whitespace-nowrap"
               >
                 <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
                 {isLoading ? t('loading') : t('refresh')}
@@ -784,10 +823,10 @@ ${forecastData.slice(0, 3).map(day =>
         {error && (
           <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-lg flex items-center flex-wrap gap-2">
             <AlertTriangle className="h-5 w-5 text-destructive flex-shrink-0" />
-            <span className="text-destructive text-sm sm:text-base">{error}</span>
+            <span className="text-destructive text-sm sm:text-base flex-1 min-w-0 break-words">{error}</span>
             <button
               onClick={loadCurrentLocationWeather}
-              className="ml-auto bg-destructive/10 hover:bg-destructive/20 text-destructive px-3 py-1 rounded-md text-sm transition-colors border border-destructive/20"
+              className="ml-auto bg-destructive/10 hover:bg-destructive/20 text-destructive px-3 py-1 rounded-md text-sm transition-colors border border-destructive/20 whitespace-nowrap"
             >
               {t('tryAgain')}
             </button>
@@ -799,11 +838,11 @@ ${forecastData.slice(0, 3).map(day =>
           <div className="bg-card rounded-lg mb-6 sm:mb-8 p-4 sm:p-6 border border-border shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 mb-4 border-b border-border">
               <h2 className="text-xl sm:text-2xl font-bold text-foreground">
-                {t('currentWeather')} - {displayLocation}
+                {t('currentWeather')} - <span className="break-words">{displayLocation}</span>
               </h2>
               <div className="flex items-center gap-2 text-muted-foreground text-sm mt-2 sm:mt-0">
-                <MapPin className="h-4 w-4" />
-                <span>{displayLocation}</span>
+                <MapPin className="h-4 w-4 flex-shrink-0" />
+                <span className="break-words">{displayLocation}</span>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:gap-6">
@@ -811,7 +850,7 @@ ${forecastData.slice(0, 3).map(day =>
               <div className="text-center col-span-1 md:col-span-2 lg:col-span-1">
                 <div className="mx-auto mb-2">{getWeatherIcon(currentWeather.condition)}</div>
                 <p className="text-3xl sm:text-4xl font-bold text-foreground">{currentWeather.temperature}°C</p>
-                <p className="text-foreground font-medium text-base sm:text-lg">{currentWeather.condition}</p>
+                <p className="text-foreground font-medium text-base sm:text-lg break-words">{currentWeather.condition}</p>
                 <p className="text-sm text-muted-foreground mt-1">{t('feelsLike')}: {currentWeather.feelsLike}°C</p>
               </div>
              
@@ -819,15 +858,15 @@ ${forecastData.slice(0, 3).map(day =>
               <div className="space-y-3 col-span-1 md:col-span-2 lg:col-span-1">
                 <div className="flex items-center gap-2 text-foreground font-medium text-sm sm:text-base">
                   <Droplets className="h-5 w-5 text-primary flex-shrink-0" />
-                  <span>{t('humidity')}: {currentWeather.humidity}%</span>
+                  <span className="break-words">{t('humidity')}: {currentWeather.humidity}%</span>
                 </div>
                 <div className="flex items-center gap-2 text-foreground font-medium text-sm sm:text-base">
                   <Wind className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                  <span>{t('wind')}: {currentWeather.windSpeed} km/h {currentWeather.windDirection}</span>
+                  <span className="break-words">{t('wind')}: {currentWeather.windSpeed} km/h {currentWeather.windDirection}</span>
                 </div>
                 <div className="flex items-center gap-2 text-foreground font-medium text-sm sm:text-base">
                   <Gauge className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                  <span>{t('pressure')}: {currentWeather.pressure} hPa</span>
+                  <span className="break-words">{t('pressure')}: {currentWeather.pressure} hPa</span>
                 </div>
               </div>
              
@@ -835,28 +874,29 @@ ${forecastData.slice(0, 3).map(day =>
               <div className="space-y-3 col-span-1 md:col-span-2 lg:col-span-1">
                 <div className="flex items-center gap-2 text-foreground font-medium text-sm sm:text-base">
                   <Eye className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                  <span>{t('visibility')}: {currentWeather.visibility} km</span>
+                  <span className="break-words">{t('visibility')}: {currentWeather.visibility} km</span>
                 </div>
                 <div className="flex items-center gap-2 text-foreground font-medium text-sm sm:text-base">
                   <Sun className="h-5 w-5 text-primary flex-shrink-0" />
-                  <span>{t('uvIndex')}: {currentWeather.uvIndex}</span>
+                  <span className="break-words">{t('uvIndex')}: {currentWeather.uvIndex}</span>
                 </div>
                 <div className="flex items-center gap-2 text-foreground font-medium text-sm sm:text-base">
                   <Thermometer className="h-5 w-5 text-destructive flex-shrink-0" />
-                  <span>{t('feelsLike')}: {currentWeather.feelsLike}°C</span>
+                  <span className="break-words">{t('feelsLike')}: {currentWeather.feelsLike}°C</span>
                 </div>
               </div>
+              
               {/* Sun Times */}
               <div className="space-y-3 col-span-1 md:col-span-2 lg:col-span-1">
                 <div className="flex items-center gap-2 text-foreground font-medium text-sm sm:text-base">
                   <Sunrise className="h-5 w-5 text-primary flex-shrink-0" />
-                  <span>{t('sunrise')}: {currentWeather.sunrise}</span>
+                  <span className="break-words">{t('sunrise')}: {currentWeather.sunrise}</span>
                 </div>
                 <div className="flex items-center gap-2 text-foreground font-medium text-sm sm:text-base">
                   <Sunset className="h-5 w-5 text-primary flex-shrink-0" />
-                  <span>{t('sunset')}: {currentWeather.sunset}</span>
+                  <span className="break-words">{t('sunset')}: {currentWeather.sunset}</span>
                 </div>
-                <div className="text-xs text-muted-foreground mt-2">
+                <div className="text-xs text-muted-foreground mt-2 break-words">
                   {t('lastUpdated')}: {currentWeather.lastUpdated}
                 </div>
               </div>
@@ -868,23 +908,23 @@ ${forecastData.slice(0, 3).map(day =>
         {forecast.length > 0 && (
           <div className="bg-card rounded-lg mb-6 sm:mb-8 p-4 sm:p-6 border border-border shadow-sm">
             <h2 className="text-lg sm:text-xl font-bold text-foreground mb-4">
-              {displayLocation} - {getStaticTranslation(language, 'fiveDayForecast')}
+              <span className="break-words">{displayLocation}</span> - {getStaticTranslation(language, 'fiveDayForecast')}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 sm:gap-4">
               {forecast.map((day, index) => (
                 <div key={index} className="text-center p-3 sm:p-4 rounded-lg bg-muted border border-border hover:shadow-md transition-shadow">
-                  <p className="font-semibold text-foreground mb-1 text-sm">{day.day}</p>
-                  <p className="text-xs text-muted-foreground mb-2">{day.date}</p>
+                  <p className="font-semibold text-foreground mb-1 text-sm break-words">{day.day}</p>
+                  <p className="text-xs text-muted-foreground mb-2 truncate">{day.date}</p>
                   <div className="mx-auto mb-2">{getWeatherIcon(day.condition)}</div>
-                  <p className="text-sm text-foreground font-medium mb-1">{day.condition}</p>
+                  <p className="text-sm text-foreground font-medium mb-1 break-words">{day.condition}</p>
                   <p className="text-sm mb-2">
                     <span className="font-medium text-foreground">{Math.round(day.high)}°</span>
                     <span className="text-muted-foreground ml-1">{Math.round(day.low)}°</span>
                   </p>
                   <div className="text-xs text-muted-foreground space-y-1">
-                    <div>{t('rainChance')}: {day.rainChance}%</div>
-                    <div>{t('humidity')}: {day.humidity}%</div>
-                    <div>{t('wind')}: {day.windSpeed} km/h</div>
+                    <div className="truncate">{t('rainChance')}: {day.rainChance}%</div>
+                    <div className="truncate">{t('humidity')}: {day.humidity}%</div>
+                    <div className="truncate">{t('wind')}: {day.windSpeed} km/h</div>
                   </div>
                 </div>
               ))}
@@ -897,7 +937,7 @@ ${forecastData.slice(0, 3).map(day =>
           <div className="bg-card rounded-lg mb-6 sm:mb-8 p-4 sm:p-6 border border-border shadow-sm">
             <h2 className="flex items-center text-lg sm:text-xl font-bold text-foreground mb-4">
               <AlertTriangle className="h-6 w-6 mr-2 text-primary" />
-              {displayLocation} - {getStaticTranslation(language, 'aiFarmingAdvice')}
+              <span className="break-words">{displayLocation} - {getStaticTranslation(language, 'aiFarmingAdvice')}</span>
             </h2>
             <div className="space-y-4">
               {farmingAdvice.map((advice, index) => (
@@ -911,17 +951,17 @@ ${forecastData.slice(0, 3).map(day =>
                 >
                   <div className="flex items-start justify-between flex-wrap gap-2">
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-foreground mb-1 text-sm sm:text-base">
+                      <h3 className="font-semibold text-foreground mb-1 text-sm sm:text-base break-words">
                         <span className="mr-2">{advice.icon}</span>
                         {getStaticTranslation(language, advice.titleKey)}
                         {advice.urgent && (
-                          <span className="ml-2 inline-block px-2 py-1 text-xs bg-destructive text-destructive-foreground rounded-full">
+                          <span className="ml-2 inline-block px-2 py-1 text-xs bg-destructive text-destructive-foreground rounded-full whitespace-nowrap">
                             {t('urgent')}
                           </span>
                         )}
                       </h3>
-                      <p className="text-foreground font-medium mb-2 whitespace-pre-wrap text-sm">{advice.description}</p>
-                      <p className="text-sm text-muted-foreground italic">
+                      <p className="text-foreground font-medium mb-2 whitespace-pre-wrap text-sm break-words">{advice.description}</p>
+                      <p className="text-sm text-muted-foreground italic break-words">
                         {t('suggestedAction')}: {advice.action}
                       </p>
                     </div>
@@ -940,31 +980,31 @@ ${forecastData.slice(0, 3).map(day =>
               {currentWeather && currentWeather.temperature > 35 && (
                 <div className="flex items-center gap-2 text-destructive">
                   <AlertTriangle className="h-4 w-4 flex-shrink-0" />
-                  <span className="text-sm font-medium">{t('highTempWarning')}</span>
+                  <span className="text-sm font-medium break-words">{t('highTempWarning')}</span>
                 </div>
               )}
               {currentWeather && currentWeather.humidity > 80 && (
                 <div className="flex items-center gap-2 text-destructive">
                   <AlertTriangle className="h-4 w-4 flex-shrink-0" />
-                  <span className="text-sm font-medium">{t('highHumidityCaution')}</span>
+                  <span className="text-sm font-medium break-words">{t('highHumidityCaution')}</span>
                 </div>
               )}
               {currentWeather && currentWeather.windSpeed > 25 && (
                 <div className="flex items-center gap-2 text-primary">
                   <AlertTriangle className="h-4 w-4 flex-shrink-0" />
-                  <span className="text-sm font-medium">{t('strongWindWarning')}</span>
+                  <span className="text-sm font-medium break-words">{t('strongWindWarning')}</span>
                 </div>
               )}
-              {currentWeather && (currentWeather.condition.includes('तूफान') || currentWeather.condition.includes('Thunderstorm') || currentWeather.condition.includes('वादळ') || currentWeather.condition.includes('તોફાન') || currentWeather.condition.includes('പ്രകോപിതമായ')) && (
+              {currentWeather && (currentWeather.condition.includes('तूफान') || currentWeather.condition.includes('Thunderstorm') || currentWeather.condition.includes('वादळ') || currentWeather.condition.includes('તોફાન') || currentWeather.condition.includes('പ്രകോപിത')) && (
                 <div className="flex items-center gap-2 text-destructive">
                   <AlertTriangle className="h-4 w-4 flex-shrink-0" />
-                  <span className="text-sm font-medium">{t('stormWarning')}</span>
+                  <span className="text-sm font-medium break-words">{t('stormWarning')}</span>
                 </div>
               )}
-              {currentWeather && currentWeather.temperature <= 35 && currentWeather.humidity <= 80 && currentWeather.windSpeed <= 25 && !currentWeather.condition.includes('तूफान') && !currentWeather.condition.includes('Thunderstorm') && !currentWeather.condition.includes('वादळ') && !currentWeather.condition.includes('તોફાન') && !currentWeather.condition.includes('പ്രകോപിതമായ') && (
+              {currentWeather && currentWeather.temperature <= 35 && currentWeather.humidity <= 80 && currentWeather.windSpeed <= 25 && !currentWeather.condition.includes('तूफान') && !currentWeather.condition.includes('Thunderstorm') && !currentWeather.condition.includes('वादळ') && !currentWeather.condition.includes('તોફાન') && !currentWeather.condition.includes('പ്രകോപിത') && (
                 <div className="flex items-center gap-2 text-primary">
                   <Sun className="h-4 w-4 flex-shrink-0" />
-                  <span className="text-sm font-medium">{t('favorableConditions')}</span>
+                  <span className="text-sm font-medium break-words">{t('favorableConditions')}</span>
                 </div>
               )}
             </div>
@@ -974,29 +1014,29 @@ ${forecastData.slice(0, 3).map(day =>
             <div className="space-y-2 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <span className="text-lg">🌱</span>
-                <span className="flex-1">{getTip(language, 'sowingTimeTip')}</span>
+                <span className="flex-1 break-words">{getTip(language, 'sowingTimeTip')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-lg">💧</span>
-                <span className="flex-1">{getTip(language, 'irrigationTip')}</span>
+                <span className="flex-1 break-words">{getTip(language, 'irrigationTip')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-lg">🌿</span>
-                <span className="flex-1">{getTip(language, 'cropProtectionTip')}</span>
+                <span className="flex-1 break-words">{getTip(language, 'cropProtectionTip')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-lg">🔍</span>
-                <span className="flex-1">{getTip(language, 'weatherCheckTip')}</span>
+                <span className="flex-1 break-words">{getTip(language, 'weatherCheckTip')}</span>
               </div>
             </div>
           </div>
         </div>
 
         <div className="text-center">
-          <p className="text-muted-foreground font-medium text-sm sm:text-base">
+          <p className="text-muted-foreground font-medium text-sm sm:text-base break-words">
             {t('weatherInfoNote')}
           </p>
-          <p className="text-xs text-muted-foreground mt-2">
+          <p className="text-xs text-muted-foreground mt-2 break-words">
             {t('dataSource')}: OpenWeatherMap | {t('lastUpdated')}: {lastRefresh.toLocaleString(language === 'hi' ? 'hi-IN' : 'en-IN')}
           </p>
         </div>

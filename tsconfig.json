@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -11,7 +15,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
       {
@@ -19,9 +23,60 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   },
-  "include": ["next-env.d.js", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/__tests__/components/HeroBanner.test.jsx", "src/__tests__/components/Header.test.jsx", "src/__tests__/components/Footer.test.jsx", "src/__tests__/pages/CropAnalysis.test.jsx", "src/__tests__/pages/EligibilityChecker.test.jsx", "src/__tests__/pages/KCCApplication.test.jsx", "src/__tests__/pages/MarketPrices.test.jsx", "src/__tests__/pages/Schemes.test.jsx", "src/__tests__/pages/VoiceAssistant.test.jsx", "src/__tests__/pages/Weather.test.jsx", "src/__tests__/hooks/useSpeechSynthesis.test.jsx", "src/__tests__/hooks/useSpeechRecognitionFixed.test.jsx", "src/__tests__/hooks/useSpeechRecognition.test.jsx", "src/app/crop-analysis/page.jsx", "src/app/kcc-application/page.jsx", "src/app/market-prices/page.jsx", "src/app/schemes/eligibility-checker/page.jsx", "src/app/schemes/page.jsx", "src/app/voice-assistant/page.jsx", "src/app/weather/page_new.jsx", "src/app/weather/page.jsx", "src/app/homepage.jsx", "src/app/layout.jsx", "src/app/page.jsx", "src/components/layout/Footer.jsx", "src/components/layout/Header.jsx", "src/components/ui/button.jsx", "src/components/ui/card.jsx", "src/components/FeatureCards.jsx", "src/components/HeroBanner.jsx", "src/components/theme-provider.jsx", "src/components/theme-toggle.jsx", "src/data/farmingKnowledge.js", "src/data/governmentSchemes.js", "src/data/marketData.js", "src/data/schemeApplications.js", "src/hooks/useSpeechRecognition.js", "src/hooks/useSpeechSynthesis.js", "src/lib/utils.js", "src/types/speech.d.js", "next.config.js"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.js",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/__tests__/components/HeroBanner.test.jsx",
+    "src/__tests__/components/Header.test.jsx",
+    "src/__tests__/components/Footer.test.jsx",
+    "src/__tests__/pages/CropAnalysis.test.jsx",
+    "src/__tests__/pages/EligibilityChecker.test.jsx",
+    "src/__tests__/pages/KCCApplication.test.jsx",
+    "src/__tests__/pages/MarketPrices.test.jsx",
+    "src/__tests__/pages/Schemes.test.jsx",
+    "src/__tests__/pages/VoiceAssistant.test.jsx",
+    "src/__tests__/pages/Weather.test.jsx",
+    "src/__tests__/hooks/useSpeechSynthesis.test.jsx",
+    "src/__tests__/hooks/useSpeechRecognitionFixed.test.jsx",
+    "src/__tests__/hooks/useSpeechRecognition.test.jsx",
+    "src/app/crop-analysis/page.jsx",
+    "src/app/kcc-application/page.jsx",
+    "src/app/market-prices/page.jsx",
+    "src/app/schemes/eligibility-checker/page.jsx",
+    "src/app/schemes/page.jsx",
+    "src/app/voice-assistant/page.jsx",
+    "src/app/weather/page_new.jsx",
+    "src/app/weather/page.jsx",
+    "src/app/homepage.jsx",
+    "src/app/layout.jsx",
+    "src/app/page.jsx",
+    "src/components/layout/Footer.jsx",
+    "src/components/layout/Header.jsx",
+    "src/components/ui/button.jsx",
+    "src/components/ui/card.jsx",
+    "src/components/FeatureCards.jsx",
+    "src/components/HeroBanner.jsx",
+    "src/components/theme-provider.jsx",
+    "src/components/theme-toggle.jsx",
+    "src/data/farmingKnowledge.js",
+    "src/data/governmentSchemes.js",
+    "src/data/marketData.js",
+    "src/data/schemeApplications.js",
+    "src/hooks/useSpeechRecognition.js",
+    "src/hooks/useSpeechSynthesis.js",
+    "src/lib/utils.js",
+    "src/types/speech.d.js",
+    "next.config.js",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

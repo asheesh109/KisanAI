@@ -1,128 +1,82 @@
 'use client'
+
 import { useLanguage } from '@/contexts/LanguageContext'
-import { ChevronRight, Mic, Sparkles, Zap } from 'lucide-react'
+import { ChevronRight, Mic, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
 export default function HeroBanner() {
   const { t } = useLanguage()
-  
+
   return (
-    <div className="relative min-h-[700px] sm:min-h-[750px] overflow-hidden bg-background">
-      {/* Dynamic gradient background with multiple layers */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/10"></div>
-        <div className="absolute inset-0 bg-gradient-to-tr from-accent/5 via-transparent to-primary/5 animate-gradient"></div>
+    <div className="relative min-h-[600px] sm:min-h-[650px] overflow-hidden bg-background">
+      {/* Enhanced Animated Background with multiple layers */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/3 via-accent/3 to-primary/3"></div>
+      <div className="absolute inset-0 bg-gradient-to-tl from-primary/5 to-transparent opacity-75 animate-gradient-shift"></div>
+      
+      {/* Floating Geometric Shapes with varied animations */}
+      <div className="absolute top-16 sm:top-20 right-16 sm:right-20 w-64 sm:w-72 h-64 sm:h-72 bg-primary/8 dark:bg-primary/15 rounded-full blur-3xl animate-float-slow"></div>
+      <div className="absolute bottom-16 sm:bottom-20 left-16 sm:left-20 w-80 sm:w-96 h-80 sm:h-96 bg-accent/8 dark:bg-accent/15 rounded-full blur-3xl animate-drift"></div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 sm:w-120 h-96 sm:h-120 bg-gradient-to-r from-primary/5 to-accent/5 rounded-full blur-3xl animate-pulse-slow opacity-30"></div>
+
+      {/* Subtle geometric pattern overlay */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,hsl(var(--primary)/0.02)_25%,hsl(var(--primary)/0.02)_50%,transparent_50%,transparent_75%,hsl(var(--primary)/0.02)_75%,hsl(var(--primary)/0.02)_100%)]"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(-45deg,transparent_25%,hsl(var(--accent)/0.02)_25%,hsl(var(--accent)/0.02)_50%,transparent_50%,transparent_75%,hsl(var(--accent)/0.02)_75%,hsl(var(--accent)/0.02)_100%)] opacity-50"></div>
       </div>
-      
-      {/* Animated orbs with glow effect */}
-      <div className="absolute top-20 right-10 sm:top-24 sm:right-20 w-72 sm:w-96 h-72 sm:h-96 bg-gradient-to-br from-primary/30 to-accent/30 dark:from-primary/20 dark:to-accent/20 rounded-full blur-[100px] animate-float"></div>
-      <div className="absolute bottom-20 left-10 sm:bottom-24 sm:left-20 w-80 sm:w-[28rem] h-80 sm:h-[28rem] bg-gradient-to-tr from-accent/25 to-primary/25 dark:from-accent/15 dark:to-primary/15 rounded-full blur-[100px] animate-float-delayed"></div>
-      
-      {/* Grid pattern overlay */}
-      <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]">
-        <div className="absolute inset-0" style={{
-          backgroundImage: 'linear-gradient(hsl(var(--primary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary)) 1px, transparent 1px)',
-          backgroundSize: '50px 50px'
-        }}></div>
-      </div>
-      
-      {/* Radial glow effects */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 dark:bg-primary/5 rounded-full blur-3xl animate-pulse-slow"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 dark:bg-accent/5 rounded-full blur-3xl animate-pulse-slower"></div>
-      
+
       {/* Content */}
-      <div className="relative flex items-center justify-center min-h-[700px] sm:min-h-[750px] px-4 sm:px-6 py-20 sm:py-28">
-        <div className="max-w-6xl mx-auto text-center">
-          {/* Animated badge with premium styling */}
-          <div className="inline-flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 mb-8 sm:mb-10 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 dark:from-primary/30 dark:via-accent/30 dark:to-primary/30 backdrop-blur-sm rounded-full text-sm sm:text-base font-bold shadow-2xl border border-primary/30 dark:border-primary/40 animate-fade-in-down">
-            <div className="relative">
-              <Sparkles className="h-5 w-5 text-primary dark:text-primary animate-pulse" />
-              <Zap className="h-3 w-3 text-accent absolute -top-1 -right-1 animate-ping" />
-            </div>
-            <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent font-extrabold">
-              {t('transformingAgriculture')}
-            </span>
+      <div className="relative flex items-center justify-center h-full px-4 sm:px-6 py-16 sm:py-24 z-10">
+        <div className="max-w-5xl mx-auto text-center">
+          {/* Modern Badge with subtle glow and animation */}
+          <div className="inline-flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 mb-6 sm:mb-8 bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 dark:from-primary/20 dark:via-accent/20 dark:to-primary/20 text-primary rounded-full text-sm sm:text-base font-semibold shadow-lg ring-1 ring-inset ring-primary/20 dark:ring-primary/30 backdrop-blur-sm animate-glow-subtle">
+            <Sparkles className="h-5 w-5 animate-spin-slow" />
+            <span className="tracking-wide">{t('transformingAgriculture')}</span>
           </div>
-          
-          {/* Hero title with advanced gradient */}
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-6 sm:mb-8 leading-[1.1] animate-fade-in-up">
-            <span className="block bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent mb-2">
-              {t('heroWelcome')}
-            </span>
+
+          {/* Hero Title with advanced gradient and staggered animation */}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-4 sm:mb-6 leading-tight bg-gradient-to-r from-foreground via-primary to-accent bg-clip-text text-transparent animate-fade-in-up-delayed">
+            {t('heroWelcome')}
           </h1>
           
-          {/* Subtitle with better contrast */}
-          <p className="text-xl sm:text-2xl md:text-3xl text-muted-foreground/90 dark:text-muted-foreground mb-10 sm:mb-12 max-w-4xl mx-auto leading-relaxed font-medium animate-fade-in-up animation-delay-200">
+          <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground mb-6 sm:mb-10 max-w-3xl mx-auto leading-relaxed opacity-95 font-medium tracking-wide animate-fade-in-up-delayed-2">
             {t('heroTagline')}
           </p>
-          
-          {/* CTA Buttons with enhanced styling */}
-          <div className="flex flex-col sm:flex-row gap-5 justify-center items-center mb-16 sm:mb-20 animate-fade-in-up animation-delay-400">
+
+          {/* Centered Buttons with enhanced styling and stagger animation */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 sm:mb-16 animate-fade-in-up-delayed-3">
             <Link href="/schemes">
-              <Button 
-                size="lg" 
-                className="group relative px-8 sm:px-10 py-6 sm:py-7 bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-primary-foreground font-bold text-lg sm:text-xl transition-all duration-500 shadow-2xl hover:shadow-primary/50 dark:hover:shadow-primary/30 hover:scale-105 flex items-center justify-center space-x-3 min-w-[240px] sm:min-w-[260px] rounded-2xl overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
-                <span className="relative z-10">{t('exploreSchemes')}</span>
-                <ChevronRight className="relative z-10 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+              <Button size="lg" className="px-8 sm:px-10 py-4 bg-gradient-to-r from-primary via-accent to-primary text-primary-foreground font-bold text-base sm:text-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 flex items-center justify-center space-x-3 min-w-[220px] sm:min-w-[240px] rounded-xl">
+                <span className="tracking-wide">{t('exploreSchemes')}</span>
+                <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
               </Button>
             </Link>
-            
             <Link href="/voice-assistant">
-              <Button 
-                variant="outline" 
-                size="lg" 
-                className="group px-8 sm:px-10 py-6 sm:py-7 border-2 border-primary/50 dark:border-primary/40 bg-background/80 dark:bg-background/50 backdrop-blur-sm hover:bg-primary/10 dark:hover:bg-primary/20 text-foreground font-bold text-lg sm:text-xl transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 flex items-center justify-center space-x-3 min-w-[240px] sm:min-w-[260px] rounded-2xl"
-              >
-                <Mic className="h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
-                <span>{t('voiceAssistant')}</span>
+              <Button variant="outline" size="lg" className="px-8 sm:px-10 py-4 border-2 border-border text-foreground font-bold text-base sm:text-lg transition-all duration-300 shadow-md hover:shadow-xl hover:scale-105 active:scale-95 flex items-center justify-center space-x-3 min-w-[220px] sm:min-w-[240px] rounded-xl backdrop-blur-sm">
+                <Mic className="h-5 w-5" />
+                <span className="tracking-wide">{t('voiceAssistant')}</span>
               </Button>
             </Link>
           </div>
-          
-          {/* Enhanced stats with glass morphism */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 max-w-4xl mx-auto pt-8 sm:pt-10 animate-fade-in-up animation-delay-600">
-            <div className="group relative overflow-hidden rounded-3xl bg-card/50 dark:bg-card/30 backdrop-blur-md border border-border/50 dark:border-border/30 p-6 sm:p-8 hover:border-primary/50 dark:hover:border-primary/40 transition-all duration-500 hover:scale-105 hover:shadow-2xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 dark:from-primary/10 dark:to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div className="relative z-10">
-                <div className="text-4xl sm:text-5xl md:text-6xl font-black mb-2 bg-gradient-to-br from-primary to-accent bg-clip-text text-transparent">
-                  20+
-                </div>
-                <div className="text-sm sm:text-base font-semibold text-muted-foreground">
-                  {t('statsGovernmentSchemes')}
-                </div>
-              </div>
+
+          {/* Enhanced Stats with card-like design and hover effects */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 max-w-3xl mx-auto pt-8 sm:pt-10 border-t border-border/30 bg-card/30 dark:bg-card/50 rounded-2xl p-6 sm:p-8 backdrop-blur-sm">
+            <div className="group cursor-default hover:scale-105 transition-all duration-300 rounded-xl p-4 sm:p-6 border border-border/50">
+              <div className="text-2xl sm:text-3xl md:text-4xl font-black mb-2 text-primary group-hover:text-accent tracking-tight">20+</div>
+              <div className="text-sm sm:text-base text-muted-foreground font-medium tracking-wide">{t('statsGovernmentSchemes')}</div>
             </div>
-            
-            <div className="group relative overflow-hidden rounded-3xl bg-card/50 dark:bg-card/30 backdrop-blur-md border border-border/50 dark:border-border/30 p-6 sm:p-8 hover:border-primary/50 dark:hover:border-primary/40 transition-all duration-500 hover:scale-105 hover:shadow-2xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-primary/5 dark:from-accent/10 dark:to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div className="relative z-10">
-                <div className="text-4xl sm:text-5xl md:text-6xl font-black mb-2 bg-gradient-to-br from-accent to-primary bg-clip-text text-transparent">
-                  24/7
-                </div>
-                <div className="text-sm sm:text-base font-semibold text-muted-foreground">
-                  {t('statsSupportAvailable')}
-                </div>
-              </div>
+            <div className="group cursor-default hover:scale-105 transition-all duration-300 rounded-xl p-4 sm:p-6 border border-border/50">
+              <div className="text-2xl sm:text-3xl md:text-4xl font-black mb-2 text-primary group-hover:text-accent tracking-tight">24/7</div>
+              <div className="text-sm sm:text-base text-muted-foreground font-medium tracking-wide">{t('statsSupportAvailable')}</div>
             </div>
-            
-            <div className="group relative overflow-hidden rounded-3xl bg-card/50 dark:bg-card/30 backdrop-blur-md border border-border/50 dark:border-border/30 p-6 sm:p-8 hover:border-primary/50 dark:hover:border-primary/40 transition-all duration-500 hover:scale-105 hover:shadow-2xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 dark:from-primary/10 dark:to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div className="relative z-10">
-                <div className="text-4xl sm:text-5xl md:text-6xl font-black mb-2 bg-gradient-to-br from-primary to-accent bg-clip-text text-transparent">
-                  1K+
-                </div>
-                <div className="text-sm sm:text-base font-semibold text-muted-foreground">
-                  {t('statsFarmersHelped')}
-                </div>
-              </div>
+            <div className="group cursor-default hover:scale-105 transition-all duration-300 rounded-xl p-4 sm:p-6 border border-border/50">
+              <div className="text-2xl sm:text-3xl md:text-4xl font-black mb-2 text-primary group-hover:text-accent tracking-tight">1K+</div>
+              <div className="text-sm sm:text-base text-muted-foreground font-medium tracking-wide">{t('statsFarmersHelped')}</div>
             </div>
           </div>
         </div>
       </div>
-      
+
       <style jsx>{`
         @keyframes fade-in-up {
           from {
@@ -134,87 +88,90 @@ export default function HeroBanner() {
             transform: translateY(0);
           }
         }
-        
-        @keyframes fade-in-down {
+        .animate-fade-in-up {
+          animation: fade-in-up 0.8s ease-out;
+        }
+        @keyframes fade-in-up-delayed {
           from {
             opacity: 0;
-            transform: translateY(-20px);
+            transform: translateY(30px);
           }
           to {
             opacity: 1;
             transform: translateY(0);
           }
         }
-        
-        @keyframes float {
-          0%, 100% { 
-            transform: translate(0, 0) scale(1);
+        .animate-fade-in-up-delayed {
+          animation: fade-in-up-delayed 0.9s ease-out 0.2s both;
+        }
+        @keyframes fade-in-up-delayed-2 {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
           }
-          33% { 
-            transform: translate(30px, -30px) scale(1.1);
-          }
-          66% { 
-            transform: translate(-20px, 20px) scale(0.9);
+          to {
+            opacity: 1;
+            transform: translateY(0);
           }
         }
-        
-        @keyframes gradient {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 0.6; }
+        .animate-fade-in-up-delayed-2 {
+          animation: fade-in-up-delayed-2 0.9s ease-out 0.4s both;
         }
-        
+        @keyframes fade-in-up-delayed-3 {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-fade-in-up-delayed-3 {
+          animation: fade-in-up-delayed-3 0.9s ease-out 0.6s both;
+        }
+        @keyframes gradient-shift {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+        .animate-gradient-shift {
+          background-size: 200% 200%;
+          animation: gradient-shift 15s ease infinite;
+        }
+        @keyframes float-slow {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        .animate-float-slow {
+          animation: float-slow 6s ease-in-out infinite;
+        }
+        @keyframes drift {
+          0%, 100% { transform: translateX(0px); }
+          50% { transform: translateX(10px); }
+        }
+        .animate-drift {
+          animation: drift 8s ease-in-out infinite;
+        }
         @keyframes pulse-slow {
-          0%, 100% { opacity: 0.4; }
-          50% { opacity: 0.8; }
+          0%, 100% { opacity: 0.4; transform: scale(1); }
+          50% { opacity: 0.8; transform: scale(1.05); }
         }
-        
-        @keyframes pulse-slower {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 0.7; }
-        }
-        
-        .animate-fade-in-up {
-          animation: fade-in-up 0.8s ease-out forwards;
-        }
-        
-        .animate-fade-in-down {
-          animation: fade-in-down 0.6s ease-out forwards;
-        }
-        
-        .animation-delay-200 {
-          animation-delay: 0.2s;
-          opacity: 0;
-        }
-        
-        .animation-delay-400 {
-          animation-delay: 0.4s;
-          opacity: 0;
-        }
-        
-        .animation-delay-600 {
-          animation-delay: 0.6s;
-          opacity: 0;
-        }
-        
-        .animate-float {
-          animation: float 20s ease-in-out infinite;
-        }
-        
-        .animate-float-delayed {
-          animation: float 25s ease-in-out infinite;
-          animation-delay: -10s;
-        }
-        
-        .animate-gradient {
-          animation: gradient 8s ease-in-out infinite;
-        }
-        
         .animate-pulse-slow {
-          animation: pulse-slow 6s ease-in-out infinite;
+          animation: pulse-slow 4s ease-in-out infinite;
         }
-        
-        .animate-pulse-slower {
-          animation: pulse-slower 8s ease-in-out infinite;
+        @keyframes glow-subtle {
+          0%, 100% { box-shadow: 0 0 20px hsl(var(--primary)/0.1); }
+          50% { box-shadow: 0 0 30px hsl(var(--primary)/0.2); }
+        }
+        .animate-glow-subtle {
+          animation: glow-subtle 3s ease-in-out infinite;
+        }
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+          animation: spin-slow 20s linear infinite;
         }
       `}</style>
     </div>

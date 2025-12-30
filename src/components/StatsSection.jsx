@@ -30,9 +30,7 @@ export default function StatsSection() {
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 bg-gradient-to-r from-foreground via-primary to-accent bg-clip-text text-transparent">
             {t('ourImpact')}
           </h2>
-          <p className="text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto">
-            Making a real difference in agriculture across India
-          </p>
+        
         </div>
         
         {/* Stats grid */}
