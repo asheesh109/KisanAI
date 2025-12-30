@@ -10,6 +10,7 @@ import {
   FileText, 
   CreditCard 
 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 const features = [
@@ -18,56 +19,56 @@ const features = [
     description: 'voiceAssistantDesc',
     icon: Mic,
     href: '/voice-assistant',
-    color: 'from-sky-500 to-blue-600',
+    color: 'from-primary to-accent',
   },
   {
     title: 'cropAnalysis',
     description: 'cropAnalysisDesc',
     icon: Camera,
     href: '/crop-analysis',
-    color: 'from-emerald-500 to-green-600',
+    color: 'from-primary to-accent',
   },
   {
     title: 'personalizedAdvice',
     description: 'personalizedAdviceDesc',
     icon: Brain,
     href: '/voice-assistant',
-    color: 'from-purple-500 to-indigo-600',
+    color: 'from-primary to-accent',
   },
   {
     title: 'weatherInfo',
     description: 'weatherInfoDesc',
     icon: Cloud,
     href: '/weather',
-    color: 'from-cyan-500 to-teal-600',
+    color: 'from-primary to-accent',
   },
   {
     title: 'marketPrices',
     description: 'marketPricesDesc',
     icon: TrendingUp,
     href: '/market-prices',
-    color: 'from-orange-500 to-red-600',
+    color: 'from-primary to-accent',
   },
   {
     title: 'governmentSchemes',
     description: 'governmentSchemesDesc',
     icon: FileText,
     href: '/schemes',
-    color: 'from-rose-500 to-pink-600',
+    color: 'from-primary to-accent',
   },
   {
     title: 'kccApplication',
     description: 'kccApplicationDesc',
     icon: CreditCard,
     href: '/kcc-application',
-    color: 'from-indigo-500 to-purple-600',
+    color: 'from-primary to-accent',
   },
   {
     title: 'kccQueries',
    description: 'kccQueriesDesc',
     icon: CreditCard,
     href: '/kcc-application',
-    color: 'from-cyan-500 to-teal-600',
+    color: 'from-primary to-accent',
   }
 ]
 
@@ -75,38 +76,37 @@ export default function FeatureCards() {
   const { t } = useLanguage()
 
   return (
-    <section className="py-20">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold mb-4 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+    <section className="py-16 sm:py-20 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="text-center mb-12 sm:mb-16">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent animate-fade-in">
             {t('features')}
           </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto animate-fade-in-delayed">
             {t('tagline')}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {features.map((feature, idx) => {
             const IconComponent = feature.icon
             return (
               <div
                 key={idx}
-                className="group relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                className="group relative overflow-hidden rounded-2xl bg-card shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-border animate-card-appear"
+                style={{ animationDelay: `${idx * 100}ms` }}
               >
-                <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-10 transition-opacity`}></div>
-                <div className="p-6 relative z-10">
-                  <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg`}>
-                    <IconComponent className="h-8 w-8 text-white" />
+                <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}></div>
+                <div className="p-4 sm:p-6 relative z-10 h-full flex flex-col">
+                  <div className={`w-12 sm:w-16 h-12 sm:h-16 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-all duration-300 shadow-lg`}>
+                    <IconComponent className="h-6 sm:h-8 w-6 sm:w-8 text-primary-foreground" />
                   </div>
-                  <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">{t(feature.title)}</h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-4 text-sm">
-                    {t(feature.description)}
-                  </p>
+                  <h3 className="text-lg sm:text-xl font-bold mb-2 text-foreground group-hover:text-primary transition-colors">{t(feature.title)}</h3>
+                  <p className="text-muted-foreground mb-4 sm:mb-6 text-sm flex-grow">{t(feature.description)}</p>
                   <Link href={feature.href}>
-                    <button className={`w-full py-3 rounded-xl bg-gradient-to-r ${feature.color} text-white font-semibold hover:shadow-lg transition-all hover:scale-105`}>
+                    <Button className="w-full bg-primary hover:bg-accent text-primary-foreground font-semibold transition-all duration-300 group-hover:scale-105">
                       {t('getStarted')}
-                    </button>
+                    </Button>
                   </Link>
                 </div>
               </div>
@@ -114,6 +114,30 @@ export default function FeatureCards() {
           })}
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.8s ease-out;
+        }
+        @keyframes fade-in-delayed {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-delayed {
+          animation: fade-in-delayed 0.8s ease-out 0.3s both;
+        }
+        @keyframes card-appear {
+          from { opacity: 0; transform: translateY(30px) scale(0.95); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .animate-card-appear {
+          animation: card-appear 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+      `}</style>
     </section>
   )
 }

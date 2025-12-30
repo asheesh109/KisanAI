@@ -47,9 +47,13 @@
   --ring: 142 70% 45%;
 }
 
-/* Base Styles */
+/* Base Styles with Modern Enhancements */
 * {
   border-color: hsl(var(--border));
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -59,72 +63,7 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Typography - Enhanced for better visibility and cleanliness */
-h1, h2, h3, h4, h5, h6 {
-  color: hsl(var(--foreground));
-  font-weight: 800;
-  line-height: 1.2;
-  margin-bottom: 0.75rem;
-  letter-spacing: -0.025em;
-}
-
-h1 { 
-  font-size: 3rem;
-  font-weight: 900;
-}
-h2 { 
-  font-size: 2.25rem; 
-}
-h3 { 
-  font-size: 1.75rem; 
-}
-h4 { 
-  font-size: 1.375rem; 
-}
-h5 { 
-  font-size: 1.25rem; 
-}
-h6 { 
-  font-size: 1.125rem; 
-}
-
-p {
-  color: hsl(var(--foreground));
-  margin-bottom: 1rem;
-  line-height: 1.7;
-}
-
-/* Home page specific title enhancements */
-.home h1,
-.home-page h1,
-.hero-title {
-  font-size: 3.5rem;
-  color: hsl(var(--foreground));
-  text-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.3),
-    0 0 20px rgba(0, 0, 0, 0.2);
-  margin-bottom: 1rem;
-  position: relative;
-  z-index: 10;
-}
-
-.dark .home h1,
-.dark .home-page h1,
-.dark .hero-title {
-  color: hsl(var(--foreground));
-  text-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.6),
-    0 0 30px rgba(0, 0, 0, 0.4);
-}
-
-/* Hero overlay enhancement for better text visibility */
-.hero-overlay {
-  background: linear-gradient(
-    rgba(0, 0, 0, 0.6),
-    rgba(0, 0, 0, 0.4)
-  ) !important;
+  overflow-x: hidden;
 }
 
 /* Utility Classes - Consolidated */
@@ -174,203 +113,7 @@ p {
   border-color: hsl(var(--border)); 
 }
 
-/* Card Styles - Cleaner with subtle shadows */
-.card {
-  background-color: hsl(var(--card));
-  color: hsl(var(--card-foreground));
-  border: 1px solid hsl(var(--border));
-  border-radius: var(--radius);
-  padding: 2rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-}
-
-.dark .card:hover {
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-}
-
-/* Ensure all card content has proper colors - Consolidated */
-.card h1, 
-.card h2, 
-.card h3, 
-.card h4, 
-.card h5, 
-.card h6,
-.card p, 
-.card span, 
-.card div {
-  color: hsl(var(--card-foreground));
-}
-
-.card .text-muted,
-.card .text-gray-500,
-.card .text-gray-600,
-.card .text-slate-500,
-.card .text-slate-600 {
-  color: hsl(var(--muted-foreground)) !important;
-}
-
-/* Button Styles - Reduced size for better proportions */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius);
-  font-weight: 600;
-  font-size: 0.8125rem;
-  padding: 0.5rem 1rem;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
-  border: none;
-  outline: none;
-  position: relative;
-  overflow: hidden;
-  min-height: 36px;
-  line-height: 1.4;
-}
-
-.btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-}
-
-.btn:hover::before {
-  left: 100%;
-}
-
-.btn:focus-visible {
-  outline: 2px solid hsl(var(--ring));
-  outline-offset: 2px;
-}
-
-.btn-primary {
-  background-color: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
-}
-
-.btn-primary:hover {
-  background-color: hsl(142, 76%, 30%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.dark .btn-primary {
-  background-color: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
-}
-
-.dark .btn-primary:hover {
-  background-color: hsl(142, 70%, 40%);
-}
-
-.btn-outline {
-  background-color: transparent;
-  border: 1px solid hsl(var(--border));
-  color: hsl(var(--foreground));
-}
-
-.btn-outline:hover {
-  background-color: hsl(var(--muted));
-  border-color: hsl(var(--primary));
-  color: hsl(var(--primary));
-  transform: translateY(-1px);
-}
-
-/* Specific button size variants */
-.btn-sm {
-  padding: 0.375rem 0.75rem;
-  font-size: 0.75rem;
-  min-height: 32px;
-}
-
-/* Hero-specific button styling */
-.hero-btn,
-.btn.hero-learn-more {
-  padding: 0.625rem 1.25rem !important;
-  font-size: 0.9375rem !important;
-  min-height: 40px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.025em !important;
-  white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-}
-
-.hero-btn:hover,
-.btn.hero-learn-more:hover {
-  transform: scale(1.05) !important;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2) !important;
-}
-
-/* Input Styles - Cleaner focus ring */
-.input {
-  background-color: hsl(var(--background));
-  border: 1px solid hsl(var(--border));
-  border-radius: var(--radius);
-  padding: 0.75rem 1rem;
-  font-size: 0.875rem;
-  color: hsl(var(--foreground));
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.input::placeholder {
-  color: hsl(var(--muted-foreground));
-}
-
-.input:focus {
-  outline: none;
-  border-color: hsl(var(--ring));
-  box-shadow: 0 0 0 3px hsla(142, 76%, 36%, 0.1);
-  transform: translateY(-1px);
-}
-
-.dark .input {
-  background-color: hsl(var(--card));
-}
-
-.dark .input:focus {
-  box-shadow: 0 0 0 3px hsla(142, 70%, 45%, 0.2);
-}
-
-/* Navigation - Cleaner hover */
-.nav-link {
-  color: hsl(var(--foreground));
-  font-weight: 500;
-  padding: 0.75rem 1.25rem;
-  transition: all 0.2s ease;
-  text-decoration: none;
-  border-radius: var(--radius);
-}
-
-.nav-link:hover {
-  color: hsl(var(--primary));
-  background-color: hsl(var(--muted));
-}
-
-/* Fix for hover background in dark mode - CRITICAL FIX */
-.dark .hover\:bg-slate-50:hover {
-  background-color: hsl(var(--secondary)) !important;
-}
-
-.dark .hover\:bg-slate-600:hover {
-  background-color: rgba(71, 85, 105, 0.5) !important;
-}
-
-.dark .hover\:bg-slate-700\/50:hover {
-  background-color: rgba(51, 65, 85, 0.5) !important;
-}
-
-/* Consolidated Dark Mode Overrides - Grouped for cleanliness */
+/* Dark Mode Overrides - Grouped for cleanliness */
 .dark .text-slate-900,
 .dark .text-slate-800,
 .dark .text-gray-900,
@@ -419,441 +162,141 @@ p {
   border-color: hsl(var(--border)) !important; 
 }
 
-/* Generic gradient overrides - but NOT for specific market analysis cards */
-.dark .bg-gradient-to-br.from-green-50.to-yellow-50,
-.dark .bg-gradient-to-br.from-purple-50.to-indigo-50,
-.dark .bg-gradient-to-br.from-blue-50.to-indigo-50,
-.dark .bg-gradient-to-br.from-slate-50.via-blue-50.to-indigo-50,
-.dark .bg-gradient-to-br.from-green-50.to-blue-50,
-.dark .bg-gradient-to-br.from-purple-50.to-indigo-50,
-.dark .bg-gradient-to-br.from-emerald-50.to-teal-50,
-.dark .bg-gradient-to-r.from-green-600.to-emerald-600,
-.dark .bg-gradient-to-r.from-blue-600.to-indigo-600,
-.dark .from-green-700.to-emerald-700,
-.dark .from-blue-700.to-indigo-700 { 
-  background: linear-gradient(to bottom right, hsl(var(--background)), hsl(var(--card))) !important; 
-}
-
-.dark .bg-green-50,
-.dark .bg-emerald-50 { 
-  background-color: rgba(22, 163, 74, 0.1) !important; 
-}
-
-.dark .bg-blue-50,
-.dark .bg-cyan-50 { 
-  background-color: rgba(37, 99, 235, 0.1) !important; 
-}
-
-.dark .bg-red-50 { 
-  background-color: rgba(220, 38, 38, 0.1) !important; 
-}
-
-.dark .bg-yellow-50,
-.dark .bg-orange-50 { 
-  background-color: rgba(202, 138, 4, 0.1) !important; 
-}
-
-.dark .bg-purple-50 { 
-  background-color: rgba(147, 51, 234, 0.1) !important; 
-}
-
-.dark .text-green-800,
-.dark .text-blue-800,
-.dark .text-orange-800,
-.dark .text-red-700,
-.dark .text-yellow-700 { 
-  color: hsl(var(--secondary-foreground)) !important; 
-}
-
-.dark .bg-white\/80,
-.dark .bg-white\/50,
-.dark .bg-gray-50\/80,
-.dark .bg-blue-50\/80,
-.dark .bg-indigo-50\/80,
-.dark .bg-green-50\/80,
-.dark .bg-cyan-50\/80,
-.dark .bg-red-50\/80,
-.dark .bg-yellow-50\/80,
-.dark .bg-orange-50\/80,
-.dark .bg-emerald-50\/80,
-.dark .bg-slate-50\/80 { 
-  background-color: hsla(var(--card) / 0.8) !important; 
-  backdrop-filter: blur(10px); 
-}
-
-.dark [class*="text-gray"] svg,
-.dark [class*="text-slate"] svg {
-  color: inherit !important;
-}
-
-.dark .bg-white.rounded-lg.p-1.shadow-sm { 
-  background-color: hsl(var(--card)) !important; 
-}
-
-.dark .text-gray-600.hover\:bg-gray-100 { 
-  color: hsl(var(--muted-foreground)) !important; 
-}
-
-.dark .hover\:bg-gray-100:hover { 
-  background-color: hsl(var(--secondary)) !important; 
-}
-
-.dark .bg-gray-100 { 
-  background-color: hsl(var(--secondary)) !important; 
-}
-
-.dark .border-gray-300 { 
-  border-color: hsl(var(--border)) !important; 
-}
-
-.dark .placeholder-gray-500::placeholder { 
-  color: hsl(var(--muted-foreground)) !important; 
-}
-
-.dark .bg-red-50 { 
-  background-color: rgba(220, 38, 38, 0.1) !important; 
-}
-
-.dark .border-red-200 { 
-  border-color: rgba(220, 38, 38, 0.2) !important; 
-}
-
-.dark .text-red-700 { 
-  color: rgb(252, 165, 165) !important; 
-}
-
-.dark .border-b-2.border-green-600 { 
-  border-color: hsl(var(--primary)) !important; 
-}
-
-.dark .header .text-gray-900,
-.dark .market-page .text-slate-900,
-.dark .schemes-page .text-slate-900,
-.dark .kcc-page .text-slate-900,
-.dark .kcc-page .text-slate-800 { 
-  color: hsl(var(--foreground)) !important; 
-}
-
-.dark .market-page .text-slate-600,
-.dark .market-page .text-slate-500,
-.dark .schemes-page .text-slate-600,
-.dark .schemes-page .text-gray-600,
-.dark .kcc-page .text-slate-600,
-.dark .kcc-page .text-gray-600 { 
-  color: hsl(var(--secondary-foreground)) !important; 
-}
-
-.dark .kcc-page .bg-white { 
-  background-color: hsl(var(--card)) !important; 
-}
-
-.dark .kcc-page .text-slate-500,
-.dark .kcc-page .text-gray-500 { 
-  color: hsl(var(--muted-foreground)) !important; 
-}
-
-.dark .sticky.top-0.z-50.backdrop-blur-md.bg-white\/80 { 
-  background-color: hsla(var(--background) / 0.8) !important; 
-  border-bottom-color: hsl(var(--border)) !important; 
-}
-
-.dark .bg-blue-100,
-.dark .bg-red-100,
-.dark .bg-green-100 { 
-  background-color: hsla(142, 70%, 45%, 0.1) !important; 
-}
-
-.dark .bg-gradient-to-r.from-blue-600.to-indigo-600 { 
-  background: linear-gradient(to right, hsl(var(--primary)), hsl(221, 83%, 53%)) !important; 
-}
-
-.dark .from-blue-700.to-indigo-700 { 
-  background: linear-gradient(to right, hsl(142, 70%, 40%), hsl(221, 83%, 48%)) !important; 
-}
-
-.dark .bg-gradient-to-r.from-green-600.to-emerald-600 { 
-  background: linear-gradient(to right, hsl(var(--primary)), hsl(152, 69%, 35%)) !important; 
-}
-
-.dark .from-green-700.to-emerald-700 { 
-  background: linear-gradient(to right, hsl(142, 70%, 40%), hsl(152, 69%, 30%)) !important; 
-}
-
-.dark .bg-gradient-to-br.from-slate-50.to-gray-50 { 
-  background: linear-gradient(to bottom right, hsl(var(--secondary)), hsl(var(--muted))) !important; 
-}
-
-.dark .from-slate-50.to-gray-50 { 
-  background: linear-gradient(to bottom right, hsl(var(--secondary)), hsl(var(--muted))) !important; 
-}
-
-.dark .bg-gray-50 { 
-  background-color: hsl(var(--secondary)) !important; 
-}
-
-.dark .text-gray-700 { 
-  color: hsl(var(--secondary-foreground)) !important; 
-}
-
-.dark .bg-orange-50 { 
-  background-color: rgba(234, 88, 12, 0.1) !important; 
-}
-
-.dark .text-orange-800 { 
-  color: hsl(var(--secondary-foreground)) !important; 
-}
-
-.dark .bg-yellow-50 { 
-  background-color: rgba(202, 138, 4, 0.1) !important; 
-}
-
-.dark .text-yellow-700 { 
-  color: hsl(var(--secondary-foreground)) !important; 
-}
-
-/* Status Colors - Ensured visibility in both modes */
-.text-green-600 { 
-  color: rgb(22, 163, 74); 
-}
-.text-blue-600 { 
-  color: rgb(37, 99, 235); 
-}
-.text-red-600 { 
-  color: rgb(220, 38, 38); 
-}
-.text-yellow-600 { 
-  color: rgb(202, 138, 4); 
-}
-.text-purple-600 { 
-  color: rgb(147, 51, 234); 
-}
-.text-orange-600 { 
-  color: rgb(234, 88, 12); 
-}
-
-/* Background status colors - Light mode */
-.bg-green-50 { 
-  background-color: rgb(240, 253, 244); 
-}
-.bg-blue-50 { 
-  background-color: rgb(239, 246, 255); 
-}
-.bg-red-50 { 
-  background-color: rgb(254, 242, 242); 
-}
-.bg-yellow-50 { 
-  background-color: rgb(254, 252, 232); 
-}
-.bg-purple-50 { 
-  background-color: rgb(250, 245, 255); 
-}
-.bg-orange-50 { 
-  background-color: rgb(255, 247, 237); 
-}
-.bg-emerald-50 { 
-  background-color: rgb(236, 253, 245); 
-}
-.bg-cyan-50 { 
-  background-color: rgb(240, 249, 255); 
-}
-
-/* Ensure proper text colors in colored backgrounds */
-.bg-green-50 *, 
-.bg-blue-50 *, 
-.bg-red-50 *, 
-.bg-yellow-50 *, 
-.bg-purple-50 *, 
-.bg-orange-50 *,
-.bg-emerald-50 *,
-.bg-cyan-50 * { 
-  color: inherit; 
-}
-
-/* Shadow overrides for dark mode */
+/* Enhanced Shadow System for Dark Mode */
 .dark .shadow-sm {
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
 }
 
 .dark .shadow-md {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 8px -1px rgba(0, 0, 0, 0.5);
 }
 
 .dark .shadow-lg {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.5);
 }
 
 .dark .shadow-xl {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 30px -5px rgba(0, 0, 0, 0.6);
 }
 
-/* Hero sections - Cleaner gradient */
-.hero-gradient {
-  background: linear-gradient(135deg, 
-    hsl(142, 76%, 36%) 0%, 
-    hsl(142, 76%, 42%) 100%);
-  color: white;
-  padding: 4rem 2rem;
-  border-radius: var(--radius);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+.dark .shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
 }
 
-.hero-gradient * {
-  color: white !important;
+/* Custom shadow colors for primary/accent */
+.shadow-primary\/10 {
+  box-shadow: 0 10px 25px -5px hsl(var(--primary) / 0.1);
 }
 
-/* Gradient text - Enhanced */
-.gradient-text {
-  background: linear-gradient(135deg, 
-    hsl(142, 76%, 36%) 0%, 
-    hsl(142, 76%, 42%) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.shadow-primary\/20 {
+  box-shadow: 0 10px 25px -5px hsl(var(--primary) / 0.2);
 }
 
-.dark .gradient-text {
-  background: linear-gradient(135deg, 
-    hsl(142, 70%, 50%) 0%, 
-    hsl(142, 70%, 40%) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.shadow-primary\/30 {
+  box-shadow: 0 10px 25px -5px hsl(var(--primary) / 0.3);
+}
+
+.dark .shadow-primary\/10 {
+  box-shadow: 0 10px 25px -5px hsl(var(--primary) / 0.15);
+}
+
+.dark .shadow-primary\/20 {
+  box-shadow: 0 10px 25px -5px hsl(var(--primary) / 0.25);
+}
+
+.dark .shadow-primary\/30 {
+  box-shadow: 0 10px 25px -5px hsl(var(--primary) / 0.35);
+}
+
+.shadow-accent\/10 {
+  box-shadow: 0 10px 25px -5px hsl(var(--accent) / 0.1);
+}
+
+.shadow-accent\/20 {
+  box-shadow: 0 10px 25px -5px hsl(var(--accent) / 0.2);
+}
+
+.dark .shadow-accent\/10 {
+  box-shadow: 0 10px 25px -5px hsl(var(--accent) / 0.15);
+}
+
+.dark .shadow-accent\/20 {
+  box-shadow: 0 10px 25px -5px hsl(var(--accent) / 0.25);
 }
 
 /* Responsive - Improved mobile typography */
 @media (max-width: 768px) {
   h1 { 
     font-size: 2.5rem;
+    line-height: 1.2;
   }
   h2 { 
-    font-size: 1.875rem; 
+    font-size: 1.875rem;
+    line-height: 1.2;
   }
   h3 { 
-    font-size: 1.5rem; 
+    font-size: 1.5rem;
+    line-height: 1.3;
   }
   
   .card,
   .stats-card,
   .feature-card,
   .about-card {
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
   }
 
   .home h1,
   .home-page h1,
   .hero-title {
-    font-size: 2.75rem;
+    font-size: 2.5rem;
+    line-height: 1.15;
   }
 
   .btn {
     padding: 0.5rem 1rem;
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
   }
 
   .hero-btn,
   .btn.hero-learn-more {
-    padding: 0.5rem 1rem !important;
+    padding: 0.75rem 1.25rem !important;
     font-size: 0.875rem !important;
-    min-height: 36px !important;
+    min-height: 44px !important;
   }
 }
 
-/* Animations - Smoother */
-.fade-in {
-  animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.slide-up {
-  animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@keyframes fadeIn {
-  from { 
-    opacity: 0; 
+@media (max-width: 640px) {
+  body {
+    font-size: 0.9375rem;
   }
-  to { 
-    opacity: 1; 
+
+  h1 { 
+    font-size: 2rem;
+  }
+  h2 { 
+    font-size: 1.625rem;
+  }
+  h3 { 
+    font-size: 1.25rem;
   }
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Fix for hover background in dark mode */
+.dark .hover\:bg-slate-50:hover {
+  background-color: hsl(var(--secondary)) !important;
 }
 
-/* Scrollbar - Subtler */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+.dark .hover\:bg-slate-600:hover {
+  background-color: rgba(71, 85, 105, 0.5) !important;
 }
 
-::-webkit-scrollbar-track {
-  background: hsl(var(--muted));
-  border-radius: 3px;
+.dark .hover\:bg-slate-700\/50:hover {
+  background-color: rgba(51, 65, 85, 0.5) !important;
 }
 
-::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted-foreground));
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--primary));
-}
-
-/* Selection - Cleaner */
-::selection {
-  background-color: hsl(var(--primary));
-  color: white;
-}
-
-/* Focus styles - Consistent */
-.focus-ring:focus,
-button:focus-visible,
-input:focus-visible,
-a:focus-visible {
-  outline: 2px solid hsl(var(--ring));
-  outline-offset: 2px;
-}
-
-/* Final catch-all to ensure everything is visible */
-.dark * {
-  border-color: hsl(var(--border));
-}
-
-/* Placeholder text color - Consistent */
-input::placeholder,
-textarea::placeholder {
-  color: hsl(var(--muted-foreground));
-  opacity: 0.6;
-}
-
-.dark input::placeholder,
-.dark textarea::placeholder {
-  color: hsl(var(--muted-foreground));
-  opacity: 0.6;
-}
-
-/* Ensure links are visible - Cleaner underline */
-a {
-  color: hsl(var(--primary));
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-a:hover {
-  text-decoration: underline;
-  color: hsl(142, 76%, 25%);
-}
-
-/* Specific component overrides - Consolidated at end */
+/* Enhanced Card Components */
 .feature-card,
 .stats-card,
 .about-card,
@@ -872,14 +315,14 @@ a:hover {
 .about-card:hover,
 .group:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
 }
 
 .dark .feature-card:hover,
 .dark .stats-card:hover,
 .dark .about-card:hover,
 .dark .group:hover {
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
 }
 
 .feature-card h3,
@@ -900,155 +343,112 @@ a:hover {
   line-height: 1.7;
 }
 
-/* Specific fix for oversized buttons */
-.btn-outline.btn-learn-more,
-.btn[data-learn-more] {
-  padding: 0.375rem 0.875rem;
-  font-size: 0.75rem;
-  min-height: 32px;
-  white-space: nowrap;
+/* Additional dark mode fixes for Tailwind opacity variants */
+.dark .bg-primary\/5 { background-color: hsl(var(--primary) / 0.05); }
+.dark .bg-primary\/10 { background-color: hsl(var(--primary) / 0.1); }
+.dark .bg-primary\/20 { background-color: hsl(var(--primary) / 0.2); }
+.dark .bg-primary\/30 { background-color: hsl(var(--primary) / 0.3); }
+.dark .bg-accent\/5 { background-color: hsl(var(--accent) / 0.05); }
+.dark .bg-accent\/10 { background-color: hsl(var(--accent) / 0.1); }
+.dark .bg-accent\/20 { background-color: hsl(var(--accent) / 0.2); }
+.dark .bg-accent\/30 { background-color: hsl(var(--accent) / 0.3); }
+
+/* Backdrop blur support */
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
 }
 
-.learn-more-btn {
-  padding: 0.375rem 0.75rem !important;
-  font-size: 0.75rem !important;
-  min-height: 28px !important;
-  border-radius: 0.375rem !important;
+.backdrop-blur-md {
+  backdrop-filter: blur(12px);
 }
 
-/* Ensure hover backgrounds in dark mode */
-.dark .bg-card:hover {
-  background-color: hsl(var(--card)) !important;
+.dark .backdrop-blur-sm {
+  backdrop-filter: blur(8px);
 }
 
-/* Group hover text primary in dark */
-.dark .group:hover .text-primary {
-  color: hsl(var(--primary)) !important;
+.dark .backdrop-blur-md {
+  backdrop-filter: blur(16px);
 }
 
-/* Border primary in dark */
-.dark .border-primary {
-  border-color: hsl(var(--primary)) !important;
+/* Ensure focus rings use theme colors */
+.focus\:ring-primary:focus { 
+  --tw-ring-color: hsl(var(--ring)); 
 }
 
-.dark .hover\:border-primary:hover {
-  border-color: hsl(var(--primary)) !important;
+/* Gradient text utilities */
+.gradient-text {
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* Fix for primary/5 backgrounds in light/dark */
-.bg-primary\/5 {
-  background-color: hsla(var(--primary), 0.05);
+/* Selection styling */
+::selection {
+  background-color: hsl(var(--primary) / 0.2);
+  color: hsl(var(--foreground));
 }
 
-.dark .bg-primary\/5 {
-  background-color: hsla(var(--primary), 0.1);
+.dark ::selection {
+  background-color: hsl(var(--primary) / 0.3);
+  color: hsl(var(--foreground));
 }
 
-.bg-primary\/10 {
-  background-color: hsla(var(--primary), 0.1);
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
 }
 
-.dark .bg-primary\/10 {
-  background-color: hsla(var(--primary), 0.15);
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
 }
 
-.border-primary\/20 {
-  border-color: hsla(var(--primary), 0.2);
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary) / 0.3);
+  border-radius: 5px;
 }
 
-.dark .border-primary\/20 {
-  border-color: hsla(var(--primary), 0.3);
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.5);
 }
 
-/* ========================================== */
-/* MARKET ANALYSIS CARDS - SPECIFIC FIX */
-/* ========================================== */
-
-/* Market Analysis Cards - Specific dark mode styling with colored gradients */
-.dark .bg-gradient-to-br.from-green-50.to-emerald-50 {
-  background: linear-gradient(to bottom right, 
-    rgba(22, 163, 74, 0.15), 
-    rgba(16, 185, 129, 0.1)) !important;
+.dark ::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary) / 0.4);
 }
 
-.dark .bg-gradient-to-br.from-orange-50.to-red-50 {
-  background: linear-gradient(to bottom right, 
-    rgba(234, 88, 12, 0.15), 
-    rgba(239, 68, 68, 0.1)) !important;
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.6);
 }
 
-.dark .bg-gradient-to-br.from-blue-50.to-cyan-50 {
-  background: linear-gradient(to bottom right, 
-    rgba(37, 99, 235, 0.15), 
-    rgba(6, 182, 212, 0.1)) !important;
+/* Performance optimizations */
+.feature-card,
+.stats-card,
+.about-card,
+.group,
+button {
+  will-change: transform;
 }
 
-/* Market Analysis Border colors for dark mode with proper visibility */
-.dark .border-green-200 {
-  border-color: rgba(22, 163, 74, 0.3) !important;
+/* Ensure proper text contrast in dark mode */
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6 {
+  color: hsl(var(--foreground));
 }
 
-.dark .border-orange-200 {
-  border-color: rgba(234, 88, 12, 0.3) !important;
+.dark p {
+  color: hsl(var(--muted-foreground));
 }
 
-.dark .border-blue-200 {
-  border-color: rgba(37, 99, 235, 0.3) !important;
-}
-
-/* Market Analysis heading colors for better visibility */
-.dark .text-green-800 {
-  color: rgb(134, 239, 172) !important;
-}
-
-.dark .text-orange-800 {
-  color: rgb(251, 191, 36) !important;
-}
-
-.dark .text-blue-800 {
-  color: rgb(147, 197, 253) !important;
-}
-
-/* Market Analysis accent colors stay vibrant */
-.dark .text-green-400 {
-  color: rgb(74, 222, 128) !important;
-}
-
-.dark .text-orange-400 {
-  color: rgb(251, 146, 60) !important;
-}
-
-.dark .text-blue-400 {
-  color: rgb(96, 165, 250) !important;
-}
-
-/* ========================================== */
-/* VOICE ASSISTANT PAGE - BACKGROUND FIX */
-/* ========================================== */
-
-/* Voice Assistant page specific background gradient fix */
-.dark .bg-gradient-to-br.from-blue-50.to-green-50 {
-  background: linear-gradient(to bottom right, 
-    rgb(15, 23, 42), 
-    rgb(30, 41, 59)) !important;
-}
-
-/* Slate gradient colors for dark mode */
-.dark .from-slate-900 {
-  --tw-gradient-from: rgb(15, 23, 42) !important;
-  --tw-gradient-to: rgb(15 23 42 / 0) !important;
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
-}
-
-.dark .to-slate-800 {
-  --tw-gradient-to: rgb(30, 41, 59) !important;
-}
-
-/* Ensure dark mode slate backgrounds work properly */
-.dark .dark\:from-slate-900 {
-  --tw-gradient-from: rgb(15, 23, 42) !important;
-}
-
-.dark .dark\:to-slate-800 {
-  --tw-gradient-to: rgb(30, 41, 59) !important;
+/* Mobile touch optimization */
+@media (hover: none) and (pointer: coarse) {
+  button,
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }

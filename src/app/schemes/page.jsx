@@ -4952,43 +4952,43 @@ export default function SchemesApp() {
       id: 'income-support', 
       name: { en: 'Income Support', hi: 'आय समर्थन', mr: 'आय समर्थन', gu: 'આવક સમર્થન', ml: 'വരുമാന പിന്തുണ' }, 
       icon: Coins, 
-      color: 'text-green-600', 
-      bgColor: 'bg-green-50' 
+      color: 'text-primary', 
+      bgColor: 'bg-primary/10' 
     },
     { 
       id: 'insurance', 
       name: { en: 'Crop Insurance', hi: 'फसल बीमा', mr: 'पिक विमा', gu: 'પાક વીમો', ml: 'പയർകൃഷി ഇൻഷുറൻസ്' }, 
       icon: Shield, 
-      color: 'text-blue-600', 
-      bgColor: 'bg-blue-50' 
+      color: 'text-primary', 
+      bgColor: 'bg-primary/10' 
     },
     { 
       id: 'credit', 
       name: { en: 'Loan Schemes', hi: 'ऋण योजनाएँ', mr: 'कर्ज योजना', gu: 'તારણ યોજનાઓ', ml: 'ലോൺ പദ്ധതികൾ' }, 
       icon: CreditCard, 
-      color: 'text-purple-600', 
-      bgColor: 'bg-purple-50' 
+      color: 'text-primary', 
+      bgColor: 'bg-primary/10' 
     },
     { 
       id: 'subsidy', 
       name: { en: 'Subsidy Schemes', hi: 'सब्सिडी योजनाएँ', mr: 'सबसिडी योजना', gu: 'સબસિડી યોજનાઓ', ml: 'സബ്‌സിഡി പദ്ധതികൾ' }, 
       icon: Leaf, 
-      color: 'text-orange-600', 
-      bgColor: 'bg-orange-50' 
+      color: 'text-primary', 
+      bgColor: 'bg-primary/10' 
     },
     { 
       id: 'irrigation', 
       name: { en: 'Irrigation', hi: 'सिंचाई', mr: 'सिंचन', gu: 'સિંચાઈ', ml: 'ശുദ്ധീകരണം' }, 
       icon: TrendingUp, 
-      color: 'text-cyan-600', 
-      bgColor: 'bg-cyan-50' 
+      color: 'text-primary', 
+      bgColor: 'bg-primary/10' 
     },
     { 
       id: 'training', 
       name: { en: 'Training & Information', hi: 'प्रशिक्षण और जानकारी', mr: 'तालीम आणि माहिती', gu: 'તાલીમ અને માહિતી', ml: 'പരിശീലനവും വിവരങ്ങളും' }, 
       icon: Users, 
-      color: 'text-pink-600', 
-      bgColor: 'bg-pink-50' 
+      color: 'text-primary', 
+      bgColor: 'bg-primary/10' 
     }
   ];
 
@@ -5040,10 +5040,10 @@ export default function SchemesApp() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin text-green-600 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900">{t('loading')}</h2>
+          <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-foreground">{t('loading')}</h2>
         </div>
       </div>
     );
@@ -5051,14 +5051,14 @@ export default function SchemesApp() {
 
   if (error && schemes.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <AlertCircle className="h-12 w-12 text-red-600 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900">{t('error')}</h2>
-          <p className="text-gray-600">{error}</p>
+          <AlertCircle className="h-12 w-12 text-destructive mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-foreground">{t('error')}</h2>
+          <p className="text-muted-foreground">{error}</p>
           <button 
             onClick={() => fetchSchemesFromGemini(true)}
-            className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg"
+            className="mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-lg"
           >
             {t('refresh')}
           </button>
@@ -5068,25 +5068,25 @@ export default function SchemesApp() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8">
-      <div className="max-w-7xl mx-auto px-6">
+    <div className="min-h-screen bg-background py-4 sm:py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6 sm:mb-8">
           <div className="flex items-center justify-center mb-4">
-            <Database className="h-8 w-8 text-green-600 mr-2" />
-            <h1 className="text-4xl font-bold text-gray-900">{t('header.title')}</h1>
+            <Database className="h-8 w-8 text-primary mr-2" />
+            <h1 className="text-3xl sm:text-4xl font-bold text-foreground">{t('header.title')}</h1>
           </div>
-          <p className="text-xl text-gray-600">{t('header.subtitle')}</p>
-          <p className="text-sm text-gray-500 mt-2">{t('header.updated')}</p>
+          <p className="text-lg sm:text-xl text-muted-foreground">{t('header.subtitle')}</p>
+          <p className="text-sm text-muted-foreground mt-2">{t('header.updated')}</p>
           
           {/* Refresh Button */}
           {error && (
-            <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg inline-flex items-center">
-              <AlertCircle className="h-5 w-5 text-yellow-600 mr-2" />
-              <span className="text-sm text-yellow-800">{error}</span>
+            <div className="mt-4 p-3 bg-muted border border-border rounded-lg inline-flex items-center">
+              <AlertCircle className="h-5 w-5 text-destructive mr-2" />
+              <span className="text-sm text-foreground">{error}</span>
               <button 
                 onClick={() => fetchSchemesFromGemini(true)}
-                className="ml-3 px-3 py-1 bg-yellow-600 text-white rounded text-sm"
+                className="ml-3 px-3 py-1 bg-primary text-primary-foreground rounded text-sm"
               >
                 {t('refresh')}
               </button>
@@ -5095,64 +5095,64 @@ export default function SchemesApp() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg p-6 shadow-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6 sm:mb-8">
+          <div className="bg-card rounded-lg p-4 sm:p-6 shadow-sm border border-border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">{t('stats.total')}</p>
-                <p className="text-2xl font-bold text-gray-900">{schemes.length}</p>
+                <p className="text-sm text-muted-foreground">{t('stats.total')}</p>
+                <p className="text-2xl font-bold text-card-foreground">{schemes.length}</p>
               </div>
-              <Target className="h-8 w-8 text-blue-600" />
+              <Target className="h-8 w-8 text-primary" />
             </div>
           </div>
-          <div className="bg-white rounded-lg p-6 shadow-sm">
+          <div className="bg-card rounded-lg p-4 sm:p-6 shadow-sm border border-border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">{t('stats.active')}</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm text-muted-foreground">{t('stats.active')}</p>
+                <p className="text-2xl font-bold text-card-foreground">
                   {schemes.filter(s => s.schemeStatus === 'active').length}
                 </p>
               </div>
-              <CheckCircle2 className="h-8 w-8 text-green-600" />
+              <CheckCircle2 className="h-8 w-8 text-primary" />
             </div>
           </div>
-          <div className="bg-white rounded-lg p-6 shadow-sm">
+          <div className="bg-card rounded-lg p-4 sm:p-6 shadow-sm border border-border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">{t('stats.categories')}</p>
-                <p className="text-2xl font-bold text-gray-900">{schemeCategories.length}</p>
+                <p className="text-sm text-muted-foreground">{t('stats.categories')}</p>
+                <p className="text-2xl font-bold text-card-foreground">{schemeCategories.length}</p>
               </div>
-              <Filter className="h-8 w-8 text-purple-600" />
+              <Filter className="h-8 w-8 text-primary" />
             </div>
           </div>
-          <div className="bg-white rounded-lg p-6 shadow-sm">
+          <div className="bg-card rounded-lg p-4 sm:p-6 shadow-sm border border-border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">{t('stats.showing')}</p>
-                <p className="text-2xl font-bold text-gray-900">{filteredSchemes.length}</p>
+                <p className="text-sm text-muted-foreground">{t('stats.showing')}</p>
+                <p className="text-2xl font-bold text-card-foreground">{filteredSchemes.length}</p>
               </div>
-              <UserCheck className="h-8 w-8 text-orange-600" />
+              <UserCheck className="h-8 w-8 text-primary" />
             </div>
           </div>
         </div>
 
         {/* Search & Filters */}
-        <div className="mb-8 bg-white rounded-lg p-6 shadow-sm">
+        <div className="mb-6 sm:mb-8 bg-card rounded-lg p-4 sm:p-6 shadow-sm border border-border">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
               <input
                 type="text"
                 placeholder={t('search.placeholder')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                className="w-full pl-10 pr-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-card text-card-foreground placeholder-muted-foreground"
               />
             </div>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+              className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-card text-card-foreground"
             >
               <option value="all">{t('filters.allCategories')}</option>
               {schemeCategories.map((c, index) => (
@@ -5164,7 +5164,7 @@ export default function SchemesApp() {
             <select
               value={selectedState}
               onChange={(e) => setSelectedState(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+              className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-card text-card-foreground"
             >
               <option value="all">{t('filters.allStates')}</option>
               {states.map((s, index) => (
@@ -5175,14 +5175,14 @@ export default function SchemesApp() {
             </select>
           </div>
           
-          <div className="mt-4 pt-4 border-t flex items-center justify-between flex-wrap gap-2">
-            <span className="text-sm text-gray-700">
+          <div className="mt-4 pt-4 border-t border-border flex items-center justify-between flex-wrap gap-2">
+            <span className="text-sm text-muted-foreground">
               {t('filters.showingSchemes', filteredSchemes.length, schemes.length)}
             </span>
             <div className="flex gap-2">
               <button
                 onClick={() => fetchSchemesFromGemini(true)}
-                className="px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg text-sm flex items-center"
+                className="px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg text-sm flex items-center"
               >
                 <RefreshCw className="h-4 w-4 mr-2" />
                 {t('refresh')}
@@ -5193,7 +5193,7 @@ export default function SchemesApp() {
                   setSelectedCategory('all');
                   setSelectedState('all');
                 }}
-                className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm flex items-center"
+                className="px-4 py-2 bg-muted hover:bg-muted/80 text-muted-foreground rounded-lg text-sm flex items-center"
               >
                 <RefreshCw className="h-4 w-4 mr-2" />
                 {t('filters.reset')}
@@ -5204,12 +5204,12 @@ export default function SchemesApp() {
 
         {showDetails && selectedScheme ? (
           // Full Details View (Same Screen)
-          <div className="bg-white rounded-lg shadow-lg">
+          <div className="bg-card rounded-lg shadow-lg border border-border">
             {/* Back Button */}
-            <div className="sticky top-0 z-10 bg-white border-b p-4 flex items-center">
+            <div className="sticky top-0 z-10 bg-card border-b border-border p-4 flex items-center">
               <button 
                 onClick={handleBackToList}
-                className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
+                className="flex items-center text-muted-foreground hover:text-foreground mb-4"
               >
                 <ArrowLeft className="h-5 w-5 mr-2" />
                 <span className="text-sm font-medium">{t('back.toSchemes')}</span>
@@ -5217,39 +5217,39 @@ export default function SchemesApp() {
             </div>
             
             {/* Scheme Details */}
-            <div className="p-6 space-y-6">
+            <div className="p-4 sm:p-6 space-y-6">
               <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">{getSchemeText(selectedScheme, 'schemeName')}</h2>
+                <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">{getSchemeText(selectedScheme, 'schemeName')}</h2>
                 <div className="flex flex-wrap gap-2 mb-4">
-                  <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-medium">
+                  <span className="px-2 py-1 bg-primary/10 text-primary rounded text-xs font-medium">
                     {(() => {
                       const cat = schemeCategories.find(c => c.id === selectedScheme.category);
                       return getSchemeText({ name: cat?.name }, 'name') || selectedScheme.category.toUpperCase();
                     })()}
                   </span>
-                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs font-medium">
+                  <span className="px-2 py-1 bg-muted text-muted-foreground rounded text-xs font-medium">
                     {getStateName(selectedScheme.state)}
                   </span>
                 </div>
               </div>
 
               <div>
-                <h3 className="font-bold text-lg mb-3 flex items-center text-gray-900">
-                  <Target className="h-5 w-5 mr-2 text-green-600" />
+                <h3 className="font-bold text-lg mb-3 flex items-center text-foreground">
+                  <Target className="h-5 w-5 mr-2 text-primary" />
                   {t('modal.objective')}
                 </h3>
-                <p className="text-gray-700 leading-relaxed">{getSchemeText(selectedScheme, 'schemeObjective')}</p>
+                <p className="text-card-foreground leading-relaxed">{getSchemeText(selectedScheme, 'schemeObjective')}</p>
               </div>
 
-              <div className="bg-green-50 p-4 rounded-lg">
-                <h3 className="font-bold text-lg mb-3 flex items-center text-gray-900">
-                  <Coins className="h-5 w-5 mr-2 text-green-600" />
+              <div className="bg-primary/5 p-4 rounded-lg">
+                <h3 className="font-bold text-lg mb-3 flex items-center text-foreground">
+                  <Coins className="h-5 w-5 mr-2 text-primary" />
                   {t('modal.benefits')}
                 </h3>
                 <ul className="space-y-2">
                   {(getSchemeText(selectedScheme, 'schemeBenefits') || []).map((b, i) => (
-                    <li key={`benefit-${i}`} className="flex items-start text-gray-700">
-                      <CheckCircle2 className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                    <li key={`benefit-${i}`} className="flex items-start text-card-foreground">
+                      <CheckCircle2 className="h-5 w-5 text-primary mr-2 flex-shrink-0 mt-0.5" />
                       <span>{b}</span>
                     </li>
                   ))}
@@ -5257,29 +5257,29 @@ export default function SchemesApp() {
               </div>
 
               <div>
-                <h3 className="font-bold text-lg mb-3 flex items-center text-gray-900">
-                  <UserCheck className="h-5 w-5 mr-2 text-blue-600" />
+                <h3 className="font-bold text-lg mb-3 flex items-center text-foreground">
+                  <UserCheck className="h-5 w-5 mr-2 text-primary" />
                   {t('modal.eligibility')}
                 </h3>
                 <ul className="space-y-2">
                   {(getSchemeText(selectedScheme, 'schemeEligibility') || []).map((e, i) => (
-                    <li key={`eligibility-${i}`} className="flex items-start text-gray-700">
-                      <span className="w-2 h-2 bg-blue-500 rounded-full mr-3 mt-2 flex-shrink-0"></span>
+                    <li key={`eligibility-${i}`} className="flex items-start text-card-foreground">
+                      <span className="w-2 h-2 bg-primary rounded-full mr-3 mt-2 flex-shrink-0"></span>
                       <span>{e}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h3 className="font-bold text-lg mb-3 flex items-center text-gray-900">
-                  <FileText className="h-5 w-5 mr-2 text-blue-600" />
+              <div className="bg-muted p-4 rounded-lg">
+                <h3 className="font-bold text-lg mb-3 flex items-center text-card-foreground">
+                  <FileText className="h-5 w-5 mr-2 text-primary" />
                   {t('modal.process')}
                 </h3>
                 <ol className="space-y-2">
                   {(getSchemeText(selectedScheme, 'applicationProcess') || []).map((p, i) => (
-                    <li key={`process-${i}`} className="flex items-start text-gray-700">
-                      <span className="font-bold text-blue-600 mr-3 flex-shrink-0">{i + 1}.</span>
+                    <li key={`process-${i}`} className="flex items-start text-card-foreground">
+                      <span className="font-bold text-primary mr-3 flex-shrink-0">{i + 1}.</span>
                       <span>{p}</span>
                     </li>
                   ))}
@@ -5287,38 +5287,38 @@ export default function SchemesApp() {
               </div>
 
               <div>
-                <h3 className="font-bold text-lg mb-3 flex items-center text-gray-900">
-                  <FileText className="h-5 w-5 mr-2 text-orange-600" />
+                <h3 className="font-bold text-lg mb-3 flex items-center text-foreground">
+                  <FileText className="h-5 w-5 mr-2 text-primary" />
                   {t('modal.documents')}
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {(getSchemeText(selectedScheme, 'documentsRequired') || []).map((d, i) => (
-                    <div key={`document-${i}`} className="flex items-center text-gray-700 bg-gray-50 p-2 rounded">
-                      <CheckCircle2 className="h-4 w-4 text-orange-600 mr-2 flex-shrink-0" />
+                    <div key={`document-${i}`} className="flex items-center text-card-foreground bg-muted p-2 rounded">
+                      <CheckCircle2 className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
                       <span className="text-sm">{d}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-bold text-lg mb-3 text-gray-900">{t('modal.additional')}</h3>
+              <div className="bg-muted p-4 rounded-lg">
+                <h3 className="font-bold text-lg mb-3 text-card-foreground">{t('modal.additional')}</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                   <div>
-                    <p className="text-gray-600 font-medium">{t('modal.ministry')}</p>
-                    <p className="text-gray-900">{getSchemeText(selectedScheme, 'sponsorMinistry')}</p>
+                    <p className="text-muted-foreground font-medium">{t('modal.ministry')}</p>
+                    <p className="text-card-foreground">{getSchemeText(selectedScheme, 'sponsorMinistry')}</p>
                   </div>
                   <div>
-                    <p className="text-gray-600 font-medium">{t('modal.year')}</p>
-                    <p className="text-gray-900">{selectedScheme.schemeIntroducedYear}</p>
+                    <p className="text-muted-foreground font-medium">{t('modal.year')}</p>
+                    <p className="text-card-foreground">{selectedScheme.schemeIntroducedYear}</p>
                   </div>
                   <div>
-                    <p className="text-gray-600 font-medium">{t('modal.target')}</p>
-                    <p className="text-gray-900">{getSchemeText(selectedScheme, 'targetBeneficiary')}</p>
+                    <p className="text-muted-foreground font-medium">{t('modal.target')}</p>
+                    <p className="text-card-foreground">{getSchemeText(selectedScheme, 'targetBeneficiary')}</p>
                   </div>
                   <div>
-                    <p className="text-gray-600 font-medium">{t('modal.status')}</p>
-                    <p className="text-green-600 font-semibold">{t('status.active')}</p>
+                    <p className="text-muted-foreground font-medium">{t('modal.status')}</p>
+                    <p className="text-primary font-semibold">{t('status.active')}</p>
                   </div>
                 </div>
               </div>
@@ -5328,14 +5328,14 @@ export default function SchemesApp() {
                   href={selectedScheme.schemeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="border border-emerald-500 text-emerald-600 hover:bg-emerald-500 hover:text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 flex items-center justify-center"
+                  className="border border-primary text-primary hover:bg-primary/5 px-6 py-3 rounded-xl font-medium transition-all duration-200 flex items-center justify-center"
                 >
                   <ExternalLink className="h-5 w-5 mr-2" />
                   {t('modal.visit')}
                 </a>
                 <a
                   href={`tel:${selectedScheme.helplineNumber}`}
-                  className="border-2 border-green-600 hover:bg-green-50 text-green-700 px-6 py-3 rounded-lg text-center font-medium flex items-center justify-center"
+                  className="border-2 border-primary hover:bg-primary/5 text-primary px-6 py-3 rounded-lg text-center font-medium flex items-center justify-center"
                 >
                   <Phone className="h-5 w-5 mr-2" />
                   {t('modal.call')} {selectedScheme.helplineNumber}
@@ -5345,60 +5345,53 @@ export default function SchemesApp() {
           </div>
         ) : (
           // Schemes Grid (Original View)
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6 sm:mb-8">
             {filteredSchemes.map((scheme, index) => {
               const category = schemeCategories.find(c => c.id === scheme.category);
               
               return (
-                <div key={`${scheme.id}-${index}`} className="bg-white rounded-lg shadow-sm border-l-4 border-l-green-500 hover:shadow-lg transition-shadow">
-                  <div className="p-6">
+                <div key={`${scheme.id}-${index}`} className="bg-card rounded-lg shadow-sm border-l-4 border-l-primary hover:shadow-md transition-shadow border border-border">
+                  <div className="p-4 sm:p-6">
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">{getSchemeText(scheme, 'schemeName')}</h3>
-                        <p className="text-gray-600 text-sm">{getSchemeText(scheme, 'schemeObjective')}</p>
+                        <h3 className="text-lg sm:text-xl font-bold text-card-foreground mb-2">{getSchemeText(scheme, 'schemeName')}</h3>
+                        <p className="text-muted-foreground text-sm">{getSchemeText(scheme, 'schemeObjective')}</p>
                       </div>
                     </div>
 
                     <div className="space-y-4">
                       <div className="flex flex-wrap gap-2">
                         {category && (
-                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                            category.color === 'text-green-600' ? 'bg-green-100 text-green-800' :
-                            category.color === 'text-blue-600' ? 'bg-blue-100 text-blue-800' :
-                            category.color === 'text-purple-600' ? 'bg-purple-100 text-purple-800' :
-                            category.color === 'text-orange-600' ? 'bg-orange-100 text-orange-800' :
-                            category.color === 'text-cyan-600' ? 'bg-cyan-100 text-cyan-800' :
-                            'bg-pink-100 text-pink-800'
-                          }`}>
+                          <span className={`${category.bgColor} ${category.color} px-3 py-1 rounded-full text-xs font-medium`}>
                             {getSchemeText({ name: category.name }, 'name')}
                           </span>
                         )}
-                        <span className="px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 flex items-center">
+                        <span className="bg-muted text-muted-foreground px-3 py-1 rounded-full text-xs font-medium flex items-center">
                           <MapPin className="h-3 w-3 mr-1" />
                           {getStateName(scheme.state)}
                         </span>
-                        <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 flex items-center">
+                        <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-medium flex items-center">
                           <CheckCircle2 className="h-3 w-3 mr-1" />
                           {t('status.active')}
                         </span>
                       </div>
 
                       <div>
-                        <h4 className="font-medium text-gray-900 mb-2 flex items-center text-sm">
-                          <Target className="h-4 w-4 mr-2 text-green-600" />
+                        <h4 className="font-medium text-card-foreground mb-2 flex items-center text-sm">
+                          <Target className="h-4 w-4 mr-2 text-primary" />
                           {t('card.keyBenefits')}
                         </h4>
-                        <ul className="text-sm text-gray-600 space-y-1">
+                        <ul className="text-sm text-muted-foreground space-y-1">
                           {[...Array(Math.min(3, (getSchemeText(scheme, 'schemeBenefits') || []).length))].map((_, i) => (
                             <li key={`benefit-${i}`} className="flex items-start">
-                              <span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></span>
+                              <span className="w-1.5 h-1.5 bg-primary rounded-full mr-2 mt-1.5 flex-shrink-0"></span>
                               <span>{getSchemeText(scheme, 'schemeBenefits', i)}</span>
                             </li>
                           ))}
                         </ul>
                       </div>
 
-                      <div className="text-xs text-gray-500 space-y-1 pt-2 border-t">
+                      <div className="text-xs text-muted-foreground space-y-1 pt-2 border-t border-border">
                         <p><strong>{t('card.ministry')}</strong> {getSchemeText(scheme, 'sponsorMinistry')}</p>
                         <p><strong>{t('card.started')}</strong> {scheme.schemeIntroducedYear} | <strong>{t('card.helpline')}</strong> {scheme.helplineNumber}</p>
                       </div>
@@ -5406,7 +5399,7 @@ export default function SchemesApp() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                         <button 
                           onClick={() => handleSchemeSelect(scheme)}
-                          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center text-sm font-medium"
+                          className="bg-primary hover:bg-accent text-primary-foreground px-4 py-2 rounded-lg transition-colors flex items-center justify-center text-sm font-medium"
                         >
                           {t('card.fullDetails')}
                           <ChevronRight className="ml-2 h-4 w-4" />
@@ -5415,7 +5408,7 @@ export default function SchemesApp() {
                           href={scheme.schemeUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="border-2 border-green-600 hover:bg-green-50 text-green-700 px-4 py-2 rounded-lg transition-colors flex items-center justify-center text-sm font-medium"
+                          className="border-2 border-primary hover:bg-primary/5 text-primary px-4 py-2 rounded-lg transition-colors flex items-center justify-center text-sm font-medium"
                         >
                           <ExternalLink className="mr-2 h-4 w-4" />
                           {t('card.applyNow')}
@@ -5430,17 +5423,17 @@ export default function SchemesApp() {
         )}
 
         {filteredSchemes.length === 0 && !loading && !showDetails && (
-          <div className="bg-white rounded-lg p-8 text-center shadow-sm">
-            <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">{t('noSchemes.title')}</h3>
-            <p className="text-gray-600 mb-4">{t('noSchemes.subtitle')}</p>
+          <div className="bg-card rounded-lg p-4 sm:p-8 text-center shadow-sm border border-border">
+            <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-foreground mb-2">{t('noSchemes.title')}</h3>
+            <p className="text-muted-foreground mb-4">{t('noSchemes.subtitle')}</p>
             <button
               onClick={() => {
                 setSearchTerm('');
                 setSelectedCategory('all');
                 setSelectedState('all');
               }}
-              className="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg"
+              className="inline-flex items-center px-4 py-2 bg-primary hover:bg-accent text-primary-foreground rounded-lg"
             >
               <RefreshCw className="h-4 w-4 mr-2" />
               {t('filters.reset')}
@@ -5449,26 +5442,26 @@ export default function SchemesApp() {
         )}
 
         {/* Footer */}
-        <div className="mt-12 text-center bg-white rounded-lg p-6 shadow-sm">
-          <h3 className="text-lg font-bold text-gray-900 mb-2">{t('footer.notice')}</h3>
-          <p className="text-gray-700 mb-4">
+        <div className="mt-8 sm:mt-12 text-center bg-card rounded-lg p-4 sm:p-6 shadow-sm border border-border">
+          <h3 className="text-lg font-bold text-foreground mb-2">{t('footer.notice')}</h3>
+          <p className="text-card-foreground mb-4">
             {t('footer.description')}
           </p>
-          <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+          <div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center">
-              <CheckCircle2 className="h-4 w-4 text-green-600 mr-1" />
+              <CheckCircle2 className="h-4 w-4 text-primary mr-1" />
               <span>{t('footer.verified')}</span>
             </div>
             <div className="flex items-center">
-              <ExternalLink className="h-4 w-4 text-blue-600 mr-1" />
+              <ExternalLink className="h-4 w-4 text-primary mr-1" />
               <span>{t('footer.links')}</span>
             </div>
             <div className="flex items-center">
-              <Phone className="h-4 w-4 text-orange-600 mr-1" />
+              <Phone className="h-4 w-4 text-primary mr-1" />
               <span>{t('footer.helplines')}</span>
             </div>
           </div>
-          <p className="text-xs text-gray-500 mt-4">
+          <p className="text-xs text-muted-foreground mt-4">
             {t('footer.updated')}
           </p>
         </div>

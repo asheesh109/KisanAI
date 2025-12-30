@@ -1,21 +1,79 @@
 'use client'
-
 import { useState, useEffect, useCallback } from 'react'
-import { Cloud, Sun, CloudRain, Wind, Droplets, Eye, MapPin, RefreshCw, AlertTriangle, Thermometer, Gauge, Sunrise, Sunset, Search, Navigation, Loader2 } from 'lucide-react'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { Cloud, Sun, CloudRain, Wind, Droplets, Eye, MapPin, RefreshCw, AlertTriangle, Thermometer, Gauge, Sunrise, Sunset, Search, Navigation, Loader2, Info } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
-
 // Import Gemini AI for farming advice
 import { GoogleGenerativeAI } from '@google/generative-ai'
-
 const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
 const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
+const OPENWEATHER_API_KEY = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY
 
-const OPENWEATHER_API_KEY =process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY
+// Local translations for static keys that may not be in i18n
+const staticTranslations = {
+  en: {
+    fiveDayForecast: '5-Day Forecast',
+    aiFarmingAdvice: 'AI Farming Advice'
+  },
+  hi: {
+    fiveDayForecast: '5-दिवसीय पूर्वानुमान',
+    aiFarmingAdvice: 'एआई कृषि सलाह'
+  },
+  mr: {
+    fiveDayForecast: '5-दिवसाचा अंदाज',
+    aiFarmingAdvice: 'AI शेती सल्ला'
+  },
+  gu: {
+    fiveDayForecast: '5-દિવસની આગાહી',
+    aiFarmingAdvice: 'AI ખેતી સલાહ'
+  },
+  ml: {
+    fiveDayForecast: '5 ദിവസത്തെ പ്രവചനം',
+    aiFarmingAdvice: 'AI കൃഷി ഉപദേശം'
+  }
+}
+// Local translations for farming tips
+const tipsTranslations = {
+  en: {
+    sowingTimeTip: 'Sow seeds during optimal temperature windows',
+    irrigationTip: 'Irrigate based on soil moisture levels',
+    cropProtectionTip: 'Apply protective measures against pests',
+    weatherCheckTip: 'Regularly check weather updates for planning'
+  },
+  hi: {
+    sowingTimeTip: 'उपयुक्त तापमान विंडो के दौरान बीज बोएं',
+    irrigationTip: 'मिट्टी की नमी स्तर के आधार पर सिंचाई करें',
+    cropProtectionTip: 'कीटों के खिलाफ सुरक्षात्मक उपाय लागू करें',
+    weatherCheckTip: 'योजना के लिए नियमित रूप से मौसम अपडेट जांचें'
+  },
+  mr: {
+    sowingTimeTip: 'सर्वोत्तम तापमान खिडक्या दरम्यान बियाणे पेरा',
+    irrigationTip: 'मातीच्या ओलाव्याच्या पातळीवर आधारित सिंचन करा',
+    cropProtectionTip: 'कीटकांविरुद्ध संरक्षक उपाय लागू करा',
+    weatherCheckTip: 'आराखड्यासाठी नियमित हवामान अपडेट तपासा'
+  },
+  gu: {
+    sowingTimeTip: 'શ્રેષ્ઠ તાપમાન વિન્ડો દરમિયાન બીજ વાવો',
+    irrigationTip: 'માટીની ભેજ સ્તર પર આધારિત સિંચાઈ કરો',
+    cropProtectionTip: 'કીટકો વિરુદ્ધ સુરક્ષાત્મક પગલાં લાગુ કરો',
+    weatherCheckTip: 'યોજના માટે નિયમિત હવામાન અપડેટ તપાસો'
+  },
+  ml: {
+    sowingTimeTip: 'ശരിയായ താപനില സമയത്ത് വിത്ത് വിതയ്ക്കുക',
+    irrigationTip: 'മണ്ണിന്റെ ഈർപ്പം അടിസ്ഥാനമാക്കി ജലസേചനം ചെയ്യുക',
+    cropProtectionTip: 'പേടികളിൽ നിന്ന് സംരക്ഷണം നൽകുക',
+    weatherCheckTip: 'പദ്ധതിക്കായി കാലാവസ്ഥ പരിശോധിക്കുക'
+  }
+}
 
+// Function to get translation
+const getStaticTranslation = (language, key) => {
+  return staticTranslations[language]?.[key] || staticTranslations.en[key] || key;
+}
 
+const getTip = (language, key) => {
+  return tipsTranslations[language]?.[key] || tipsTranslations.en[key] || key;
+}
 
 export default function Weather() {
   const [currentWeather, setCurrentWeather] = useState(null)
@@ -29,72 +87,6 @@ export default function Weather() {
   const [searchQuery, setSearchQuery] = useState('')
   const [isSearching, setIsSearching] = useState(false)
   const { language, t } = useLanguage()
-
-  // Local translations for static keys that may not be in i18n
-  const staticTranslations = {
-    en: {
-      fiveDayForecast: '5-Day Forecast',
-      aiFarmingAdvice: 'AI Farming Advice'
-    },
-    hi: {
-      fiveDayForecast: '5-दिवसीय पूर्वानुमान',
-      aiFarmingAdvice: 'एआई कृषि सलाह'
-    },
-    mr: {
-      fiveDayForecast: '5-दिवसाचा अंदाज',
-      aiFarmingAdvice: 'AI शेती सल्ला'
-    },
-    gu: {
-      fiveDayForecast: '5-દિવસની આગાહી',
-      aiFarmingAdvice: 'AI ખેતી સલાહ'
-    },
-    ml: {
-      fiveDayForecast: '5 ദിവസത്തെ പ്രവചനം',
-      aiFarmingAdvice: 'AI കൃഷി ഉപദേശം'
-    }
-  }
-
-  // Local translations for farming tips
-  const tipsTranslations = {
-    en: {
-      sowingTimeTip: 'Sow seeds during optimal temperature windows',
-      irrigationTip: 'Irrigate based on soil moisture levels',
-      cropProtectionTip: 'Apply protective measures against pests',
-      weatherCheckTip: 'Regularly check weather updates for planning'
-    },
-    hi: {
-      sowingTimeTip: 'उपयुक्त तापमान विंडो के दौरान बीज बोएं',
-      irrigationTip: 'मिट्टी की नमी स्तर के आधार पर सिंचाई करें',
-      cropProtectionTip: 'कीटों के खिलाफ सुरक्षात्मक उपाय लागू करें',
-      weatherCheckTip: 'योजना के लिए नियमित रूप से मौसम अपडेट जांचें'
-    },
-    mr: {
-      sowingTimeTip: 'सर्वोत्तम तापमान खिडक्या दरम्यान बियाणे पेरा',
-      irrigationTip: 'मातीच्या ओलाव्याच्या पातळीवर आधारित सिंचन करा',
-      cropProtectionTip: 'कीटकांविरुद्ध संरक्षक उपाय लागू करा',
-      weatherCheckTip: 'आराखड्यासाठी नियमित हवामान अपडेट तपासा'
-    },
-    gu: {
-      sowingTimeTip: 'શ્રેષ્ઠ તાપમાન વિન્ડો દરમિયાન બીજ વાવો',
-      irrigationTip: 'માટીની ભેજ સ્તર પર આધારિત સિંચાઈ કરો',
-      cropProtectionTip: 'કીટકો વિરુદ્ધ સુરક્ષાત્મક પગલાં લાગુ કરો',
-      weatherCheckTip: 'યોજના માટે નિયમિત હવામાન અપડેટ તપાસો'
-    },
-    ml: {
-      sowingTimeTip: 'ശരിയായ താപനില സമയത്ത് വിത്ത് വിതയ്ക്കുക',
-      irrigationTip: 'മണ്ണിന്റെ ഈർപ്പം അടിസ്ഥാനമാക്കി ജലസേചനം ചെയ്യുക',
-      cropProtectionTip: 'പേടികളിൽ നിന്ന് സംരക്ഷണം നൽകുക',
-      weatherCheckTip: 'പദ്ധതിക്കായി കാലാവസ്ഥ പരിശോധിക്കുക'
-    }
-  }
-
-  const getStaticTranslation = useCallback((key) => {
-    return staticTranslations[language]?.[key] || key
-  }, [language])
-
-  const getTip = useCallback((key) => {
-    return tipsTranslations[language]?.[key] || key
-  }, [language])
 
   // City translations for local names
   const cityTranslations = {
@@ -157,7 +149,6 @@ export default function Weather() {
         reject(new Error(t('geolocationNotSupported')))
         return
       }
-
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords
@@ -182,7 +173,7 @@ export default function Weather() {
         `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${OPENWEATHER_API_KEY}`
       )
       const data = await response.json()
-      
+     
       if (data && data.length > 0) {
         return {
           name: data[0].name + ', ' + data[0].country,
@@ -212,7 +203,7 @@ export default function Weather() {
         `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(cityName)}&limit=1&appid=${OPENWEATHER_API_KEY}`
       )
       const data = await response.json()
-      
+     
       if (data && data.length > 0) {
         return {
           name: data[0].name + ', ' + data[0].country,
@@ -316,7 +307,7 @@ export default function Weather() {
         'Tornado': 'ടൊർണേഡോ'
       }
     }
-    
+   
     const langConditions = conditions[language] || conditions.en
     return langConditions[main] || main
   }, [language])
@@ -358,7 +349,7 @@ export default function Weather() {
         'Drizzle': 'હળવો વરસાદ પાક માટે ફાયદાકારક',
         'Thunderstorm': 'તોફાનથી પાકનું નુકસાન શક્ય',
         'Snow': 'બરફથી પાક સુરક્ષા જરૂરી',
-        'default': 'આજનું હવામાન કૃષિ પ્રવૃત્તિઓ માટે સામાન્ય છે'
+        'default': 'આજનું હવામાન કૃഷિ પ્રવૃત્તિઓ માટે સામાન્ય છે'
       },
       ml: {
         'Clear': 'കൃഷിക്ക് മികച്ച ദിവസം',
@@ -370,7 +361,7 @@ export default function Weather() {
         'default': 'ഇന്നത്തെ കാലാവസ്ഥ കാർഷിക പ്രവർത്തനങ്ങൾക്ക് സാധാരണമാണ്'
       }
     }
-    
+   
     const langDescriptions = descriptions[language] || descriptions.en
     return langDescriptions[condition] || langDescriptions.default
   }, [language])
@@ -384,7 +375,7 @@ export default function Weather() {
       gu: ['ઉત્તર', 'ઉત્તર-પૂર્વ', 'પૂર્વ', 'દક્ષિણ-પૂર્વ', 'દક્ષિણ', 'દક્ષિણ-પશ્ચિમ', 'પશ્ચિમ', 'ઉત્તર-પશ્ચિમ'],
       ml: ['വടക്ക്', 'വടക്കുകിഴക്കൻ', 'കിഴക്ക്', 'തെക്കുകിഴക്കൻ', 'തെക്ക്', 'തെക്കുപടിഞ്ഞാറൻ', 'പടിഞ്ഞാറ്', 'വടക്കുപടിഞ്ഞാറൻ']
     }
-    
+   
     const langDirections = directions[language] || directions.en
     return langDirections[Math.round(degrees / 45) % 8]
   }, [language])
@@ -396,11 +387,10 @@ export default function Weather() {
         `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${OPENWEATHER_API_KEY}&units=metric&lang=${language === 'hi' ? 'hi' : 'en'}`
       )
       const data = await response.json()
-      
+     
       if (data.cod !== 200) {
         throw new Error(data.message || t('weatherDataFailed'))
       }
-
       return {
         location: data.name + ', ' + data.sys.country,
         temperature: Math.round(data.main.temp),
@@ -412,15 +402,15 @@ export default function Weather() {
         visibility: (data.visibility / 1000).toFixed(1),
         pressure: data.main.pressure,
         feelsLike: Math.round(data.main.feels_like),
-        sunrise: new Date(data.sys.sunrise * 1000).toLocaleTimeString(language === 'hi' ? 'hi-IN' : 'en-IN', { 
-          hour: '2-digit', 
+        sunrise: new Date(data.sys.sunrise * 1000).toLocaleTimeString(language === 'hi' ? 'hi-IN' : 'en-IN', {
+          hour: '2-digit',
           minute: '2-digit',
-          hour12: false 
+          hour12: false
         }),
-        sunset: new Date(data.sys.sunset * 1000).toLocaleTimeString(language === 'hi' ? 'hi-IN' : 'en-IN', { 
-          hour: '2-digit', 
+        sunset: new Date(data.sys.sunset * 1000).toLocaleTimeString(language === 'hi' ? 'hi-IN' : 'en-IN', {
+          hour: '2-digit',
           minute: '2-digit',
-          hour12: false 
+          hour12: false
         }),
         uvIndex: data.uvi || Math.floor(Math.random() * 8) + 3,
         lastUpdated: new Date().toLocaleTimeString(language === 'hi' ? 'hi-IN' : 'en-IN')
@@ -438,11 +428,10 @@ export default function Weather() {
         `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${OPENWEATHER_API_KEY}&units=metric&lang=${language === 'hi' ? 'hi' : 'en'}`
       )
       const data = await response.json()
-      
+     
       if (data.cod !== '200') {
         throw new Error(data.message || t('forecastDataFailed'))
       }
-
       const getMostFrequentCondition = (conditions) => {
         const frequency = {}
         conditions.forEach(condition => {
@@ -450,7 +439,6 @@ export default function Weather() {
         })
         return Object.keys(frequency).reduce((a, b) => frequency[a] > frequency[b] ? a : b)
       }
-
       // Group forecast by day and get daily data
       const dailyForecast = {}
       data.list.forEach(item => {
@@ -464,14 +452,13 @@ export default function Weather() {
             rainChance: []
           }
         }
-        
+       
         dailyForecast[date].temps.push(item.main.temp)
         dailyForecast[date].conditions.push(item.weather[0].main)
         dailyForecast[date].humidity.push(item.main.humidity)
         dailyForecast[date].windSpeed.push(item.wind.speed)
         dailyForecast[date].rainChance.push(item.pop * 100)
       })
-
       // Generate 5-day forecast
       const forecastDays = {
         en: ['Today', 'Tomorrow', 'Day after', 'Third day', 'Fourth day'],
@@ -480,16 +467,16 @@ export default function Weather() {
         gu: ['આજે', 'આવતીકાલે', 'પરમદિવસે', 'ત્રીજો દિવસ', 'ચોથો દિવસ'],
         ml: ['ഇന്ന്', 'നാളെ', 'മറ്റൊരു ദിവസം', 'മൂന്നാം ദിവസം', 'നാലാം ദിവസം']
       }
-      
+     
       const days = forecastDays[language] || forecastDays.en
       const dates = Object.keys(dailyForecast).slice(0, 5)
-      
+     
       return dates.map((date, index) => {
         const dayData = dailyForecast[date]
         const high = Math.round(Math.max(...dayData.temps))
         const low = Math.round(Math.min(...dayData.temps))
         const mainCondition = getMostFrequentCondition(dayData.conditions)
-        
+       
         return {
           day: days[index],
           date: date,
@@ -513,7 +500,6 @@ export default function Weather() {
     try {
       const prompts = {
         en: `You are an agricultural expert. Provide practical advice for farmers based on the following weather conditions:
-
 Location: ${locationName}
 Current Weather:
 - Temperature: ${weatherData.temperature}°C
@@ -521,21 +507,16 @@ Current Weather:
 - Humidity: ${weatherData.humidity}%
 - Wind Speed: ${weatherData.windSpeed} km/h
 - Rain Chance: ${forecastData[0]?.rainChance || 0}%
-
 Next 3 days forecast:
-${forecastData.slice(0, 3).map(day => 
+${forecastData.slice(0, 3).map(day =>
   `- ${day.day}: ${day.condition}, High: ${day.high}°C, Low: ${day.low}°C, Rain: ${day.rainChance}%`
 ).join('\n')}
-
 Respond in this format (just 80-100 words):
 1. Main recommendation (1 sentence)
 2. Immediate action (2-3 sentences)
 3. Future preparation (1 sentence)
-
 Respond only in English, no markdown.`,
-
         hi: `आप एक कृषि विशेषज्ञ हैं। निम्नलिखित मौसम की स्थिति के आधार किसानों के लिए व्यावहारिक सलाह दें:
-
 स्थान: ${locationName}
 वर्तमान मौसम:
 - तापमान: ${weatherData.temperature}°C
@@ -543,21 +524,16 @@ Respond only in English, no markdown.`,
 - नमी: ${weatherData.humidity}%
 - हवा की गति: ${weatherData.windSpeed} km/h
 - बारिश की संभावना: ${forecastData[0]?.rainChance || 0}%
-
 अगले 3 दिनों का पूर्वानुमान:
-${forecastData.slice(0, 3).map(day => 
+${forecastData.slice(0, 3).map(day =>
   `- ${day.day}: ${day.condition}, उच्च: ${day.high}°C, निम्न: ${day.low}°C, बारिश: ${day.rainChance}%`
 ).join('\n')}
-
 निम्नलिखित प्रारूप में उत्तर दें (सिर्फ 80-100 शब्दों में):
 1. मुख्य सिफारिश (1 वाक्य)
 2. तत्काल कार्यवाही (2-3 वाक्य)
 3. भविष्य की तैयारी (1 वाक्य)
-
 उत्तर सिर्फ हिंदी में दें, कोई मार्कडाउन नहीं।`,
-
         mr: `तुम्ही एक कृषी तज्ज्ञ आहात. खालील हवामानाच्या स्थितीनुसार शेतकऱ्यांसाठी व्यावहारिक सल्ला द्या:
-
 स्थान: ${locationName}
 सध्याचे हवामान:
 - तापमान: ${weatherData.temperature}°C
@@ -565,21 +541,16 @@ ${forecastData.slice(0, 3).map(day =>
 - आर्द्रता: ${weatherData.humidity}%
 - वाऱ्याची गती: ${weatherData.windSpeed} km/h
 - पावसाची शक्यता: ${forecastData[0]?.rainChance || 0}%
-
 पुढील 3 दिवसांचा अंदाज:
-${forecastData.slice(0, 3).map(day => 
+${forecastData.slice(0, 3).map(day =>
   `- ${day.day}: ${day.condition}, कमाल: ${day.high}°C, किमान: ${day.low}°C, पाऊस: ${day.rainChance}%`
 ).join('\n')}
-
 खालील स्वरूपात उत्तर द्या (फक्त 80-100 शब्द):
 1. मुख्य शिफारस (1 वाक्य)
 2. त्वरित कारवाई (2-3 वाक्य)
 3. भविष्यातील तयारी (1 वाक्य)
-
 उत्तर फक्त मराठीत द्या, कोणतेही मार्कडाउन नाही.`,
-
         gu: `તમે એક કૃષિ નિષ્ણાત છો. નીચેની હવામાનની સ્થિતિના આધારે ખેડૂતો માટે વ્યવહારુ સલાહ આપો:
-
 સ્થાન: ${locationName}
 વર્તમાન હવામાન:
 - તાપમાન: ${weatherData.temperature}°C
@@ -587,21 +558,16 @@ ${forecastData.slice(0, 3).map(day =>
 - ભેજ: ${weatherData.humidity}%
 - પવનની ગતિ: ${weatherData.windSpeed} km/h
 - વરસાદની સંભાવના: ${forecastData[0]?.rainChance || 0}%
-
 આગામી 3 દિવસની આગાહી:
-${forecastData.slice(0, 3).map(day => 
+${forecastData.slice(0, 3).map(day =>
   `- ${day.day}: ${day.condition}, મહત્તમ: ${day.high}°C, ન્યૂનતમ: ${day.low}°C, વરસાદ: ${day.rainChance}%`
 ).join('\n')}
-
 નીચેના ફોર્મેટમાં જવાબ આપો (માત્ર 80-100 શબ્દો):
 1. મુખ્ય ભલામણ (1 વાક્ય)
 2. તાત્કાલિક કાર્યવાહી (2-3 વાક્યો)
 3. ભવિષ્યની તૈયારી (1 વાક્ય)
-
 જવાબ ફક્ત ગુજરાતીમાં આપો, કોઈ માર્કડાઉન નહીં.`,
-
         ml: `നിങ്ങൾ ഒരു കാർഷിക വിദഗ്ധനാണ്. ഇനിപ്പറയുന്ന കാലാവസ്ഥാ സാഹചര്യങ്ങളെ അടിസ്ഥാനമാക്കി കർഷകർക്ക് പ്രായോഗിക ഉപദേശം നൽകുക:
-
 സ്ഥലം: ${locationName}
 നിലവിലെ കാലാവസ്ഥ:
 - താപനില: ${weatherData.temperature}°C
@@ -609,22 +575,18 @@ ${forecastData.slice(0, 3).map(day =>
 - ഈർപ്പം: ${weatherData.humidity}%
 - കാറ്റിൻ്റെ വേഗത: ${weatherData.windSpeed} km/h
 - മഴയുടെ സാധ്യത: ${forecastData[0]?.rainChance || 0}%
-
 അടുത്ത 3 ദിവസത്തെ പ്രവചനം:
-${forecastData.slice(0, 3).map(day => 
+${forecastData.slice(0, 3).map(day =>
   `- ${day.day}: ${day.condition}, ഉയർന്ന: ${day.high}°C, താഴ്ന്ന: ${day.low}°C, മഴ: ${day.rainChance}%`
 ).join('\n')}
-
 ഈ ഫോർമാറ്റിൽ മറുപടി നൽകുക (80-100 വാക്കുകൾ മാത്രം):
 1. പ്രധാന ശുപാർശ (1 വാക്യം)
 2. തൽക്ഷണ പ്രവർത്തനം (2-3 വാക്യങ്ങൾ)
 3. ഭാവി തയ്യാറെടുപ്പ് (1 വാക്യം)
-
 മലയാളത്തിൽ മാത്രം മറുപടി നൽകുക, മാർക്ക്ഡൗൺ ഇല്ല.`
       }
-
       const prompt = prompts[language] || prompts.en
-      
+     
       const result = await model.generateContent(prompt)
       const response = await result.response
       return response.text()
@@ -645,25 +607,25 @@ ${forecastData.slice(0, 3).map(day =>
   const loadWeatherDataByCoords = useCallback(async (lat, lon, locationName = '') => {
     setIsLoading(true)
     setError('')
-    
+   
     try {
       let finalLocationName = locationName
       if (!finalLocationName) {
         const locationInfo = await reverseGeocode(lat, lon)
         finalLocationName = locationInfo.name
       }
-      
+     
       setLocation(finalLocationName)
       setUserLocation({ latitude: lat, longitude: lon })
-      
+     
       const [current, forecastData] = await Promise.all([
         fetchCurrentWeather(lat, lon),
         fetchForecast(lat, lon)
       ])
-      
+     
       setCurrentWeather(current)
       setForecast(forecastData)
-      
+     
       const advice = await getFarmingAdviceFromAI(current, forecastData, finalLocationName)
       setFarmingAdvice([{
         titleKey: 'aiFarmingAdvice',
@@ -672,7 +634,7 @@ ${forecastData.slice(0, 3).map(day =>
         icon: '🤖',
         action: t('verifyWithLocalDept')
       }])
-      
+     
       setLastRefresh(new Date())
     } catch (error) {
       console.error('Failed to load weather data:', error)
@@ -687,7 +649,7 @@ ${forecastData.slice(0, 3).map(day =>
   const loadCurrentLocationWeather = useCallback(async () => {
     setIsLoading(true)
     setError('')
-    
+   
     try {
       const coords = await getUserLocation()
       await loadWeatherDataByCoords(coords.latitude, coords.longitude)
@@ -701,10 +663,10 @@ ${forecastData.slice(0, 3).map(day =>
   // Search for city weather
   const handleSearch = useCallback(async () => {
     if (!searchQuery.trim()) return
-    
+   
     setIsSearching(true)
     setError('')
-    
+   
     try {
       const cityInfo = await searchCity(searchQuery)
       await loadWeatherDataByCoords(cityInfo.lat, cityInfo.lon, cityInfo.name)
@@ -724,16 +686,16 @@ ${forecastData.slice(0, 3).map(day =>
   const getWeatherIcon = (condition) => {
     switch (condition) {
       case getWeatherCondition('Clear'):
-        return <Sun className="h-16 w-16 text-yellow-500 mx-auto mb-2" />
+        return <Sun className="h-16 w-16 text-yellow-500 dark:text-yellow-400 mx-auto mb-2" />
       case getWeatherCondition('Clouds'):
-        return <Cloud className="h-16 w-16 text-gray-500 mx-auto mb-2" />
+        return <Cloud className="h-16 w-16 text-gray-500 dark:text-gray-400 mx-auto mb-2" />
       case getWeatherCondition('Rain'):
       case getWeatherCondition('Drizzle'):
-        return <CloudRain className="h-16 w-16 text-blue-500 mx-auto mb-2" />
+        return <CloudRain className="h-16 w-16 text-blue-500 dark:text-blue-400 mx-auto mb-2" />
       case getWeatherCondition('Thunderstorm'):
-        return <CloudRain className="h-16 w-16 text-purple-500 mx-auto mb-2" />
+        return <CloudRain className="h-16 w-16 text-purple-500 dark:text-purple-400 mx-auto mb-2" />
       default:
-        return <Sun className="h-16 w-16 text-yellow-500 mx-auto mb-2" />
+        return <Sun className="h-16 w-16 text-yellow-500 dark:text-yellow-400 mx-auto mb-2" />
     }
   }
 
@@ -741,14 +703,14 @@ ${forecastData.slice(0, 3).map(day =>
 
   if (isLoading && !currentWeather) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 py-8">
-        <div className="max-w-6xl mx-auto px-6 sm:px-8">
+      <div className="min-h-screen bg-background py-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-xl text-slate-700 font-medium">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-xl text-foreground font-medium">
               {t('loadingWeatherInfo')}
             </p>
-            <p className="text-sm text-slate-500 mt-2">
+            <p className="text-sm text-muted-foreground mt-2">
               {t('allowLocationPermission')}
             </p>
           </div>
@@ -758,309 +720,283 @@ ${forecastData.slice(0, 3).map(day =>
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 py-8">
-      <div className="max-w-6xl mx-auto px-6 sm:px-8">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 mb-4">
+    <div className="min-h-screen bg-background py-4 sm:py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
             {t('weatherInformation')}
           </h1>
-          <p className="text-xl text-slate-700 font-medium">
+          <p className="text-lg sm:text-xl text-muted-foreground font-medium">
             {t('detailedWeatherForecast')}
           </p>
-          <p className="text-sm text-slate-500 mt-2">
+          <p className="text-sm text-muted-foreground mt-2">
             {t('lastUpdated')}: {lastRefresh.toLocaleTimeString(language === 'hi' ? 'hi-IN' : 'en-IN')}
           </p>
         </div>
 
         {/* Search and Location Controls */}
-        <Card className="mb-6">
-          <CardContent className="pt-6">
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-              <div className="flex-1 w-full">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                    placeholder={t('searchCity')}
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 placeholder-gray-500"
-                    disabled={isSearching}
-                  />
-                  <Button 
-                    onClick={handleSearch}
-                    disabled={!searchQuery.trim() || isSearching}
-                    className="whitespace-nowrap"
-                  >
-                    <Search className="h-4 w-4 mr-2" />
-                    {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : t('search')}
-                  </Button>
-                </div>
-              </div>
-              
+        <div className="bg-card rounded-lg p-4 sm:p-6 mb-6 border border-border shadow-sm">
+          <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
+            <div className="flex-1 w-full">
               <div className="flex gap-2">
-                <Button 
-                  variant="outline" 
-                  onClick={loadCurrentLocationWeather}
-                  disabled={isLoading}
-                  className="whitespace-nowrap text-slate-900"
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                  placeholder={t('searchCity')}
+                  className="flex-1 px-4 py-2 border border-border rounded-md focus:ring-2 focus:ring-primary focus:border-transparent text-foreground placeholder-muted-foreground bg-card"
+                  disabled={isSearching}
+                />
+                <button
+                  onClick={handleSearch}
+                  disabled={!searchQuery.trim() || isSearching}
+                  className="bg-primary hover:bg-accent text-primary-foreground px-4 py-2 rounded-md transition-colors disabled:bg-muted disabled:text-muted-foreground whitespace-nowrap flex items-center gap-2"
                 >
-                  <Navigation className="h-4 w-4 mr-2" />
-                  {t('currentLocation')}
-                </Button>
-                <Button 
-                  variant="outline" 
-                  onClick={() => loadWeatherDataByCoords(userLocation?.latitude, userLocation?.longitude)}
-                  disabled={isLoading || !userLocation}
-                  className="text-slate-900"
-                >
-                  <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-                  {isLoading ? t('loading') : t('refresh')}
-                </Button>
+                  <Search className="h-4 w-4" />
+                  {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : t('search')}
+                </button>
               </div>
             </div>
-          </CardContent>
-        </Card>
+           
+            <div className="flex gap-2 flex-wrap justify-center sm:justify-end">
+              <button
+                onClick={loadCurrentLocationWeather}
+                disabled={isLoading}
+                className="bg-muted hover:bg-muted/80 text-foreground px-4 py-2 rounded-md transition-colors disabled:bg-muted disabled:text-muted-foreground whitespace-nowrap flex items-center gap-2 border border-border"
+              >
+                <Navigation className="h-4 w-4" />
+                {t('currentLocation')}
+              </button>
+              <button
+                onClick={() => loadWeatherDataByCoords(userLocation?.latitude, userLocation?.longitude)}
+                disabled={isLoading || !userLocation}
+                className="bg-muted hover:bg-muted/80 text-foreground px-4 py-2 rounded-md transition-colors disabled:bg-muted disabled:text-muted-foreground whitespace-nowrap flex items-center gap-2 border border-border"
+              >
+                <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+                {isLoading ? t('loading') : t('refresh')}
+              </button>
+            </div>
+          </div>
+        </div>
 
         {/* Error Display */}
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center">
-            <AlertTriangle className="h-5 w-5 text-red-600 mr-2" />
-            <span className="text-red-700">{error}</span>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="ml-auto text-slate-900"
+          <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-lg flex items-center flex-wrap gap-2">
+            <AlertTriangle className="h-5 w-5 text-destructive flex-shrink-0" />
+            <span className="text-destructive text-sm sm:text-base">{error}</span>
+            <button
               onClick={loadCurrentLocationWeather}
+              className="ml-auto bg-destructive/10 hover:bg-destructive/20 text-destructive px-3 py-1 rounded-md text-sm transition-colors border border-destructive/20"
             >
               {t('tryAgain')}
-            </Button>
+            </button>
           </div>
         )}
 
         {/* Current Weather */}
         {currentWeather && (
-          <Card className="mb-8">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-2xl text-slate-900 font-bold">
+          <div className="bg-card rounded-lg mb-6 sm:mb-8 p-4 sm:p-6 border border-border shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 mb-4 border-b border-border">
+              <h2 className="text-xl sm:text-2xl font-bold text-foreground">
                 {t('currentWeather')} - {displayLocation}
-              </CardTitle>
-              <div className="flex items-center space-x-2 text-slate-600">
+              </h2>
+              <div className="flex items-center gap-2 text-muted-foreground text-sm mt-2 sm:mt-0">
                 <MapPin className="h-4 w-4" />
-                <span className="text-sm">{displayLocation}</span>
+                <span>{displayLocation}</span>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                {/* Main Weather */}
-                <div className="text-center">
-                  {getWeatherIcon(currentWeather.condition)}
-                  <p className="text-3xl font-bold text-slate-900">{currentWeather.temperature}°C</p>
-                  <p className="text-slate-600 font-medium">{currentWeather.condition}</p>
-                  <p className="text-sm text-slate-500 mt-1">{t('feelsLike')}: {currentWeather.feelsLike}°C</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:gap-6">
+              {/* Main Weather */}
+              <div className="text-center col-span-1 md:col-span-2 lg:col-span-1">
+                <div className="mx-auto mb-2">{getWeatherIcon(currentWeather.condition)}</div>
+                <p className="text-3xl sm:text-4xl font-bold text-foreground">{currentWeather.temperature}°C</p>
+                <p className="text-foreground font-medium text-base sm:text-lg">{currentWeather.condition}</p>
+                <p className="text-sm text-muted-foreground mt-1">{t('feelsLike')}: {currentWeather.feelsLike}°C</p>
+              </div>
+             
+              {/* Weather Details 1 */}
+              <div className="space-y-3 col-span-1 md:col-span-2 lg:col-span-1">
+                <div className="flex items-center gap-2 text-foreground font-medium text-sm sm:text-base">
+                  <Droplets className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span>{t('humidity')}: {currentWeather.humidity}%</span>
                 </div>
-                
-                {/* Weather Details 1 */}
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-2 text-slate-700 font-medium">
-                    <Droplets className="h-5 w-5 text-blue-500" />
-                    <span>{t('humidity')}: {currentWeather.humidity}%</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-slate-700 font-medium">
-                    <Wind className="h-5 w-5 text-gray-500" />
-                    <span>{t('wind')}: {currentWeather.windSpeed} km/h {currentWeather.windDirection}</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-slate-700 font-medium">
-                    <Gauge className="h-5 w-5 text-gray-500" />
-                    <span>{t('pressure')}: {currentWeather.pressure} hPa</span>
-                  </div>
+                <div className="flex items-center gap-2 text-foreground font-medium text-sm sm:text-base">
+                  <Wind className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                  <span>{t('wind')}: {currentWeather.windSpeed} km/h {currentWeather.windDirection}</span>
                 </div>
-                
-                {/* Weather Details 2 */}
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-2 text-slate-700 font-medium">
-                    <Eye className="h-5 w-5 text-gray-500" />
-                    <span>{t('visibility')}: {currentWeather.visibility} km</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-slate-700 font-medium">
-                    <Sun className="h-5 w-5 text-yellow-500" />
-                    <span>{t('uvIndex')}: {currentWeather.uvIndex}</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-slate-700 font-medium">
-                    <Thermometer className="h-5 w-5 text-red-500" />
-                    <span>{t('feelsLike')}: {currentWeather.feelsLike}°C</span>
-                  </div>
-                </div>
-
-                {/* Sun Times */}
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-2 text-slate-700 font-medium">
-                    <Sunrise className="h-5 w-5 text-orange-500" />
-                    <span>{t('sunrise')}: {currentWeather.sunrise}</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-slate-700 font-medium">
-                    <Sunset className="h-5 w-5 text-orange-600" />
-                    <span>{t('sunset')}: {currentWeather.sunset}</span>
-                  </div>
-                  <div className="text-xs text-slate-500 mt-2">
-                    {t('lastUpdated')}: {currentWeather.lastUpdated}
-                  </div>
+                <div className="flex items-center gap-2 text-foreground font-medium text-sm sm:text-base">
+                  <Gauge className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                  <span>{t('pressure')}: {currentWeather.pressure} hPa</span>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+             
+              {/* Weather Details 2 */}
+              <div className="space-y-3 col-span-1 md:col-span-2 lg:col-span-1">
+                <div className="flex items-center gap-2 text-foreground font-medium text-sm sm:text-base">
+                  <Eye className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                  <span>{t('visibility')}: {currentWeather.visibility} km</span>
+                </div>
+                <div className="flex items-center gap-2 text-foreground font-medium text-sm sm:text-base">
+                  <Sun className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span>{t('uvIndex')}: {currentWeather.uvIndex}</span>
+                </div>
+                <div className="flex items-center gap-2 text-foreground font-medium text-sm sm:text-base">
+                  <Thermometer className="h-5 w-5 text-destructive flex-shrink-0" />
+                  <span>{t('feelsLike')}: {currentWeather.feelsLike}°C</span>
+                </div>
+              </div>
+              {/* Sun Times */}
+              <div className="space-y-3 col-span-1 md:col-span-2 lg:col-span-1">
+                <div className="flex items-center gap-2 text-foreground font-medium text-sm sm:text-base">
+                  <Sunrise className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span>{t('sunrise')}: {currentWeather.sunrise}</span>
+                </div>
+                <div className="flex items-center gap-2 text-foreground font-medium text-sm sm:text-base">
+                  <Sunset className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span>{t('sunset')}: {currentWeather.sunset}</span>
+                </div>
+                <div className="text-xs text-muted-foreground mt-2">
+                  {t('lastUpdated')}: {currentWeather.lastUpdated}
+                </div>
+              </div>
+            </div>
+          </div>
         )}
 
         {/* 5-Day Forecast */}
         {forecast.length > 0 && (
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle className="text-xl text-slate-900 font-bold">
-                {displayLocation} - {getStaticTranslation('fiveDayForecast')}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
-                {forecast.map((day, index) => (
-                  <div key={index} className="text-center p-4 rounded-lg bg-white border hover:shadow-md transition-shadow">
-                    <p className="font-semibold text-slate-900 mb-1">{day.day}</p>
-                    <p className="text-xs text-slate-500 mb-2">{day.date}</p>
-                    {getWeatherIcon(day.condition)}
-                    <p className="text-sm text-slate-600 font-medium mb-1">{day.condition}</p>
-                    <p className="text-sm mb-2">
-                      <span className="font-medium text-slate-900">{Math.round(day.high)}°</span>
-                      <span className="text-slate-500 ml-1">{Math.round(day.low)}°</span>
-                    </p>
-                    <div className="text-xs text-slate-500 space-y-1">
-                      <div>{t('rainChance')}: {day.rainChance}%</div>
-                      <div>{t('humidity')}: {day.humidity}%</div>
-                      <div>{t('wind')}: {day.windSpeed} km/h</div>
-                    </div>
+          <div className="bg-card rounded-lg mb-6 sm:mb-8 p-4 sm:p-6 border border-border shadow-sm">
+            <h2 className="text-lg sm:text-xl font-bold text-foreground mb-4">
+              {displayLocation} - {getStaticTranslation(language, 'fiveDayForecast')}
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 sm:gap-4">
+              {forecast.map((day, index) => (
+                <div key={index} className="text-center p-3 sm:p-4 rounded-lg bg-muted border border-border hover:shadow-md transition-shadow">
+                  <p className="font-semibold text-foreground mb-1 text-sm">{day.day}</p>
+                  <p className="text-xs text-muted-foreground mb-2">{day.date}</p>
+                  <div className="mx-auto mb-2">{getWeatherIcon(day.condition)}</div>
+                  <p className="text-sm text-foreground font-medium mb-1">{day.condition}</p>
+                  <p className="text-sm mb-2">
+                    <span className="font-medium text-foreground">{Math.round(day.high)}°</span>
+                    <span className="text-muted-foreground ml-1">{Math.round(day.low)}°</span>
+                  </p>
+                  <div className="text-xs text-muted-foreground space-y-1">
+                    <div>{t('rainChance')}: {day.rainChance}%</div>
+                    <div>{t('humidity')}: {day.humidity}%</div>
+                    <div>{t('wind')}: {day.windSpeed} km/h</div>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                </div>
+              ))}
+            </div>
+          </div>
         )}
 
         {/* AI Farming Advice */}
         {farmingAdvice.length > 0 && (
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle className="flex items-center text-xl text-slate-900 font-bold">
-                <AlertTriangle className="h-6 w-6 mr-2 text-yellow-500" />
-                {displayLocation} - {getStaticTranslation('aiFarmingAdvice')}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {farmingAdvice.map((advice, index) => (
-                  <div
-                    key={index}
-                    className={`p-4 rounded-lg border-l-4 ${
-                      advice.urgent
-                        ? 'bg-red-50 border-red-400'
-                        : 'bg-green-50 border-green-400'
-                    }`}
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-slate-900 mb-1">
-                          <span className="mr-2">{advice.icon}</span>
-                          {getStaticTranslation(advice.titleKey)}
-                          {advice.urgent && (
-                            <span className="ml-2 inline-block px-2 py-1 text-xs bg-red-200 text-red-800 rounded-full">
-                              {t('urgent')}
-                            </span>
-                          )}
-                        </h3>
-                        <p className="text-slate-600 font-medium mb-2 whitespace-pre-wrap">{advice.description}</p>
-                        <p className="text-sm text-slate-500 italic">
-                          {t('suggestedAction')}: {advice.action}
-                        </p>
-                      </div>
+          <div className="bg-card rounded-lg mb-6 sm:mb-8 p-4 sm:p-6 border border-border shadow-sm">
+            <h2 className="flex items-center text-lg sm:text-xl font-bold text-foreground mb-4">
+              <AlertTriangle className="h-6 w-6 mr-2 text-primary" />
+              {displayLocation} - {getStaticTranslation(language, 'aiFarmingAdvice')}
+            </h2>
+            <div className="space-y-4">
+              {farmingAdvice.map((advice, index) => (
+                <div
+                  key={index}
+                  className={`p-4 rounded-lg border-l-4 ${
+                    advice.urgent
+                      ? 'bg-destructive/10 border-destructive'
+                      : 'bg-primary/10 border-primary'
+                  }`}
+                >
+                  <div className="flex items-start justify-between flex-wrap gap-2">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-foreground mb-1 text-sm sm:text-base">
+                        <span className="mr-2">{advice.icon}</span>
+                        {getStaticTranslation(language, advice.titleKey)}
+                        {advice.urgent && (
+                          <span className="ml-2 inline-block px-2 py-1 text-xs bg-destructive text-destructive-foreground rounded-full">
+                            {t('urgent')}
+                          </span>
+                        )}
+                      </h3>
+                      <p className="text-foreground font-medium mb-2 whitespace-pre-wrap text-sm">{advice.description}</p>
+                      <p className="text-sm text-muted-foreground italic">
+                        {t('suggestedAction')}: {advice.action}
+                      </p>
                     </div>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                </div>
+              ))}
+            </div>
+          </div>
         )}
 
         {/* Weather Alerts & Tips */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg text-slate-900">{t('weatherAlerts')}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {currentWeather && currentWeather.temperature > 35 && (
-                  <div className="flex items-center space-x-2 text-red-600">
-                    <AlertTriangle className="h-4 w-4" />
-                    <span className="text-sm font-medium">{t('highTempWarning')}</span>
-                  </div>
-                )}
-                {currentWeather && currentWeather.humidity > 80 && (
-                  <div className="flex items-center space-x-2 text-orange-600">
-                    <AlertTriangle className="h-4 w-4" />
-                    <span className="text-sm font-medium">{t('highHumidityCaution')}</span>
-                  </div>
-                )}
-                {currentWeather && currentWeather.windSpeed > 25 && (
-                  <div className="flex items-center space-x-2 text-blue-600">
-                    <AlertTriangle className="h-4 w-4" />
-                    <span className="text-sm font-medium">{t('strongWindWarning')}</span>
-                  </div>
-                )}
-                {currentWeather && (currentWeather.condition.includes('तूफान') || currentWeather.condition.includes('Thunderstorm') || currentWeather.condition.includes('वादळ') || currentWeather.condition.includes('તોફાન') || currentWeather.condition.includes('പ്രകോപിതമായ')) && (
-                  <div className="flex items-center space-x-2 text-purple-600">
-                    <AlertTriangle className="h-4 w-4" />
-                    <span className="text-sm font-medium">{t('stormWarning')}</span>
-                  </div>
-                )}
-                {currentWeather && currentWeather.temperature <= 35 && currentWeather.humidity <= 80 && currentWeather.windSpeed <= 25 && !currentWeather.condition.includes('तूफान') && !currentWeather.condition.includes('Thunderstorm') && !currentWeather.condition.includes('वादळ') && !currentWeather.condition.includes('તોફાન') && !currentWeather.condition.includes('പ്രകോപിതമായ') && (
-                  <div className="flex items-center space-x-2 text-green-600">
-                    <Sun className="h-4 w-4" />
-                    <span className="text-sm font-medium">{t('favorableConditions')}</span>
-                  </div>
-                )}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
+          <div className="bg-card rounded-lg p-4 sm:p-6 border border-border shadow-sm">
+            <h3 className="text-base sm:text-lg font-bold text-foreground mb-4">{t('weatherAlerts')}</h3>
+            <div className="space-y-3">
+              {currentWeather && currentWeather.temperature > 35 && (
+                <div className="flex items-center gap-2 text-destructive">
+                  <AlertTriangle className="h-4 w-4 flex-shrink-0" />
+                  <span className="text-sm font-medium">{t('highTempWarning')}</span>
+                </div>
+              )}
+              {currentWeather && currentWeather.humidity > 80 && (
+                <div className="flex items-center gap-2 text-destructive">
+                  <AlertTriangle className="h-4 w-4 flex-shrink-0" />
+                  <span className="text-sm font-medium">{t('highHumidityCaution')}</span>
+                </div>
+              )}
+              {currentWeather && currentWeather.windSpeed > 25 && (
+                <div className="flex items-center gap-2 text-primary">
+                  <AlertTriangle className="h-4 w-4 flex-shrink-0" />
+                  <span className="text-sm font-medium">{t('strongWindWarning')}</span>
+                </div>
+              )}
+              {currentWeather && (currentWeather.condition.includes('तूफान') || currentWeather.condition.includes('Thunderstorm') || currentWeather.condition.includes('वादळ') || currentWeather.condition.includes('તોફાન') || currentWeather.condition.includes('പ്രകോപിതമായ')) && (
+                <div className="flex items-center gap-2 text-destructive">
+                  <AlertTriangle className="h-4 w-4 flex-shrink-0" />
+                  <span className="text-sm font-medium">{t('stormWarning')}</span>
+                </div>
+              )}
+              {currentWeather && currentWeather.temperature <= 35 && currentWeather.humidity <= 80 && currentWeather.windSpeed <= 25 && !currentWeather.condition.includes('तूफान') && !currentWeather.condition.includes('Thunderstorm') && !currentWeather.condition.includes('वादळ') && !currentWeather.condition.includes('તોફાન') && !currentWeather.condition.includes('പ്രകോപിതമായ') && (
+                <div className="flex items-center gap-2 text-primary">
+                  <Sun className="h-4 w-4 flex-shrink-0" />
+                  <span className="text-sm font-medium">{t('favorableConditions')}</span>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="bg-card rounded-lg p-4 sm:p-6 border border-border shadow-sm">
+            <h3 className="text-base sm:text-lg font-bold text-foreground mb-4">{t('farmingTips')}</h3>
+            <div className="space-y-2 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <span className="text-lg">🌱</span>
+                <span className="flex-1">{getTip(language, 'sowingTimeTip')}</span>
               </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg text-slate-900">{t('farmingTips')}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2 text-sm text-slate-600">
-                <div className="flex items-center space-x-2">
-                  <span>🌱</span>
-                  <span>{getTip('sowingTimeTip')}</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span>💧</span>
-                  <span>{getTip('irrigationTip')}</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span>🌿</span>
-                  <span>{getTip('cropProtectionTip')}</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span>🔍</span>
-                  <span>{getTip('weatherCheckTip')}</span>
-                </div>
+              <div className="flex items-center gap-2">
+                <span className="text-lg">💧</span>
+                <span className="flex-1">{getTip(language, 'irrigationTip')}</span>
               </div>
-            </CardContent>
-          </Card>
+              <div className="flex items-center gap-2">
+                <span className="text-lg">🌿</span>
+                <span className="flex-1">{getTip(language, 'cropProtectionTip')}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-lg">🔍</span>
+                <span className="flex-1">{getTip(language, 'weatherCheckTip')}</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="text-center">
-          <p className="text-slate-600 font-medium">
+          <p className="text-muted-foreground font-medium text-sm sm:text-base">
             {t('weatherInfoNote')}
           </p>
-          <p className="text-xs text-slate-500 mt-2">
+          <p className="text-xs text-muted-foreground mt-2">
             {t('dataSource')}: OpenWeatherMap | {t('lastUpdated')}: {lastRefresh.toLocaleString(language === 'hi' ? 'hi-IN' : 'en-IN')}
           </p>
         </div>

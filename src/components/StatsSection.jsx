@@ -14,26 +14,70 @@ export default function StatsSection() {
   const { t } = useLanguage()
 
   return (
-    <div className="py-16 bg-slate-50 dark:bg-gray-800">
-      <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-          {t('ourImpact')}
-        </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+    <div className="relative py-20 sm:py-28 bg-background overflow-hidden">
+      {/* Background effects */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/10"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-primary/20 to-accent/20 dark:from-primary/10 dark:to-accent/10 rounded-full blur-[150px]"></div>
+      
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
+        {/* Section header */}
+        <div className="text-center mb-16 sm:mb-20">
+          <div className="inline-block mb-4 px-5 py-2 bg-gradient-to-r from-primary/20 to-accent/20 dark:from-primary/30 dark:to-accent/30 rounded-full backdrop-blur-sm">
+            <span className="text-sm font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent uppercase tracking-wider">
+              Our Impact
+            </span>
+          </div>
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 bg-gradient-to-r from-foreground via-primary to-accent bg-clip-text text-transparent">
+            {t('ourImpact')}
+          </h2>
+          <p className="text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto">
+            Making a real difference in agriculture across India
+          </p>
+        </div>
+        
+        {/* Stats grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           {stats.map((stat, idx) => {
             const Icon = stat.icon;
             return (
-              <div key={idx} className="text-center p-6 rounded-2xl bg-white dark:bg-gray-900 shadow-xl hover:shadow-2xl transition-all hover:-translate-y-2">
-                <Icon className="h-12 w-12 mx-auto mb-4 text-emerald-600" />
-                <div className="text-4xl font-extrabold mb-2 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-                  {stat.value}
-                </div>
-                <div className="text-sm font-semibold text-gray-600 dark:text-gray-400">
-                  {t(stat.label)}
+              <div 
+                key={idx} 
+                className="group relative overflow-hidden rounded-3xl bg-card/80 dark:bg-card/50 backdrop-blur-sm border-2 border-border/50 dark:border-border/30 hover:border-primary/50 dark:hover:border-primary/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/20 dark:hover:shadow-primary/10"
+              >
+                {/* Gradient overlay on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10 dark:from-primary/20 dark:to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                {/* Shimmer effect */}
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+                
+                <div className="relative text-center p-6 sm:p-8 z-10">
+                  {/* Icon container */}
+                  <div className="relative inline-block mb-5">
+                    <div className="w-16 sm:w-20 h-16 sm:h-20 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-xl group-hover:shadow-2xl group-hover:shadow-primary/30 dark:group-hover:shadow-primary/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                      <Icon className="h-8 sm:h-10 w-8 sm:w-10 text-primary-foreground" />
+                    </div>
+                    {/* Glow effect */}
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary to-accent blur-xl opacity-0 group-hover:opacity-60 transition-opacity duration-500"></div>
+                  </div>
+                  
+                  {/* Stat value */}
+                  <div className="text-4xl sm:text-5xl md:text-6xl font-black mb-3 bg-gradient-to-br from-primary via-accent to-primary bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300">
+                    {stat.value}
+                  </div>
+                  
+                  {/* Stat label */}
+                  <div className="text-sm sm:text-base font-bold text-muted-foreground group-hover:text-foreground transition-colors duration-300">
+                    {t(stat.label)}
+                  </div>
                 </div>
               </div>
             );
           })}
+        </div>
+        
+        {/* Bottom decorative line */}
+        <div className="mt-16 sm:mt-20 flex justify-center">
+          <div className="w-48 h-1 bg-gradient-to-r from-transparent via-primary to-transparent rounded-full"></div>
         </div>
       </div>
     </div>

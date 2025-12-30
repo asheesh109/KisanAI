@@ -1,8 +1,8 @@
 'use client'
-
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { TrendingUp, TrendingDown, Search, RefreshCw, AlertCircle, Calendar, IndianRupee, Loader, Filter, ChevronDown, ChevronUp, Star, Target, BarChart3, Lightbulb, MapPin, Award, Clock, Rocket, Leaf, Flame, Wheat, Nut, Sun, Apple, DollarSign, Sparkles, Database, Shield, Globe, Info } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
+
 
 // Move static data outside the component to maintain reference stability
 const translations = {
@@ -658,6 +658,7 @@ const fallbackCommodities = [
   'Onion', 'Potato', 'Tomato', 'Cabbage', 'Cauliflower', 'Carrot', 'Radish', 'Brinjal', 'Lady Finger', 'Green Chilli', 'Spinach', 'Bitter Gourd', 'Bottle Gourd', 'Ridge Gourd', 'Snake Gourd', 'Pumpkin', 'Cucumber', 'Green Peas', 'French Beans', 'Cluster Beans', 'Drumstick', 'Capsicum', 'Sweet Potato', 'Beetroot', 'Turnip', 'Green Beans', 'Plantain', 'Turmeric', 'Chilli', 'Coriander', 'Garlic', 'Ginger', 'Fenugreek', 'Mint', 'Tamarind', 'Black Pepper', 'Cardamom', 'Clove', 'Nutmeg', 'Cinnamon', 'Cumin', 'Fennel', 'Wheat', 'Rice', 'Maize', 'Bajra', 'Jowar', 'Barley', 'Ragi', 'Black Gram', 'Green Gram', 'Red Gram', 'Bengal Gram', 'Field Pea', 'Lentil', 'Cowpea', 'Horse Gram', 'Kidney Beans', 'Soyabean', 'Groundnut', 'Mustard', 'Sesame', 'Sunflower', 'Safflower', 'Castor', 'Niger', 'Linseed', 'Coconut', 'Palm Oil', 'Banana', 'Apple', 'Orange', 'Mango', 'Grapes', 'Papaya', 'Lemon', 'Pomegranate', 'Guava', 'Pineapple', 'Watermelon', 'Cotton', 'Sugarcane', 'Tobacco', 'Jute', 'Tea', 'Coffee', 'Rubber', 'Indigo'
 ]
 
+
 // Mock fallback data generator (now uses staticMarketData as primary fallback)
 const generateMockPrices = (commodity, category, count = 5) => {
   // Filter static data for this commodity if available, else generate mock
@@ -665,13 +666,11 @@ const generateMockPrices = (commodity, category, count = 5) => {
   if (staticEntries.length > 0) {
     return staticEntries.slice(0, count);
   }
-
   // Fallback to original mock generation if not in static data
   const mockStates = ['Maharashtra', 'Karnataka', 'Tamil Nadu', 'Andhra Pradesh', 'Uttar Pradesh']
   const mockMarkets = ['Mumbai', 'Bangalore', 'Chennai', 'Hyderabad', 'Lucknow']
   const basePrices = [1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000]
   const basePrice = basePrices[Math.floor(Math.random() * basePrices.length)]
-  
   return Array.from({ length: count }, (_, i) => {
     const price = basePrice + (Math.random() - 0.5) * 1000
     const minPrice = Math.max(0, price - 200)
@@ -681,7 +680,7 @@ const generateMockPrices = (commodity, category, count = 5) => {
     const state = mockStates[i % mockStates.length]
     const market = mockMarkets[i % mockMarkets.length]
     const district = `${state} District`
-    
+ 
     return {
       crop: commodity,
       englishName: commodity,
@@ -704,7 +703,6 @@ const generateMockPrices = (commodity, category, count = 5) => {
     }
   })
 }
-
 export default function EnhancedMarketPrices() {
   const [marketPrices, setMarketPrices] = useState([])
   const [loading, setLoading] = useState(true)
@@ -723,7 +721,6 @@ export default function EnhancedMarketPrices() {
   const [lazyLoadedCategories, setLazyLoadedCategories] = useState(new Set())
   const [usingFallback, setUsingFallback] = useState(false)
   const { language } = useLanguage()
-
   // Memoize language-dependent values to stabilize references
   const currentT = useMemo(() => translations[language] || translations.en, [language])
   const currentCategoryTranslations = useMemo(() => cropCategoryTranslations[language] || cropCategoryTranslations.en, [language])
@@ -735,7 +732,6 @@ export default function EnhancedMarketPrices() {
     }, {})
   }, [currentCategoryTranslations])
   const currentLocale = useMemo(() => locales[language] || 'en-IN', [language])
-
   // Helper function to translate fallback data (static/mock)
   const translateFallbackData = useCallback((data) => {
     return data.map(item => ({
@@ -743,7 +739,6 @@ export default function EnhancedMarketPrices() {
       crop: currentCommodityNames[item.englishName] || item.crop
     }))
   }, [currentCommodityNames])
-
   // Function to categorize a commodity
   const categorizeCommodity = useCallback((commodity) => {
     for (const [categoryKey, categoryData] of Object.entries(currentCropCategories)) {
@@ -753,7 +748,6 @@ export default function EnhancedMarketPrices() {
     }
     return 'others'
   }, [currentCropCategories])
-
   // Get current agricultural season based on month (proxy for weather/seasonal conditions)
   const getCurrentSeason = useCallback(() => {
     const month = new Date().getMonth() + 1;
@@ -761,31 +755,29 @@ export default function EnhancedMarketPrices() {
     if (month >= 11 || month <= 3) return 'Rabi'; // Winter season, suitable for wheat, barley, etc.
     return 'Zaid'; // Summer season, suitable for vegetables, fruits, etc.
   }, [])
-
   // Lazy load category data when expanded
   const loadCategoryData = useCallback(async (category) => {
     if (lazyLoadedCategories.has(category)) return
-    
+ 
     setLoadingStates(prev => ({ ...prev, [category]: true }))
-    
+ 
     try {
       const categoryData = currentCropCategories[category]
       if (!categoryData) return
-
       const batchSize = 3
       const crops = categoryData.crops
-      
+   
       for (let i = 0; i < crops.length; i += batchSize) {
         const batch = crops.slice(i, i + batchSize)
-        
+     
         const batchResponses = await Promise.allSettled(
           batch.map(async (commodity) => {
             try {
               const url = `${API_URL}?api-key=${API_KEY}&format=json&limit=20&filters[commodity]=${encodeURIComponent(commodity)}`
               const response = await fetch(url)
-              
+           
               if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
-              
+           
               let data;
               try {
                 data = await response.json()
@@ -793,7 +785,7 @@ export default function EnhancedMarketPrices() {
                 console.warn(`JSON parse error for ${commodity}:`, parseError)
                 return { commodity, records: [] }
               }
-              
+           
               return { commodity, records: data.records || [] }
             } catch (error) {
               console.warn(`Failed to fetch ${commodity}:`, error)
@@ -801,11 +793,10 @@ export default function EnhancedMarketPrices() {
             }
           })
         )
-
         batchResponses.forEach((result) => {
           if (result.status === 'fulfilled') {
             const { commodity, records } = result.value
-            
+         
             if (records.length > 0) {
               const processedRecords = records
                 .filter(record => record.modal_price && parseFloat(record.modal_price) > 0)
@@ -813,10 +804,9 @@ export default function EnhancedMarketPrices() {
                   const price = parseFloat(record.modal_price) || 0
                   const minPrice = parseFloat(record.min_price) || price
                   const maxPrice = parseFloat(record.max_price) || price
-                  
+               
                   const change = price - minPrice
                   const changePercent = minPrice > 0 ? ((change / minPrice) * 100) : 0
-
                   return {
                     crop: currentCommodityNames[commodity] || commodity,
                     englishName: commodity,
@@ -838,7 +828,6 @@ export default function EnhancedMarketPrices() {
                     goodProfit: price > 3000 // Derived from data
                   }
                 })
-
               setMarketPrices(prev => [...prev, ...processedRecords])
             } else {
               // Use static data as fallback for this commodity
@@ -865,13 +854,12 @@ export default function EnhancedMarketPrices() {
             setUsingFallback(true)
           }
         })
-        
+     
         // Small delay to prevent API throttling
         if (i + batchSize < crops.length) {
           await new Promise(resolve => setTimeout(resolve, 100))
         }
       }
-
       setLazyLoadedCategories(prev => new Set([...prev, category]))
     } catch (error) {
       console.error(`Error loading category ${category}:`, error)
@@ -890,11 +878,9 @@ export default function EnhancedMarketPrices() {
       setLoadingStates(prev => ({ ...prev, [category]: false }))
     }
   }, [currentCropCategories, currentCommodityNames, currentT, lazyLoadedCategories, translateFallbackData])
-
   // Analyze price trends and generate recommendations
   const analyzeMarketTrends = useCallback(() => {
     if (marketPrices.length === 0) return null
-
     // Group by commodity and calculate averages
     const commodityStats = {}
     marketPrices.forEach(item => {
@@ -913,7 +899,6 @@ export default function EnhancedMarketPrices() {
       commodityStats[key].states.add(item.state)
       commodityStats[key].totalQuantity += item.quantity
     })
-
     // Calculate insights
     const insights = Object.values(commodityStats).map(stat => {
       const avgPrice = stat.prices.reduce((a, b) => a + b, 0) / stat.prices.length
@@ -922,7 +907,7 @@ export default function EnhancedMarketPrices() {
       const priceVariance = maxPrice - minPrice
       const volatility = avgPrice > 0 ? ((priceVariance / avgPrice) * 100) : 0
       const demandScore = stat.totalQuantity * stat.states.size
-      
+   
       return {
         ...stat,
         avgPrice: Math.round(avgPrice),
@@ -934,7 +919,6 @@ export default function EnhancedMarketPrices() {
         profitPotential: (avgPrice / 1000) * (stat.totalQuantity / 100) * stat.states.size
       }
     }).sort((a, b) => b.profitPotential - a.profitPotential)
-
     return {
       highPriceItems: insights.slice(0, 10),
       highDemandItems: insights.sort((a, b) => b.demandScore - a.demandScore).slice(0, 10),
@@ -942,12 +926,10 @@ export default function EnhancedMarketPrices() {
       recommendations: generateFarmingRecommendations(insights)
     }
   }, [marketPrices, currentT])
-
   // Generate farming recommendations based on analysis
   const generateFarmingRecommendations = useCallback((insights) => {
     const recommendations = []
     const currentSeason = getCurrentSeason()
-
     // High profit potential crops
     const highProfitCrops = insights.slice(0, 5)
     recommendations.push({
@@ -958,13 +940,11 @@ export default function EnhancedMarketPrices() {
       icon: TrendingUp,
       priority: 'high'
     })
-
     // Seasonal recommendations based on current season (proxy for weather)
     const seasonalCrops = insights.filter(item => {
       const catSeason = currentCropCategories[item.category]?.seasonEnglish || ''
       return catSeason.includes('all') || catSeason.toLowerCase().includes(currentSeason.toLowerCase())
     }).sort((a, b) => b.profitPotential - a.profitPotential).slice(0, 5)
-
     recommendations.push({
       type: 'seasonal',
       title: `${currentT.seasonalTitlePrefix} ${currentSeason}`,
@@ -973,12 +953,10 @@ export default function EnhancedMarketPrices() {
       icon: Leaf,
       priority: 'medium'
     })
-
     // High demand crops
     const highDemandCrops = insights
       .sort((a, b) => b.demandScore - a.demandScore)
       .slice(0, 5)
-
     recommendations.push({
       type: 'demand',
       title: currentT.highDemandTitle,
@@ -987,13 +965,11 @@ export default function EnhancedMarketPrices() {
       icon: Target,
       priority: 'high'
     })
-
     // Nationwide costly crops
     const nationwideHigh = insights
       .filter(item => item.states.size >= 5)
       .sort((a, b) => b.avgPrice - a.avgPrice)
       .slice(0, 5)
-
     recommendations.push({
       type: 'nationwide',
       title: currentT.nationwideTitle,
@@ -1002,13 +978,11 @@ export default function EnhancedMarketPrices() {
       icon: Globe,
       priority: 'high'
     })
-
     // Low risk crops (low volatility)
     const lowRiskCrops = insights
       .filter(item => parseFloat(item.volatility) < 30)
       .sort((a, b) => b.profitPotential - a.profitPotential)
       .slice(0, 5)
-
     recommendations.push({
       type: 'lowrisk',
       title: currentT.stablePriceTitle,
@@ -1017,26 +991,23 @@ export default function EnhancedMarketPrices() {
       icon: Shield,
       priority: 'medium'
     })
-
     return recommendations
   }, [currentT, currentCropCategories, getCurrentSeason])
-
   // Update price analysis when market prices change
   useEffect(() => {
     const analysis = analyzeMarketTrends()
     setPriceAnalysis(analysis)
   }, [analyzeMarketTrends])
-
   // Fetch available commodities from API
   const fetchAvailableCommodities = useCallback(async () => {
     try {
       const url = `${API_URL}?api-key=${API_KEY}&format=json&limit=1000`
       const response = await fetch(url)
-      
+   
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-      
+   
       let data;
       try {
         data = await response.json()
@@ -1047,13 +1018,12 @@ export default function EnhancedMarketPrices() {
         setUsingFallback(true)
         return fallback
       }
-      
+   
       const uniqueCommodities = [...new Set(
         (data.records || [])
           .map(record => record.commodity)
           .filter(commodity => commodity && commodity.trim() !== '')
       )].sort()
-
       setAvailableCommodities(uniqueCommodities)
       return uniqueCommodities
     } catch (error) {
@@ -1064,7 +1034,6 @@ export default function EnhancedMarketPrices() {
       return fallback
     }
   }, [currentCommodityNames])
-
   // Initial data load - load all available commodities for analysis
   useEffect(() => {
     const loadInitialData = async () => {
@@ -1074,21 +1043,20 @@ export default function EnhancedMarketPrices() {
       try {
         // First get all available commodities
         const commodities = await fetchAvailableCommodities()
-        
+     
         if (commodities.length > 0) {
           // Load a sample from each category for initial analysis
           const sampleSize = 3 // Take 3 items from each category for analysis
           const initialPrices = []
-
           for (const [categoryKey, categoryData] of Object.entries(currentCropCategories)) {
             const categoryCrops = categoryData.crops.filter(crop => commodities.includes(crop))
             const sampleCrops = categoryCrops.slice(0, sampleSize)
-            
+         
             for (const commodity of sampleCrops) {
               try {
                 const url = `${API_URL}?api-key=${API_KEY}&format=json&limit=50&filters[commodity]=${encodeURIComponent(commodity)}`
                 const response = await fetch(url)
-                
+             
                 if (response.ok) {
                   let data;
                   try {
@@ -1106,30 +1074,28 @@ export default function EnhancedMarketPrices() {
                     setUsingFallback(true)
                     continue;
                   }
-                  
+               
                   const records = data.records || []
-                  
+               
                   // Get unique markets for this commodity
                   const marketGroups = {}
                   records.forEach(record => {
                     if (record.modal_price && parseFloat(record.modal_price) > 0) {
                       const marketKey = `${record.state}-${record.district}-${record.market}`
-                      if (!marketGroups[marketKey] || 
+                      if (!marketGroups[marketKey] ||
                           new Date(record.arrival_date) > new Date(marketGroups[marketKey].arrival_date)) {
                         marketGroups[marketKey] = record
                       }
                     }
                   })
-
                   Object.values(marketGroups).forEach(record => {
                     const price = parseFloat(record.modal_price) || 0
                     const minPrice = parseFloat(record.min_price) || price
                     const maxPrice = parseFloat(record.max_price) || price
-                    
+                 
                     if (price > 0) {
                       const change = price - minPrice
                       const changePercent = minPrice > 0 ? ((change / minPrice) * 100) : 0
-
                       initialPrices.push({
                         crop: currentCommodityNames[commodity] || commodity,
                         englishName: commodity,
@@ -1177,7 +1143,6 @@ export default function EnhancedMarketPrices() {
               }
             }
           }
-
           setMarketPrices(initialPrices)
         } else {
           // Full fallback to static data
@@ -1198,9 +1163,8 @@ export default function EnhancedMarketPrices() {
           setMarketPrices(fallbackPrices)
           setUsingFallback(true)
         }
-        
+     
         setLastUpdated(new Date())
-
       } catch (error) {
         console.error('Error loading initial data:', error)
         // Full fallback to static data on initial load failure
@@ -1224,26 +1188,23 @@ export default function EnhancedMarketPrices() {
         setLoading(false)
       }
     }
-
     loadInitialData()
   }, [fetchAvailableCommodities, currentT, currentCropCategories, currentCommodityNames, translateFallbackData])
-
   // Filter and categorize prices
   const filteredPrices = useMemo(() => {
     return marketPrices.filter(item => {
-      const matchesSearch = !searchTerm || 
+      const matchesSearch = !searchTerm ||
         item.crop.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.englishName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.market.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.variety.toLowerCase().includes(searchTerm.toLowerCase())
-      
+   
       const matchesState = !selectedState || item.state === selectedState
       const matchesCategory = !selectedCategory || item.category === selectedCategory
-      
+   
       return matchesSearch && matchesState && matchesCategory
     })
   }, [marketPrices, searchTerm, selectedState, selectedCategory])
-
   // Group filtered prices by category
   const pricesByCategory = useMemo(() => {
     const groups = {}
@@ -1255,13 +1216,11 @@ export default function EnhancedMarketPrices() {
     })
     return groups
   }, [filteredPrices])
-
   const availableStates = useMemo(() => {
     return [...new Set(marketPrices.map(item => item.state))]
       .filter(Boolean)
       .sort()
   }, [marketPrices])
-
   const handleRefresh = useCallback(() => {
     setRefreshing(true)
     setMarketPrices([])
@@ -1274,20 +1233,17 @@ export default function EnhancedMarketPrices() {
     }, 500)
     setRefreshing(false)
   }, [])
-
   const toggleCategory = useCallback(async (category) => {
     const isExpanding = !expandedCategories[category]
-    
+ 
     setExpandedCategories(prev => ({
       ...prev,
       [category]: isExpanding
     }))
-
     if (isExpanding && !lazyLoadedCategories.has(category)) {
       await loadCategoryData(category)
     }
   }, [expandedCategories, lazyLoadedCategories, loadCategoryData])
-
   // Fallback notification if using static/mock data
   useEffect(() => {
     if (usingFallback) {
@@ -1295,144 +1251,138 @@ export default function EnhancedMarketPrices() {
       console.warn(currentT.fallbackNotification);
     }
   }, [usingFallback, currentT.fallbackNotification]);
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-muted to-secondary py-4 sm:py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-       
-
+    
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mb-4">
-            <Rocket className="h-6 w-6 text-white" />
+        <div className="text-center mb-6 sm:mb-12">
+          <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-primary to-primary/80 rounded-full mb-4 mx-auto">
+            <Rocket className="h-6 w-6 text-primary-foreground" />
           </div>
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+          <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-4 leading-tight">
             {currentT.headerTitle}
           </h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300 font-medium max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-muted-foreground font-medium max-w-2xl mx-auto leading-relaxed">
             {currentT.headerSubtitle}
           </p>
           {lastUpdated && (
-            <p className="text-sm text-slate-500 dark:text-slate-400 mt-4 flex items-center justify-center gap-2">
-              <Calendar className="h-4 w-4" />
+            <p className="text-sm text-muted-foreground mt-4 flex items-center justify-center gap-2">
+              <Calendar className="h-4 w-4 flex-shrink-0" />
               {currentT.lastUpdatedPrefix} {lastUpdated.toLocaleString(currentLocale)}
             </p>
           )}
         </div>
-
         {error && (
-          <div className="mb-8 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl flex items-center gap-3">
-            <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 flex-shrink-0" />
-            <p className="text-red-700 dark:text-red-300 text-sm">{error}</p>
+          <div className="mb-6 sm:mb-8 p-4 bg-destructive/10 border border-destructive/20 rounded-xl flex items-center gap-3">
+            <AlertCircle className="h-5 w-5 text-destructive flex-shrink-0" />
+            <p className="text-destructive/90 text-sm">{error}</p>
           </div>
         )}
-
         {/* Quick Analysis Toggle */}
-        <div className="mb-8 flex justify-center">
+        <div className="mb-6 sm:mb-8 flex justify-center">
           <button
             onClick={() => setShowRecommendations(!showRecommendations)}
-            className="group flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 dark:hover:from-blue-500 dark:hover:to-indigo-500 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            className="group flex items-center justify-center gap-3 px-4 sm:px-6 py-3 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground rounded-xl hover:from-primary/90 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 min-w-0 flex-1 sm:flex-none"
           >
-            <BarChart3 className="h-5 w-5 group-hover:scale-110 transition-transform" />
-            <span className="font-medium">
+            <BarChart3 className="h-5 w-5 group-hover:scale-110 transition-transform flex-shrink-0" />
+            <span className="font-medium text-sm sm:text-base truncate">
               {showRecommendations ? currentT.viewPriceList : currentT.viewAnalysis}
             </span>
           </button>
         </div>
-
         {/* Market Analysis & Recommendations */}
         {showRecommendations && priceAnalysis && (
-          <div className="space-y-8 mb-12">
+          <div className="space-y-6 sm:space-y-8 mb-12">
             {/* Price Analysis Summary */}
-            <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-blue-200 dark:border-slate-700 rounded-2xl p-8 shadow-xl">
-              <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6 flex items-center gap-3">
-                <BarChart3 className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+            <div className="bg-card/80 backdrop-blur-sm border border-border rounded-2xl p-4 sm:p-8 shadow-xl">
+              <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-6 flex items-center gap-3 flex-wrap">
+                <BarChart3 className="h-8 w-8 text-primary flex-shrink-0" />
                 {currentT.marketAnalysis}
               </h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-  <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl p-6 border border-green-200 dark:border-blue-800">
-    <h3 className="font-semibold text-green-800 dark:text-blue-300 mb-3 flex items-center gap-2">
-      <TrendingUp className="h-5 w-5" />
+           
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+  <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 sm:p-6">
+    <h3 className="font-semibold text-primary mb-3 flex items-center gap-2 text-sm sm:text-base">
+      <TrendingUp className="h-5 w-5 flex-shrink-0" />
       {currentT.mostExpensiveCrops}
     </h3>
     <div className="space-y-3">
       {priceAnalysis.highPriceItems.slice(0, 3).map((item, idx) => (
-        <div key={idx} className="flex justify-between text-sm bg-white dark:bg-slate-700 rounded-lg p-3 shadow-sm">
-          <span className="text-slate-700 dark:text-slate-300">{item.name} ({item.states.size} {currentT.states})</span>
-          <span className="font-bold text-green-600 dark:text-green-400">₹{item.avgPrice.toLocaleString('hi-IN')}</span>
+        <div key={idx} className="flex justify-between text-sm bg-card/50 rounded-lg p-3 shadow-sm">
+          <span className="text-muted-foreground truncate flex-1 pr-2">{item.name} ({item.states.size} {currentT.states})</span>
+          <span className="font-bold text-primary">₹{item.avgPrice.toLocaleString('hi-IN')}</span>
         </div>
       ))}
     </div>
   </div>
-  <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
-    <h3 className="font-semibold text-blue-800 dark:text-blue-300 mb-3 flex items-center gap-2">
-      <Target className="h-5 w-5" />
+  <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 sm:p-6">
+    <h3 className="font-semibold text-primary mb-3 flex items-center gap-2 text-sm sm:text-base">
+      <Target className="h-5 w-5 flex-shrink-0" />
       {currentT.highDemand}
     </h3>
     <div className="space-y-3">
       {priceAnalysis.highDemandItems.slice(0, 3).map((item, idx) => (
-        <div key={idx} className="flex justify-between text-sm bg-white dark:bg-slate-700 rounded-lg p-3 shadow-sm">
-          <span className="text-slate-700 dark:text-slate-300">{item.name}</span>
-          <span className="font-bold text-blue-600 dark:text-blue-400">{item.states.size} {currentT.states}</span>
+        <div key={idx} className="flex justify-between text-sm bg-card/50 rounded-lg p-3 shadow-sm">
+          <span className="text-muted-foreground truncate flex-1 pr-2">{item.name}</span>
+          <span className="font-bold text-primary">{item.states.size} {currentT.states}</span>
         </div>
       ))}
     </div>
   </div>
-  <div className="bg-gradient-to-br from-orange-50 to-red-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl p-6 border border-orange-200 dark:border-blue-800">
-    <h3 className="font-semibold text-orange-800 dark:text-orange-300 mb-3 flex items-center gap-2">
-      <AlertCircle className="h-5 w-5" />
+  <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 sm:p-6">
+    <h3 className="font-semibold text-primary mb-3 flex items-center gap-2 text-sm sm:text-base">
+      <AlertCircle className="h-5 w-5 flex-shrink-0" />
       {currentT.priceVolatility}
     </h3>
     <div className="space-y-3">
       {priceAnalysis.priceVolatileItems.slice(0, 3).map((item, idx) => (
-        <div key={idx} className="flex justify-between text-sm bg-white dark:bg-slate-700 rounded-lg p-3 shadow-sm">
-          <span className="text-slate-700 dark:text-slate-300">{item.name}</span>
-          <span className="font-bold text-orange-600 dark:text-orange-400">₹{item.priceVariance} ({item.volatility}%)</span>
+        <div key={idx} className="flex justify-between text-sm bg-card/50 rounded-lg p-3 shadow-sm">
+          <span className="text-muted-foreground truncate flex-1 pr-2">{item.name}</span>
+          <span className="font-bold text-primary">₹{item.priceVariance} ({item.volatility}%)</span>
         </div>
       ))}
     </div>
   </div>
 </div>
             </div>
-
             {/* Farming Recommendations */}
             <div className="space-y-6">
-              <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-3">
-                <Lightbulb className="h-8 w-8 text-amber-500" />
+              <h2 className="text-2xl sm:text-3xl font-bold text-foreground flex items-center gap-3 flex-wrap">
+                <Lightbulb className="h-8 w-8 text-amber-500 flex-shrink-0" />
                 {currentT.farmingRecommendations}
               </h2>
-              
+           
               {priceAnalysis.recommendations.map((rec, idx) => (
-                <div key={idx} className={`bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 ${
-                  rec.priority === 'high' ? 'border-l-4 border-green-500 dark:border-green-400' : 'border-l-4 border-blue-500 dark:border-blue-400'
+                <div key={idx} className={`bg-card/80 backdrop-blur-sm border border-border rounded-2xl p-4 sm:p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 ${
+                  rec.priority === 'high' ? 'border-l-4 border-primary' : 'border-l-4 border-primary/50'
                 }`}>
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-start gap-4 flex-col sm:flex-row">
                     <div className="flex-shrink-0 mt-1">
-                      <rec.icon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                      <rec.icon className="h-8 w-8 text-primary" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-3">{rec.title}</h3>
-                      <p className="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">{rec.description}</p>
-                      
+                      <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-3 leading-tight">{rec.title}</h3>
+                      <p className="text-muted-foreground mb-6 leading-relaxed text-sm sm:text-base">{rec.description}</p>
+                   
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {rec.crops.slice(0, 6).map((crop, cropIdx) => (
-                          <div key={cropIdx} className="flex items-center justify-between p-4 bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-700 dark:to-slate-600 rounded-lg hover:from-slate-100 dark:hover:from-slate-600">
-                            <div className="flex-1">
-                              <div className="font-semibold text-slate-900 dark:text-slate-100 text-base">{crop.name}</div>
-                              <div className="text-sm text-slate-500 dark:text-slate-400">{currentT.statesAvailable(crop.states.size)}</div>
+                          <div key={cropIdx} className="flex items-center justify-between p-4 bg-muted rounded-lg hover:bg-secondary/80 transition-colors">
+                            <div className="flex-1 min-w-0">
+                              <div className="font-semibold text-foreground text-base truncate">{crop.name}</div>
+                              <div className="text-sm text-muted-foreground">{currentT.statesAvailable(crop.states.size)}</div>
                             </div>
-                            <div className="text-right ml-4">
-                              <div className="font-bold text-green-600 dark:text-green-400 text-lg">₹{crop.avgPrice.toLocaleString('hi-IN')}</div>
-                              <div className="text-xs text-slate-500 dark:text-slate-400">{currentT.avgPrice}</div>
+                            <div className="text-right ml-4 min-w-0">
+                              <div className="font-bold text-primary text-lg">₹{crop.avgPrice.toLocaleString('hi-IN')}</div>
+                              <div className="text-xs text-muted-foreground">{currentT.avgPrice}</div>
                             </div>
                           </div>
                         ))}
                       </div>
-                      
+                   
                       {rec.type === 'profit' && (
-                        <div className="mt-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-                          <p className="text-sm text-green-800 dark:text-green-300 font-medium flex items-center gap-2">
+                        <div className="mt-6 p-4 bg-primary/10 rounded-lg border border-primary/20">
+                          <p className="text-sm text-primary font-medium flex items-center gap-2">
                             <TrendingUp className="h-4 w-4" />
                             {currentT.suggestionProfit}
                           </p>
@@ -1445,30 +1395,29 @@ export default function EnhancedMarketPrices() {
             </div>
           </div>
         )}
-
         {/* Search and Filter - Only show when not in recommendations view */}
         {!showRecommendations && (
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 mb-8 overflow-hidden">
-            <div className="p-6">
+          <div className="bg-card/80 backdrop-blur-sm rounded-2xl shadow-lg border border-border mb-6 sm:mb-8 overflow-hidden">
+            <div className="p-4 sm:p-6">
               <div className="flex flex-col lg:flex-row gap-4 mb-4">
                 <div className="flex-1 relative">
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 dark:text-slate-500 h-5 w-5" />
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
                   <input
                     type="text"
                     placeholder={currentT.searchPlaceholder}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 bg-white dark:bg-slate-700 transition-all duration-200"
+                    className="w-full pl-12 pr-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent text-foreground placeholder:text-muted-foreground bg-card transition-all duration-200 text-base"
                   />
                 </div>
-                
-                <div className="flex gap-4">
-                  <div className="relative">
-                    <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 dark:text-slate-500 h-5 w-5" />
+             
+                <div className="flex flex-col sm:flex-row gap-4 flex-1">
+                  <div className="relative flex-1">
+                    <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
                     <select
                       value={selectedCategory}
                       onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="pl-12 pr-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-700 w-48"
+                      className="w-full pl-12 pr-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent text-foreground bg-card text-base"
                     >
                       <option value="">{currentT.allCategories}</option>
                       {Object.entries(currentCropCategories).map(([key, category]) => (
@@ -1476,11 +1425,10 @@ export default function EnhancedMarketPrices() {
                       ))}
                     </select>
                   </div>
-
                   <select
                     value={selectedState}
                     onChange={(e) => setSelectedState(e.target.value)}
-                    className="px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-700 w-48"
+                    className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent text-foreground bg-card text-base"
                   >
                     <option value="">{currentT.allStates}</option>
                     {indianStates.map(state => (
@@ -1488,36 +1436,33 @@ export default function EnhancedMarketPrices() {
                     ))}
                   </select>
                 </div>
-
                 <button
                   onClick={handleRefresh}
                   disabled={refreshing}
-                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl hover:from-green-700 hover:to-emerald-700 dark:hover:from-green-500 dark:hover:to-emerald-500 disabled:opacity-50 transition-all duration-200 shadow-lg hover:shadow-xl"
+                  className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl hover:from-green-700 hover:to-emerald-700 disabled:opacity-50 transition-all duration-200 shadow-lg hover:shadow-xl flex-shrink-0 w-full sm:w-auto"
                 >
                   <RefreshCw className={`h-5 w-5 ${refreshing ? 'animate-spin' : ''}`} />
-                  {currentT.refresh}
+                  <span className="hidden sm:inline">{currentT.refresh}</span>
+                  <span className="sm:hidden">Refresh</span>
                 </button>
               </div>
-
-              <div className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-2">
-                <MapPin className="h-4 w-4" />
+              <div className="text-sm text-muted-foreground flex items-center gap-2 flex-wrap">
+                <MapPin className="h-4 w-4 flex-shrink-0" />
                 {currentT.dataAvailable(indianStates.length)}
               </div>
             </div>
           </div>
         )}
-
         {/* Loading State */}
         {loading && (
           <div className="text-center py-16">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 dark:bg-blue-900/20 rounded-full mb-4">
-              <Loader className="h-8 w-8 text-blue-600 dark:text-blue-400 animate-spin" />
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4 mx-auto">
+              <Loader className="h-8 w-8 text-primary animate-spin" />
             </div>
-            <p className="text-slate-600 dark:text-slate-300 mb-2 text-lg">{currentT.loadingInitial}</p>
-            <p className="text-sm text-slate-500 dark:text-slate-400">{currentT.loadingOther}</p>
+            <p className="text-muted-foreground mb-2 text-lg">{currentT.loadingInitial}</p>
+            <p className="text-sm text-muted-foreground">{currentT.loadingOther}</p>
           </div>
         )}
-
         {/* Categorized Prices Display - Only show when not in recommendations view */}
         {!loading && !showRecommendations && (
           <div className="space-y-6">
@@ -1525,57 +1470,56 @@ export default function EnhancedMarketPrices() {
               const categoryPrices = pricesByCategory[categoryKey] || []
               const isExpanded = expandedCategories[categoryKey]
               const isLoading = loadingStates[categoryKey]
-
               return (
-                <div key={categoryKey} className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
-                  <div 
-                    className="p-6 border-b border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all duration-200"
+                <div key={categoryKey} className="bg-card/80 backdrop-blur-sm rounded-2xl shadow-lg border border-border overflow-hidden">
+                  <div
+                    className="p-4 sm:p-6 border-b border-border cursor-pointer hover:bg-secondary transition-all duration-200"
                     onClick={() => toggleCategory(categoryKey)}
                   >
-                    <div className="flex items-center justify-between">
-                      <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-4">
-                        <div className="p-2 bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 rounded-xl">
-                          <categoryData.icon className="h-6 w-6 text-green-600 dark:text-green-400" />
+                    <div className="flex items-center justify-between flex-wrap gap-4">
+                      <h2 className="text-xl sm:text-2xl font-bold text-foreground flex items-center gap-4 flex-1 min-w-0">
+                        <div className="p-2 bg-primary/10 rounded-xl flex-shrink-0">
+                          <categoryData.icon className="h-6 w-6 text-primary" />
                         </div>
-                        <div>
-                          <div>{categoryData.name}</div>
-                          <div className="text-sm font-medium text-slate-600 dark:text-slate-300 flex items-center gap-6 mt-1">
-                            <span>({categoryPrices.length} {currentT.items})</span>
+                        <div className="min-w-0 flex-1">
+                          <div className="truncate">{categoryData.name}</div>
+                          <div className="text-sm font-medium text-muted-foreground flex flex-wrap items-center gap-2 sm:gap-6 mt-1">
+                            <span className="whitespace-nowrap">({categoryPrices.length} {currentT.items})</span>
                             <span className="flex items-center gap-1">
-                              <Clock className="h-4 w-4" />
+                              <Clock className="h-4 w-4 flex-shrink-0" />
                               {categoryData.season}
                             </span>
                             <span className="flex items-center gap-1">
-                              <Award className="h-4 w-4" />
+                              <Award className="h-4 w-4 flex-shrink-0" />
                               {categoryData.profitMargin} {currentT.profit}
                             </span>
                           </div>
                         </div>
                       </h2>
-                      <div className="flex items-center gap-3">
-                        {isLoading && <Loader className="h-5 w-5 animate-spin text-blue-600 dark:text-blue-400" />}
+                      <div className="flex items-center gap-3 flex-shrink-0">
+                        {isLoading && <Loader className="h-5 w-5 animate-spin text-primary" />}
                         {isExpanded ? (
-                          <ChevronUp className="h-6 w-6 text-slate-500 dark:text-slate-400 transition-transform duration-200" />
+                          <ChevronUp className="h-6 w-6 text-muted-foreground transition-transform duration-200" />
                         ) : (
-                          <ChevronDown className="h-6 w-6 text-slate-500 dark:text-slate-400 transition-transform duration-200" />
+                          <ChevronDown className="h-6 w-6 text-muted-foreground transition-transform duration-200" />
                         )}
                       </div>
                     </div>
                   </div>
-                  
+               
                   {isExpanded && (
-                    <div className="p-6">
+                    <div className="p-4 sm:p-6">
                       {isLoading && categoryPrices.length === 0 ? (
                         <div className="text-center py-12">
-                          <Loader className="h-8 w-8 animate-spin mx-auto mb-3 text-blue-600 dark:text-blue-400" />
-                          <p className="text-slate-600 dark:text-slate-300 text-lg">{currentT.loadingData}</p>
+                          <Loader className="h-8 w-8 animate-spin mx-auto mb-3 text-primary" />
+                          <p className="text-muted-foreground text-lg">{currentT.loadingData}</p>
                         </div>
                       ) : categoryPrices.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                           {categoryPrices.map((item, index) => (
                             <div
                               key={`${categoryKey}-${index}`}
-                              className="p-5 border border-slate-200 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-700 hover:shadow-lg transition-all duration-200 hover:border-blue-300 dark:hover:border-blue-600 relative group"
+                              className="p-4 sm:p-5 border border-border rounded-xl bg-card hover:shadow-lg transition-all duration-200 hover:border-primary/50 relative group"
                             >
                               {/* High price indicator */}
                               {item.price > 5000 && (
@@ -1583,17 +1527,17 @@ export default function EnhancedMarketPrices() {
                                   <Star className="h-4 w-4 text-amber-500" />
                                 </div>
                               )}
-                              
-                              <div className="flex justify-between items-start mb-4">
+                           
+                              <div className="flex justify-between items-start mb-4 gap-2">
                                 <div className="flex-1 min-w-0">
-                                  <h3 className="font-semibold text-lg text-slate-900 dark:text-slate-100 leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{item.crop}</h3>
-                                  <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">({item.englishName})</p>
-                                  <p className="text-sm text-slate-600 dark:text-slate-300 font-medium line-clamp-2 mt-1">{item.market}</p>
+                                  <h3 className="font-semibold text-base sm:text-lg text-foreground leading-tight group-hover:text-primary transition-colors truncate">{item.crop}</h3>
+                                  <p className="text-xs text-muted-foreground font-medium mt-1">({item.englishName})</p>
+                                  <p className="text-sm text-muted-foreground font-medium line-clamp-2 mt-1">{item.market}</p>
                                   {item.variety && item.variety !== currentT.generalVariety && (
-                                    <p className="text-xs text-blue-600 dark:text-blue-400 font-medium mt-1">{item.variety}</p>
+                                    <p className="text-xs text-primary font-medium mt-1 truncate">{item.variety}</p>
                                   )}
                                 </div>
-                                <div className={`flex items-center space-x-1 ml-3 ${
+                                <div className={`flex items-center space-x-1 ml-3 flex-shrink-0 ${
                                   item.trending === 'up' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
                                 }`}>
                                   {item.trending === 'up' ? (
@@ -1601,38 +1545,37 @@ export default function EnhancedMarketPrices() {
                                   ) : (
                                     <TrendingDown className="h-4 w-4" />
                                   )}
-                                  <span className="text-sm font-medium">{item.changePercent}</span>
+                                  <span className="text-sm font-medium whitespace-nowrap">{item.changePercent}</span>
                                 </div>
                               </div>
-                              
+                           
                               <div className="flex justify-between items-end pb-4">
-                                <div>
-                                  <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">₹{item.price.toLocaleString('hi-IN')}</p>
-                                  <p className="text-sm text-slate-600 dark:text-slate-300 font-medium">{item.unit}</p>
+                                <div className="min-w-0">
+                                  <p className="text-xl sm:text-2xl font-bold text-foreground">₹{item.price.toLocaleString('hi-IN')}</p>
+                                  <p className="text-sm text-muted-foreground font-medium">{item.unit}</p>
                                   {item.minPrice !== item.maxPrice && (
-                                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                                    <p className="text-xs text-muted-foreground mt-1">
                                       {currentT.range} ₹{item.minPrice} - ₹{item.maxPrice}
                                     </p>
                                   )}
                                 </div>
-                                <div className={`text-sm font-medium ${
+                                <div className={`text-sm font-medium whitespace-nowrap ${
                                   item.trending === 'up' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
                                 }`}>
                                   {item.change}
                                 </div>
                               </div>
-                              
+                           
                               {item.quantity > 0 && (
-                                <div className="pt-3 border-t border-slate-100 dark:border-slate-600">
-                                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                                <div className="pt-3 border-t border-border">
+                                  <p className="text-xs text-muted-foreground">
                                     {currentT.arrival} {item.quantity.toLocaleString('hi-IN')} {currentT.quintal}
                                   </p>
                                 </div>
                               )}
-
                               {/* Profit indicator */}
                               {item.goodProfit && (
-                                <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-600">
+                                <div className="mt-3 pt-3 border-t border-border">
                                   <p className="text-xs text-green-600 dark:text-green-400 font-medium flex items-center gap-1">
                                     <TrendingUp className="h-3 w-3" />
                                     {currentT.goodProfit}
@@ -1644,10 +1587,10 @@ export default function EnhancedMarketPrices() {
                         </div>
                       ) : (
                         <div className="text-center py-12">
-                          <p className="text-slate-500 dark:text-slate-400 text-lg mb-4">{currentT.noData}</p>
+                          <p className="text-muted-foreground text-lg mb-4">{currentT.noData}</p>
                           <button
                             onClick={() => loadCategoryData(categoryKey)}
-                            className="px-6 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-xl hover:bg-blue-700 dark:hover:bg-blue-600 transition-all duration-200 shadow-lg hover:shadow-xl"
+                            className="px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-all duration-200 shadow-lg hover:shadow-xl text-sm font-medium"
                           >
                             {currentT.loadData}
                           </button>
@@ -1660,42 +1603,39 @@ export default function EnhancedMarketPrices() {
             })}
           </div>
         )}
-
         {/* Summary Statistics */}
         {!loading && !showRecommendations && (
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 mt-8 p-6 overflow-hidden">
-            <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-6">{currentT.dataSummary}</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
+          <div className="bg-card/80 backdrop-blur-sm rounded-2xl shadow-lg border border-border mt-8 p-4 sm:p-6 overflow-hidden">
+            <h3 className="text-lg sm:text-xl font-semibold text-foreground mb-6">{currentT.dataSummary}</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-6">
               {Object.entries(currentCropCategories).map(([key, category]) => {
                 const count = pricesByCategory[key]?.length || 0
                 return (
-                  <div key={key} className="text-center p-4 bg-gradient-to-br from-slate-50 to-gray-50 dark:from-slate-700 dark:to-slate-600 rounded-xl border border-slate-200 dark:border-slate-600 hover:shadow-md transition-shadow">
-                    <div className="p-2 bg-white dark:bg-slate-700 rounded-full w-12 h-12 mx-auto mb-3 shadow-sm">
-                      <category.icon className="h-5 w-5 text-slate-600 dark:text-slate-300 mx-auto" />
+                  <div key={key} className="text-center p-4 bg-muted rounded-xl border border-border hover:shadow-md transition-shadow">
+                    <div className="p-2 bg-card rounded-full w-12 h-12 mx-auto mb-3 shadow-sm">
+                      <category.icon className="h-5 w-5 text-muted-foreground mx-auto" />
                     </div>
-                    <div className="font-bold text-slate-900 dark:text-slate-100 text-lg">{count}</div>
-                    <div className="text-sm text-slate-600 dark:text-slate-300">{category.name}</div>
-                    <div className="text-xs text-slate-500 dark:text-slate-400">{category.profitMargin}</div>
+                    <div className="font-bold text-foreground text-lg">{count}</div>
+                    <div className="text-sm text-muted-foreground truncate">{category.name}</div>
+                    <div className="text-xs text-muted-foreground">{category.profitMargin}</div>
                   </div>
                 )
               })}
             </div>
-            <div className="text-center pt-4 border-t border-slate-200 dark:border-slate-600">
-              <p className="text-slate-600 dark:text-slate-300 text-sm">
-                {currentT.total} <span className="font-semibold text-slate-900 dark:text-slate-100">{filteredPrices.length}</span> {currentT.marketEntries} | {currentT.statesLabel}: <span className="font-semibold text-slate-900 dark:text-slate-100">{availableStates.length}</span>
+            <div className="text-center pt-4 border-t border-border">
+              <p className="text-muted-foreground text-sm">
+                {currentT.total} <span className="font-semibold text-foreground">{filteredPrices.length}</span> {currentT.marketEntries} | {currentT.statesLabel}: <span className="font-semibold text-foreground">{availableStates.length}</span>
               </p>
             </div>
           </div>
         )}
-
         {/* Enhanced Data Source Info */}
-      
-
-        <div className="text-center mt-8 pt-6 border-t border-slate-200 dark:border-slate-600">
-          <p className="text-slate-700 dark:text-slate-300 font-medium text-lg mb-2">
+   
+        <div className="text-center mt-8 pt-6 border-t border-border">
+          <p className="text-foreground font-medium text-base sm:text-lg mb-2">
             {currentT.footerWarning}
           </p>
-          <p className="text-xs text-slate-500 dark:text-slate-400 flex justify-center items-center gap-4 mt-3">
+          <p className="text-xs text-muted-foreground flex justify-center items-center gap-4 mt-3 flex-wrap">
             <span className="flex items-center gap-1"><BarChart3 className="h-3 w-3" /> {currentT.footerSmartAnalytics}</span>
             <span className="flex items-center gap-1"><Leaf className="h-3 w-3" /> {currentT.footerFarmingRec}</span>
             <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {currentT.footerFastLoading}</span>

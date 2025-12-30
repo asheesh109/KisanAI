@@ -120,36 +120,67 @@ export default function AboutSection() {
   const currentAbout = aboutContent[language] || aboutContent.en;
 
   return (
-    <section className="py-20 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-gray-800 dark:to-gray-900">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold mb-6 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+    <section className="py-16 sm:py-20 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="text-center mb-12 sm:mb-16">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-fade-in">
             {currentAbout.title}
           </h2>
-          <p className="text-xl text-gray-700 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed animate-fade-in-delayed">
             {currentAbout.description}
           </p>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
           {currentFeatures.map((feature, index) => (
             <div 
               key={index}
-              className="text-center p-8 rounded-2xl bg-white dark:bg-gray-900 shadow-xl hover:shadow-2xl transition-all hover:-translate-y-2"
+              className="text-center p-6 sm:p-8 rounded-2xl bg-card shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-border animate-card-appear"
+              style={{ animationDelay: `${index * 150}ms` }}
             >
-              <div className="w-24 h-24 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                <span className="text-5xl">{feature.icon}</span>
+              <div className="w-20 sm:w-24 h-20 sm:h-24 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-lg group-hover:rotate-12 transition-all duration-500">
+                <span className="text-3xl sm:text-5xl animate-icon-bounce">{feature.icon}</span>
               </div>
-              <h3 className="text-2xl font-bold mb-3 text-gray-900 dark:text-white">
+              <h3 className="text-xl sm:text-2xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors">
                 {feature.title}
               </h3>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-muted-foreground leading-relaxed animate-fade-in-delayed">
                 {feature.description}
               </p>
             </div>
           ))}
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.8s ease-out;
+        }
+        @keyframes fade-in-delayed {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-delayed {
+          animation: fade-in-delayed 0.8s ease-out 0.3s both;
+        }
+        @keyframes card-appear {
+          from { opacity: 0; transform: translateY(40px) scale(0.95); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .animate-card-appear {
+          animation: card-appear 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        @keyframes icon-bounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-5px); }
+        }
+        .animate-icon-bounce {
+          animation: icon-bounce 2s ease-in-out infinite;
+        }
+      `}</style>
     </section>
   );
 }

@@ -571,15 +571,15 @@ const loanBenefits = {
     },
     {
       title: 'സബ്സിഡി',
-      description: '2% പലിശ സബ്സിഡി ലഭ്യമാണ്',
+      description: '2% പലിശ സബ്സിഡി ലഭ്യം',
     },
     {
-      title: 'എളുപ്പത്തിലുള്ള തിരിച്ചടവ്',
-      description: 'വിള സീസണിനനുസരിച്ച് ഫ്ലെക്സിബിൾ പേയ്മെന്റ്',
+      title: 'ലളിതമായ തിരിച്ചടവ്',
+      description: 'പയർക്കാലത്തിനനുസരിച്ചുള്ള ഫ്ലെക്സിബിൾ പേയ്മെന്റ്',
     },
     {
       title: 'ഇൻഷുറൻസ് കവർ',
-      description: 'വ്യക്തിപരമായ അപകട ഇൻഷുറൻസ്',
+      description: 'വ്യക്തിഗത അപകട ഇൻഷുറൻസ്',
     },
   ]
 }
@@ -762,6 +762,16 @@ export default function KCCApplication() {
   const [totalInterest, setTotalInterest] = useState(0)
   const [totalAmount, setTotalAmount] = useState(0)
 
+  // Locale map for number formatting
+  const localeMap = {
+    en: 'en-IN',
+    hi: 'hi-IN',
+    mr: 'mr-IN',
+    gu: 'gu-IN',
+    ml: 'ml-IN'
+  }
+  const currentLocale = localeMap[language] || 'en-IN'
+
   // Calculator calculation
   useEffect(() => {
     if (loanAmount > 0 && tenure > 0) {
@@ -856,24 +866,24 @@ export default function KCCApplication() {
     };
 
     return (
-      <div className="flex flex-col h-[70vh] bg-white rounded-lg shadow-sm">
+      <div className="flex flex-col h-[60vh] sm:h-[70vh] bg-card rounded-lg shadow-sm border border-border">
         {/* Fallback Notification */}
         {usingFallback && chatMessages.length > 0 && (
-          <div className="p-4 bg-blue-100 border border-blue-400 text-blue-700 rounded-lg mb-4">
+          <div className="p-4 bg-muted border border-border text-card-foreground rounded-lg mb-4">
             <div className="flex items-center">
-              <Info className="h-5 w-5 mr-2" />
-              <p>{getTranslation(language, 'fallbackNotification')}</p>
+              <Info className="h-5 w-5 mr-2 flex-shrink-0 text-primary" />
+              <p className="text-sm">{getTranslation(language, 'fallbackNotification')}</p>
             </div>
           </div>
         )}
         
         {/* Chat Header */}
-        <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+        <div className="p-4 border-b border-border flex items-center justify-between">
           <div className="flex items-center">
-            <Bot className="h-6 w-6 text-purple-600 mr-2" />
+            <Bot className="h-6 w-6 text-primary mr-2 flex-shrink-0" />
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">{getTranslation(language, 'kccAssistant')}</h3>
-              <p className="text-sm text-gray-600">{getTranslation(language, 'kccAssistantDesc')}</p>
+              <h3 className="text-lg font-semibold text-card-foreground">{getTranslation(language, 'kccAssistant')}</h3>
+              <p className="text-sm text-muted-foreground">{getTranslation(language, 'kccAssistantDesc')}</p>
             </div>
           </div>
         </div>
@@ -885,15 +895,15 @@ export default function KCCApplication() {
         >
           {chatMessages.length === 0 ? (
             <div className="text-center py-8">
-              <Bot className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h4 className="text-lg font-medium text-gray-900">{getTranslation(language, 'helloKCCAssistant')}</h4>
-              <p className="text-gray-600 mt-2">{getTranslation(language, 'askKCCQuestions')}</p>
+              <Bot className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <h4 className="text-lg font-medium text-card-foreground">{getTranslation(language, 'helloKCCAssistant')}</h4>
+              <p className="text-muted-foreground mt-2">{getTranslation(language, 'askKCCQuestions')}</p>
               <div className="mt-4 flex flex-wrap gap-2 justify-center">
                 {(quickQuestions[language] || quickQuestions.en).map((question, index) => (
                   <button
                     key={index}
                     onClick={() => handleQuickQuestion(question)}
-                    className="px-3 py-2 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-lg text-sm transition-colors"
+                    className="px-3 py-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg text-sm transition-colors"
                   >
                     {question}
                   </button>
@@ -905,8 +915,8 @@ export default function KCCApplication() {
               <div key={index} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[80%] p-3 rounded-lg ${
                   msg.type === 'user' 
-                    ? 'bg-purple-600 text-white' 
-                    : 'bg-gray-100 text-gray-900'
+                    ? 'bg-primary text-primary-foreground' 
+                    : 'bg-muted text-card-foreground'
                 }`}>
                   <p 
                     className="text-sm whitespace-pre-wrap"
@@ -918,23 +928,23 @@ export default function KCCApplication() {
           )}
           {chatLoading && (
             <div className="flex justify-start">
-              <div className="bg-gray-100 p-3 rounded-lg flex items-center gap-2">
-                <Loader2 className="h-4 w-4 animate-spin" />
-                <span className="text-sm text-gray-600">{getTranslation(language, 'answerComing')}</span>
+              <div className="bg-muted p-3 rounded-lg flex items-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                <span className="text-sm text-muted-foreground">{getTranslation(language, 'answerComing')}</span>
               </div>
             </div>
           )}
         </div>
         
         {/* Chat Input */}
-        <div className="p-4 border-t border-gray-200">
+        <div className="p-4 border-t border-border">
           <div className="flex gap-2">
             <input
               type="text"
               value={currentMessage}
               onChange={(e) => setCurrentMessage(e.target.value)}
               placeholder={getTranslation(language, 'typeYourQuestionHere')}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="flex-1 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-card-foreground placeholder-muted-foreground bg-card"
               onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
               disabled={chatLoading}
               autoFocus={!chatLoading}
@@ -944,12 +954,12 @@ export default function KCCApplication() {
             <button
               onClick={handleSendMessage}
               disabled={chatLoading || !currentMessage.trim()}
-              className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-300 text-white px-4 py-2 rounded-lg transition-colors flex items-center"
+              className="bg-primary hover:bg-accent disabled:bg-muted text-primary-foreground px-4 py-2 rounded-lg transition-colors flex items-center disabled:text-muted-foreground"
             >
               <Send className="h-4 w-4" />
             </button>
           </div>
-          <p className="text-xs text-gray-500 mt-2 text-center">
+          <p className="text-xs text-muted-foreground mt-2 text-center">
             {getTranslation(language, 'kccHelpText')}
           </p>
         </div>
@@ -958,20 +968,20 @@ export default function KCCApplication() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-50 py-8">
-      <div className="max-w-6xl mx-auto px-6 sm:px-8">
+    <div className="min-h-screen bg-background py-4 sm:py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 mb-4">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
             {getTranslation(language, 'kisanCreditCard')}
           </h1>
-          <p className="text-xl text-slate-600 font-medium">
+          <p className="text-lg sm:text-xl text-muted-foreground font-medium">
             {getTranslation(language, 'kccTagline')}
           </p>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex space-x-1 mb-8 bg-white rounded-lg p-1 shadow-sm">
+        <div className="flex flex-col sm:flex-row space-y-1 sm:space-y-0 sm:space-x-1 mb-6 sm:mb-8 bg-card rounded-lg p-1 shadow-sm border border-border">
           {[
             { id: 'application', name: getTranslation(language, 'application'), icon: CreditCard },
             { id: 'information', name: getTranslation(language, 'information'), icon: FileText },
@@ -983,14 +993,14 @@ export default function KCCApplication() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center space-x-2 px-4 py-3 rounded-md flex-1 transition-colors ${
+                className={`flex items-center space-x-2 px-3 sm:px-4 py-3 rounded-md flex-1 transition-colors ${
                   activeTab === tab.id
-                    ? 'bg-purple-600 text-white'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    ? 'bg-primary text-primary-foreground shadow-sm'
+                    : 'text-muted-foreground hover:bg-muted'
                 }`}
               >
-                <IconComponent className="h-5 w-5" />
-                <span className="font-medium">{tab.name}</span>
+                <IconComponent className="h-5 w-5 flex-shrink-0" />
+                <span className="font-medium text-sm sm:text-base">{tab.name}</span>
               </button>
             )
           })}
@@ -998,33 +1008,31 @@ export default function KCCApplication() {
 
         {/* Main Content */}
         {activeTab === 'application' && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
             {/* Application Form */}
             <div className="space-y-6">
-              <div className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center">
-                  <CreditCard className="mr-2 h-5 w-5" />
+              <div className="bg-card rounded-lg shadow-sm p-4 sm:p-6 border border-border">
+                <h2 className="text-xl font-bold text-foreground mb-4 flex items-center">
+                  <CreditCard className="mr-2 h-5 w-5 flex-shrink-0 text-primary" />
                   {getTranslation(language, 'startNewApplication')}
                 </h2>
-                <p className="text-slate-600 mb-6">
+                <p className="text-muted-foreground mb-6">
                   {getTranslation(language, 'followStepsToComplete')}
                 </p>
                 <div className="space-y-4">
                   {(applicationSteps[language] || applicationSteps.en).map((step) => {
                     const IconComponent = step.icon
                     return (
-                      <div key={step.id} className="flex items-center space-x-4 p-4 border rounded-lg hover:border-purple-300 transition-colors">
-                        <div className="flex-shrink-0">
-                          <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                            <IconComponent className="h-5 w-5 text-purple-600" />
-                          </div>
+                      <div key={step.id} className="flex items-start space-x-4 p-4 border border-border rounded-lg hover:border-primary/50 transition-colors">
+                        <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mt-1">
+                          <IconComponent className="h-5 w-5 text-primary" />
                         </div>
-                        <div className="flex-1">
-                          <h4 className="font-medium text-slate-900">{step.title}</h4>
-                          <p className="text-sm text-slate-600">{step.description}</p>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-medium text-foreground">{step.title}</h4>
+                          <p className="text-sm text-muted-foreground">{step.description}</p>
                         </div>
                         <div className="flex-shrink-0">
-                          <Clock className="h-5 w-5 text-gray-400" />
+                          <Clock className="h-5 w-5 text-muted-foreground mt-1" />
                         </div>
                       </div>
                     )
@@ -1032,38 +1040,37 @@ export default function KCCApplication() {
                   <a 
                     href="https://pmkisan.gov.in/documents/Kcc.pdf"
                     download="KCC_Application_Form.pdf"
-                   className="bg-white text-purple-700 hover:bg-purple-100 px-6 py-3 rounded-xl font-semibold shadow-md transition-all duration-200 flex items-center justify-center"
-
+                    className="bg-card text-primary hover:bg-primary/5 px-6 py-3 rounded-xl font-semibold shadow-sm transition-all duration-200 flex items-center justify-center border border-primary"
                   >
                     {getTranslation(language, 'startApplication')} - {getTranslation(language, 'downloadForm')}
                   </a>
-                  <p className="text-xs text-gray-500 mt-2 text-center">
+                  <p className="text-xs text-muted-foreground mt-2 text-center">
                     {getTranslation(language, 'orVisitNearestBank')}
                   </p>
                 </div>
               </div>
 
               {/* Status Check */}
-              <div className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-xl font-bold text-slate-900 mb-4">{getTranslation(language, 'checkApplicationStatus')}</h2>
-                <p className="text-sm text-gray-600 mb-4">
+              <div className="bg-card rounded-lg shadow-sm p-4 sm:p-6 border border-border">
+                <h2 className="text-xl font-bold text-foreground mb-4">{getTranslation(language, 'checkApplicationStatus')}</h2>
+                <p className="text-sm text-muted-foreground mb-4">
                   {getTranslation(language, 'contactBankOrHelplineForStatus')}
                 </p>
                 <div className="space-y-4">
                   <input
                     type="text"
                     placeholder={getTranslation(language, 'enterApplicationNumber')}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-slate-900 placeholder-gray-500"
+                    className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-card-foreground placeholder-muted-foreground bg-card"
                   />
                   <a 
                     href="http://pmkisan.gov.in/beneficiarystatus.aspx"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full block border border-purple-600 text-purple-600 hover:bg-purple-50 py-2 rounded-lg font-medium transition-colors text-center"
+                    className="w-full block border border-primary text-primary hover:bg-primary/5 py-2 rounded-lg font-medium transition-colors text-center"
                   >
                     {getTranslation(language, 'checkStatus')} - {getTranslation(language, 'viaPMKisanPortal')}
                   </a>
-                  <p className="text-xs text-gray-500 text-center">
+                  <p className="text-xs text-muted-foreground text-center">
                     {getTranslation(language, 'orCallHelpline')} 1800-180-1551
                   </p>
                 </div>
@@ -1073,32 +1080,32 @@ export default function KCCApplication() {
             {/* Information Panel */}
             <div className="space-y-6">
               {/* Eligibility */}
-              <div className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center">
-                  <CheckCircle className="mr-2 h-5 w-5" />
+              <div className="bg-card rounded-lg shadow-sm p-4 sm:p-6 border border-border">
+                <h2 className="text-xl font-bold text-foreground mb-4 flex items-center">
+                  <CheckCircle className="mr-2 h-5 w-5 flex-shrink-0 text-primary" />
                   {getTranslation(language, 'eligibilityCriteria')}
                 </h2>
                 <ul className="space-y-3">
                   {(eligibilityCriteria[language] || eligibilityCriteria.en).map((criteria, index) => (
                     <li key={index} className="flex items-center">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                      <span className="text-gray-700">{criteria}</span>
+                      <span className="w-2 h-2 bg-primary rounded-full mr-3 flex-shrink-0"></span>
+                      <span className="text-card-foreground">{criteria}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
               {/* Required Documents */}
-              <div className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center">
-                  <FileText className="mr-2 h-5 w-5" />
+              <div className="bg-card rounded-lg shadow-sm p-4 sm:p-6 border border-border">
+                <h2 className="text-xl font-bold text-foreground mb-4 flex items-center">
+                  <FileText className="mr-2 h-5 w-5 flex-shrink-0 text-primary" />
                   {getTranslation(language, 'requiredDocuments')}
                 </h2>
                 <ul className="space-y-3">
                   {(requiredDocuments[language] || requiredDocuments.en).map((document, index) => (
                     <li key={index} className="flex items-center">
-                      <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
-                      <span className="text-gray-700">{document}</span>
+                      <span className="w-2 h-2 bg-primary rounded-full mr-3 flex-shrink-0"></span>
+                      <span className="text-card-foreground">{document}</span>
                     </li>
                   ))}
                 </ul>
@@ -1112,58 +1119,58 @@ export default function KCCApplication() {
             {/* Loan Benefits */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {(loanBenefits[language] || loanBenefits.en).map((benefit, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-sm p-6">
-                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
-                    <CreditCard className="h-6 w-6 text-purple-600" />
+                <div key={index} className="bg-card rounded-lg shadow-sm p-4 sm:p-6 border border-border hover:shadow-md transition-shadow">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                    <CreditCard className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="font-semibold text-slate-900 mb-2">{benefit.title}</h3>
-                  <p className="text-slate-600">{benefit.description}</p>
+                  <h3 className="font-semibold text-foreground mb-2">{benefit.title}</h3>
+                  <p className="text-muted-foreground">{benefit.description}</p>
                 </div>
               ))}
             </div>
 
             {/* FAQ Section */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center">
-                <MessageCircle className="mr-2 h-5 w-5" />
+            <div className="bg-card rounded-lg shadow-sm p-4 sm:p-6 border border-border">
+              <h2 className="text-xl font-bold text-foreground mb-6 flex items-center">
+                <MessageCircle className="mr-2 h-5 w-5 flex-shrink-0 text-primary" />
                 {getTranslation(language, 'faq')}
               </h2>
               <div className="space-y-4">
                 {(faqQuestions[language] || faqQuestions.en).map((faq, index) => (
-                  <div key={index} className="border-b border-gray-200 pb-4 last:border-b-0">
-                    <h3 className="font-semibold text-slate-900 mb-2">{faq.question}</h3>
-                    <p className="text-slate-600">{faq.answer}</p>
+                  <div key={index} className="border-b border-border pb-4 last:border-b-0">
+                    <h3 className="font-semibold text-foreground mb-2">{faq.question}</h3>
+                    <p className="text-muted-foreground">{faq.answer}</p>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Help & Support */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center">
-                <Phone className="mr-2 h-5 w-5" />
+            <div className="bg-card rounded-lg shadow-sm p-4 sm:p-6 border border-border">
+              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center">
+                <Phone className="mr-2 h-5 w-5 flex-shrink-0 text-primary" />
                 {getTranslation(language, 'helpSupport')}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <h4 className="font-medium text-slate-900 mb-2">{getTranslation(language, 'farmerHelpline')}</h4>
-                  <p className="text-sm text-slate-600">Toll Free: 1800-180-1551</p>
-                  <p className="text-sm text-slate-600">Time: 6 AM to 10 PM</p>
+                <div className="p-4 bg-muted rounded-lg">
+                  <h4 className="font-medium text-card-foreground mb-2">{getTranslation(language, 'farmerHelpline')}</h4>
+                  <p className="text-sm text-muted-foreground">Toll Free: 1800-180-1551</p>
+                  <p className="text-sm text-muted-foreground">Time: 6 AM to 10 PM</p>
                 </div>
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <h4 className="font-medium text-slate-900 mb-2">{getTranslation(language, 'emailSupport')}</h4>
-                  <p className="text-sm text-slate-600">kcc-support@kisanai.gov.in</p>
+                <div className="p-4 bg-muted rounded-lg">
+                  <h4 className="font-medium text-card-foreground mb-2">{getTranslation(language, 'emailSupport')}</h4>
+                  <p className="text-sm text-muted-foreground">kcc-support@kisanai.gov.in</p>
                 </div>
               </div>
               <a 
                 href="https://pmkisan.gov.in/documents/Kcc.pdf"
                 download="KCC_Application_Form.pdf"
-                className="w-full block border border-purple-600 text-purple-600 hover:bg-purple-50 py-3 rounded-lg font-medium mt-4 transition-colors text-center flex items-center justify-center"
+                className="w-full block border border-primary text-primary hover:bg-primary/5 py-3 rounded-lg font-medium mt-4 transition-colors text-center flex items-center justify-center"
               >
-                <Download className="h-4 w-4 mr-2" />
+                <Download className="h-4 w-4 mr-2 flex-shrink-0" />
                 {getTranslation(language, 'downloadForms')}
               </a>
-              <p className="text-xs text-gray-500 mt-2 text-center">
+              <p className="text-xs text-muted-foreground mt-2 text-center">
                 {getTranslation(language, 'officialKCCFormFromPMKisan')}
               </p>
             </div>
@@ -1173,15 +1180,15 @@ export default function KCCApplication() {
         {activeTab === 'queries' && <ChatInterface />}
 
         {activeTab === 'calculator' && (
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center">
-              <Calculator className="mr-2 h-5 w-5" />
+          <div className="bg-card rounded-lg shadow-sm p-4 sm:p-6 border border-border">
+            <h2 className="text-xl font-bold text-foreground mb-6 flex items-center">
+              <Calculator className="mr-2 h-5 w-5 flex-shrink-0 text-primary" />
               {getTranslation(language, 'kccLoanCalculator')}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-card-foreground mb-2">
                     {getTranslation(language, 'loanAmount')} (₹)
                   </label>
                   <input
@@ -1189,11 +1196,11 @@ export default function KCCApplication() {
                     value={loanAmount}
                     onChange={(e) => setLoanAmount(Number(e.target.value) || 0)}
                     placeholder={`${getTranslation(language, 'example')}: 100000`}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-slate-900"
+                    className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-card-foreground bg-card"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-card-foreground mb-2">
                     {getTranslation(language, 'tenure')} ({getTranslation(language, 'years')})
                   </label>
                   <input
@@ -1201,29 +1208,29 @@ export default function KCCApplication() {
                     value={tenure}
                     onChange={(e) => setTenure(Number(e.target.value) || 0)}
                     placeholder={`${getTranslation(language, 'example')}: 5`}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-slate-900"
+                    className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-card-foreground bg-card"
                   />
                 </div>
                 <button 
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-medium"
+                  className="w-full bg-primary hover:bg-accent text-primary-foreground py-3 rounded-lg font-medium transition-colors"
                 >
                   {getTranslation(language, 'calculate')}
                 </button>
               </div>
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h3 className="font-semibold text-slate-900 mb-4">{getTranslation(language, 'results')}</h3>
+              <div className="bg-muted rounded-lg p-4 sm:p-6">
+                <h3 className="font-semibold text-card-foreground mb-4">{getTranslation(language, 'results')}</h3>
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-slate-600">{getTranslation(language, 'monthlyInstallment')}:</span>
-                    <span className="font-semibold text-slate-900">₹{monthlyEMI.toLocaleString(language === 'hi' ? 'hi-IN' : 'en-IN')}</span>
+                    <span className="text-muted-foreground">{getTranslation(language, 'monthlyInstallment')}:</span>
+                    <span className="font-semibold text-card-foreground">₹{monthlyEMI.toLocaleString(currentLocale)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-600">{getTranslation(language, 'totalInterest')}:</span>
-                    <span className="font-semibold text-slate-900">₹{totalInterest.toLocaleString(language === 'hi' ? 'hi-IN' : 'en-IN')}</span>
+                    <span className="text-muted-foreground">{getTranslation(language, 'totalInterest')}:</span>
+                    <span className="font-semibold text-card-foreground">₹{totalInterest.toLocaleString(currentLocale)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-600">{getTranslation(language, 'totalAmount')}:</span>
-                    <span className="font-semibold text-slate-900">₹{totalAmount.toLocaleString(language === 'hi' ? 'hi-IN' : 'en-IN')}</span>
+                    <span className="text-muted-foreground">{getTranslation(language, 'totalAmount')}:</span>
+                    <span className="font-semibold text-card-foreground">₹{totalAmount.toLocaleString(currentLocale)}</span>
                   </div>
                 </div>
               </div>
@@ -1232,8 +1239,8 @@ export default function KCCApplication() {
         )}
 
         {/* Footer */}
-        <div className="mt-8 text-center">
-          <p className="text-gray-500">
+        <div className="mt-6 sm:mt-8 text-center">
+          <p className="text-muted-foreground">
             {getTranslation(language, 'kccProcessTime')}
           </p>
         </div>

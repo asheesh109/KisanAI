@@ -147,7 +147,7 @@ export default function CropAnalysis() {
           recommendations: [
             '२% निंब तेल उपाय फवारणीसाठी वापरा',
             'प्रभावित भाग शक्तिशाली पाण्याच्या प्रवाहाने स्वच्छ करा',
-            'सेंद्रिय कीटकनाशके वापरा'
+            'सेंद्रिय कीटकनाशक वापरा'
           ],
           severity: 'high'
         },
@@ -157,7 +157,7 @@ export default function CropAnalysis() {
           disease: 'नायट्रोजनची कमतरता',
           recommendations: [
             'युरिया किंवा अमोनियम सल्फेट वापरा',
-            'हिरवा खत किंवा कंपोस्ट लावा',
+            'हिरवी खाद किंवा कंपोस्ट टाका',
             'मातीची चाचणी करा'
           ],
           severity: 'medium'
@@ -227,7 +227,7 @@ export default function CropAnalysis() {
           disease: 'ലീഫ് സ്പോട്ട് രോഗം',
           recommendations: [
             'മാൻകോസെബ് അല്ലെങ്കിൽ കോപ്പർ ഓക്സിക്ലോറൈഡ് ഉപയോഗിച്ച് സ്പ്രേ ചെയ്യുക',
-            'ബാധിച്ച ഇലകൾ ഉടൻ നീക്കംചെയ്ത് നശിപ്പിക്കുക',
+            'ബാധിത ഇലകൾ ഉടൻ നീക്കംചെയ്ത് നശിപ്പിക്കുക',
             'ചെടികൾക്കിടയിൽ ശരിയായ ദൂരം നിലനിർത്തുക'
           ],
           severity: 'medium'
@@ -238,7 +238,7 @@ export default function CropAnalysis() {
           disease: 'അഫിഡ് കീട ബാധ',
           recommendations: [
             'സ്പ്രേയിംഗിനായി 2% നീം ഓയിൽ ലായനി ഉപയോഗിക്കുക',
-            'ബാധിച്ച ഭാഗങ്ങൾ ശക്തമായ വെള്ളപ്പോക്ക് ഉപയോഗിച്ച് വൃത്തിയാക്കുക',
+            'ബാധിത ഭാഗങ്ങൾ ശക്തമായ വെള്ളപ്പോക്ക് ഉപയോഗിച്ച് വൃത്തിയാക്കുക',
             'ജൈവ കീടനാശിനികൾ ഉപയോഗിക്കുക'
           ],
           severity: 'high'
@@ -495,11 +495,11 @@ export default function CropAnalysis() {
 
   const getConditionIcon = (condition) => {
     switch (condition) {
-      case 'healthy': return <CheckCircle className="h-6 w-6 text-green-600" />
-      case 'disease': return <AlertTriangle className="h-6 w-6 text-red-600" />
-      case 'pest': return <Bug className="h-6 w-6 text-orange-600" />
-      case 'nutrient-deficiency': return <Droplets className="h-6 w-6 text-yellow-600" />
-      default: return <Leaf className="h-6 w-6 text-gray-600" />
+      case 'healthy': return <CheckCircle className="h-6 w-6 text-primary flex-shrink-0" />
+      case 'disease': return <AlertTriangle className="h-6 w-6 text-destructive flex-shrink-0" />
+      case 'pest': return <Bug className="h-6 w-6 text-accent flex-shrink-0" />
+      case 'nutrient-deficiency': return <Droplets className="h-6 w-6 text-primary flex-shrink-0" />
+      default: return <Leaf className="h-6 w-6 text-muted-foreground flex-shrink-0" />
     }
   }
 
@@ -548,10 +548,10 @@ export default function CropAnalysis() {
 
   const getSeverityColor = (severity) => {
     switch (severity) {
-      case 'low': return 'text-green-600 bg-green-100'
-      case 'medium': return 'text-yellow-600 bg-yellow-100'
-      case 'high': return 'text-red-600 bg-red-100'
-      default: return 'text-gray-600 bg-gray-100'
+      case 'low': return 'text-primary bg-primary/10 dark:bg-primary/20'
+      case 'medium': return 'text-accent bg-accent/10 dark:bg-accent/20'
+      case 'high': return 'text-destructive bg-destructive/10 dark:bg-destructive/20'
+      default: return 'text-muted-foreground bg-muted'
     }
   }
 
@@ -606,43 +606,45 @@ export default function CropAnalysis() {
   }, [language])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-yellow-50 py-8">
-      <div className="max-w-4xl mx-auto px-6 sm:px-8">
+    <div className="min-h-screen bg-background py-4 sm:py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {error && (
-          <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+          <div className="mb-4 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
             <div className="flex items-center">
-              <AlertTriangle className="h-5 w-5 mr-2" />
-              <p>{error}</p>
+              <AlertTriangle className="h-5 w-5 text-destructive mr-2 flex-shrink-0" />
+              <p className="text-destructive">{error}</p>
             </div>
           </div>
         )}
 
         {usingFallback && analysisResult && (
-          <div className="mb-4 p-4 bg-blue-100 border border-blue-400 text-blue-700 rounded-lg">
+          <div className="mb-4 p-4 bg-primary/10 border border-primary/20 rounded-lg">
             <div className="flex items-center">
-              <Info className="h-5 w-5 mr-2" />
-              <p>{getFallbackMessage()}</p>
+              <Info className="h-5 w-5 text-primary mr-2 flex-shrink-0" />
+              <p className="text-primary">{getFallbackMessage()}</p>
             </div>
           </div>
         )}
 
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 mb-4">{t('cropAnalysis')}</h1>
-          <p className="text-xl text-slate-600 font-medium">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">{t('cropAnalysis')}</h1>
+          <p className="text-lg sm:text-xl text-muted-foreground font-medium">
             {t('analyzeCropHealth')}
           </p>
         </div>
 
         {!selectedImage ? (
-          <div className="mb-8">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-              <div className="text-center p-6 border-b border-gray-200">
-                <h2 className="text-2xl font-semibold text-slate-800">{t('uploadCropPhoto')}</h2>
+          <div className="mb-6 sm:mb-8">
+            <div className="bg-card rounded-lg shadow-sm border border-border">
+              <div className="text-center p-4 sm:p-6 border-b border-border">
+                <h2 className="text-xl sm:text-2xl font-semibold text-foreground">{t('uploadCropPhoto')}</h2>
               </div>
-              <div className="p-6 text-center space-y-6">
+              <div className="p-4 sm:p-6 text-center space-y-4 sm:space-y-6">
                 <div 
-                  className={`border-2 border-dashed rounded-lg p-12 transition-colors cursor-pointer ${
-                    dragActive ? 'border-green-500 bg-green-50' : 'border-gray-300 bg-gray-50 hover:bg-gray-100'
+                  className={`border-2 border-dashed rounded-lg p-8 sm:p-12 transition-colors cursor-pointer ${
+                    dragActive 
+                      ? 'border-primary bg-primary/5 dark:bg-primary/10' 
+                      : 'border-border bg-muted hover:bg-muted/80 dark:hover:bg-muted'
                   }`}
                   onDragEnter={handleDrag}
                   onDragLeave={handleDrag}
@@ -650,17 +652,17 @@ export default function CropAnalysis() {
                   onDrop={handleDrop}
                   onClick={() => fileInputRef.current?.click()}
                 >
-                  <Camera className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                  <p className="text-slate-600 mb-4 font-medium">
+                  <Camera className="h-12 sm:h-16 w-12 sm:w-16 text-muted-foreground mx-auto mb-3 sm:mb-4" />
+                  <p className="text-foreground font-medium mb-2 sm:mb-4">
                     {t('dragDrop')}
                   </p>
-                  <p className="text-sm text-slate-500 mb-6">
+                  <p className="text-sm text-muted-foreground mb-4 sm:mb-6">
                     {t('supportedFormats')}
                   </p>
                   <button 
-                    className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                    className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-accent transition-colors"
                   >
-                    <Upload className="mr-2 h-5 w-5" />
+                    <Upload className="mr-2 h-4 w-4" />
                     {t('uploadFile')}
                   </button>
                   <input
@@ -676,30 +678,30 @@ export default function CropAnalysis() {
           </div>
         ) : (
           <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-              <div className="flex flex-row items-center justify-between p-6 border-b border-gray-200">
-                <h2 className="text-2xl font-semibold text-slate-800">{t('photoAnalysis')}</h2>
+            <div className="bg-card rounded-lg shadow-sm border border-border">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 sm:p-6 border-b border-border">
+                <h2 className="text-xl sm:text-2xl font-semibold text-foreground">{t('photoAnalysis')}</h2>
                 <button 
                   onClick={resetAnalysis}
-                  className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+                  className="inline-flex items-center px-3 py-2 border border-border rounded-md text-sm font-medium text-foreground bg-card hover:bg-muted transition-colors mt-2 sm:mt-0"
                 >
                   <X className="h-4 w-4 mr-2" />
                   {t('newPhoto')}
                 </button>
               </div>
-              <div className="p-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="p-4 sm:p-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                   <div className="space-y-4">
-                    <div className="border rounded-lg overflow-hidden">
+                    <div className="border border-border rounded-lg overflow-hidden">
                       <img 
                         src={selectedImage.url} 
                         alt="Selected crop" 
-                        className="w-full h-64 object-cover"
+                        className="w-full h-48 sm:h-64 object-cover"
                       />
                     </div>
                     {!analysisResult && !isAnalyzing && (
                       <button 
-                        className="w-full inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                        className="w-full inline-flex items-center justify-center px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-accent transition-colors"
                         onClick={handleAnalyzeClick}
                       >
                         <Leaf className="mr-2 h-5 w-5" />
@@ -711,28 +713,28 @@ export default function CropAnalysis() {
                   <div className="space-y-4">
                     {isAnalyzing ? (
                       <div className="text-center py-8">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-                        <p className="text-slate-600 font-medium">{t('analysisInProgress')}</p>
-                        <p className="text-sm text-slate-500">{t('pleaseWait')}</p>
+                        <div className="animate-spin rounded-full h-10 sm:h-12 w-10 sm:w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                        <p className="text-foreground font-medium">{t('analysisInProgress')}</p>
+                        <p className="text-sm text-muted-foreground">{t('pleaseWait')}</p>
                       </div>
                     ) : analysisResult ? (
                       <div className="space-y-4">
                         <div className="flex items-center space-x-3">
                           {getConditionIcon(analysisResult.condition)}
                           <div>
-                            <h3 className="text-lg font-semibold text-slate-800">
+                            <h3 className="text-lg font-semibold text-foreground">
                               {getConditionText(analysisResult.condition)}
                             </h3>
-                            <p className="text-sm text-slate-600">
+                            <p className="text-sm text-muted-foreground">
                               {t('confidence')}: {analysisResult.confidence}%
                             </p>
                           </div>
                         </div>
 
                         {analysisResult.disease && (
-                          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                            <h4 className="font-medium text-red-800 mb-2">{t('identifiedDisease')}:</h4>
-                            <p className="text-red-700">{analysisResult.disease}</p>
+                          <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
+                            <h4 className="font-medium text-destructive mb-2">{t('identifiedDisease')}:</h4>
+                            <p className="text-destructive">{analysisResult.disease}</p>
                           </div>
                         )}
 
@@ -740,11 +742,11 @@ export default function CropAnalysis() {
                           {t('severity')}: {getSeverityText(analysisResult.severity)}
                         </div>
 
-                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                          <h4 className="font-medium text-blue-800 mb-3">{t('recommendations')}</h4>
+                        <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
+                          <h4 className="font-medium text-primary mb-3">{t('recommendations')}</h4>
                           <ul className="space-y-2">
                             {analysisResult.recommendations.map((rec, index) => (
-                              <li key={index} className="flex items-start text-blue-700">
+                              <li key={index} className="flex items-start text-primary">
                                 <CheckCircle className="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" />
                                 {rec}
                               </li>
@@ -754,16 +756,16 @@ export default function CropAnalysis() {
 
                         <button 
                           onClick={resetAnalysis}
-                          className="w-full inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+                          className="w-full inline-flex items-center justify-center px-4 py-2 border border-border rounded-md text-sm font-medium text-foreground bg-card hover:bg-muted transition-colors"
                         >
                           <RotateCcw className="mr-2 h-4 w-4" />
                           {t('newAnalysis')}
                         </button>
                       </div>
                     ) : (
-                      <div className="text-center py-8 text-slate-500">
-                        <ImageIcon className="h-16 w-16 mx-auto mb-4 opacity-50" />
-                        <p>{t('clickToStartAnalysis')}</p>
+                      <div className="text-center py-8 text-muted-foreground">
+                        <ImageIcon className="h-12 sm:h-16 w-12 sm:w-16 mx-auto mb-4 opacity-50" />
+                        <p className="text-foreground">{t('clickToStartAnalysis')}</p>
                       </div>
                     )}
                   </div>
@@ -773,76 +775,79 @@ export default function CropAnalysis() {
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div className="p-6 border-b border-gray-200">
-              <h3 className="flex items-center text-slate-800 font-semibold">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mt-6 sm:mt-8">
+          {/* Photo Quality Card */}
+          <div className="bg-card rounded-lg shadow-sm border border-border">
+            <div className="p-4 sm:p-6 border-b border-border">
+              <h3 className="flex items-center text-foreground font-semibold">
                 <ImageIcon className="mr-2 h-5 w-5" />
                 {t('photoQuality')}
               </h3>
             </div>
-            <div className="p-6">
-              <ul className="text-sm text-slate-600 space-y-2">
+            <div className="p-4 sm:p-6">
+              <ul className="text-sm text-muted-foreground space-y-2">
                 <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
+                  <CheckCircle className="h-4 w-4 mr-2 text-primary flex-shrink-0" />
                   {t('clearPhoto')}
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
+                  <CheckCircle className="h-4 w-4 mr-2 text-primary flex-shrink-0" />
                   {t('goodLighting')}
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
+                  <CheckCircle className="h-4 w-4 mr-2 text-primary flex-shrink-0" />
                   {t('closeUp')}
                 </li>
               </ul>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div className="p-6 border-b border-gray-200">
-              <h3 className="flex items-center text-slate-800 font-semibold">
+          {/* Analysis Features Card */}
+          <div className="bg-card rounded-lg shadow-sm border border-border">
+            <div className="p-4 sm:p-6 border-b border-border">
+              <h3 className="flex items-center text-foreground font-semibold">
                 <Leaf className="mr-2 h-5 w-5" />
                 {t('analysisFeatures')}
               </h3>
             </div>
-            <div className="p-6">
-              <ul className="text-sm text-slate-600 space-y-2">
+            <div className="p-4 sm:p-6">
+              <ul className="text-sm text-muted-foreground space-y-2">
                 <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
+                  <CheckCircle className="h-4 w-4 mr-2 text-primary flex-shrink-0" />
                   {t('diseaseDetection')}
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
+                  <CheckCircle className="h-4 w-4 mr-2 text-primary flex-shrink-0" />
                   {t('pestInfectionCheck')}
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
+                  <CheckCircle className="h-4 w-4 mr-2 text-primary flex-shrink-0" />
                   {t('nutrientAnalysis')}
                 </li>
               </ul>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div className="p-6 border-b border-gray-200">
-              <h3 className="flex items-center text-slate-800 font-semibold">
+          {/* Better Results Card */}
+          <div className="bg-card rounded-lg shadow-sm border border-border">
+            <div className="p-4 sm:p-6 border-b border-border">
+              <h3 className="flex items-center text-foreground font-semibold">
                 <Sun className="mr-2 h-5 w-5" />
                 {t('betterResults')}
               </h3>
             </div>
-            <div className="p-6">
-              <ul className="text-sm text-slate-600 space-y-2">
+            <div className="p-4 sm:p-6">
+              <ul className="text-sm text-muted-foreground space-y-2">
                 <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
+                  <CheckCircle className="h-4 w-4 mr-2 text-primary flex-shrink-0" />
                   {t('daytimePhoto')}
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
+                  <CheckCircle className="h-4 w-4 mr-2 text-primary flex-shrink-0" />
                   {t('focusOnProblem')}
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
+                  <CheckCircle className="h-4 w-4 mr-2 text-primary flex-shrink-0" />
                   {t('multipleAngles')}
                 </li>
               </ul>
