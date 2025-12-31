@@ -10,8 +10,52 @@ const stats = [
   { icon: Shield, value: '95%', label: 'aiAccuracy' },
 ];
 
+// Local translations for stats labels (shorter versions for Malayalam)
+const statsTranslations = {
+  en: {
+    activeFarmers: 'Active Farmers',
+    solvedQueries: 'Queries Solved',
+    listedSchemes: 'Schemes Listed',
+    aiAccuracy: 'AI Accuracy',
+    ourImpact: 'Our Impact'
+  },
+  hi: {
+    activeFarmers: 'सक्रिय किसान',
+    solvedQueries: 'प्रश्न हल',
+    listedSchemes: 'सूचीबद्ध योजनाएं',
+    aiAccuracy: 'AI सटीकता',
+    ourImpact: 'हमारा प्रभाव'
+  },
+  mr: {
+    activeFarmers: 'सक्रिय शेतकरी',
+    solvedQueries: 'प्रश्न सोडवले',
+    listedSchemes: 'सूचीबद्ध योजना',
+    aiAccuracy: 'AI अचूकता',
+    ourImpact: 'आमचा प्रभाव'
+  },
+  gu: {
+    activeFarmers: 'સક્રિય ખેડૂતો',
+    solvedQueries: 'પ્રશ્નો ઉકેલાયા',
+    listedSchemes: 'યાદીમાં યોજનાઓ',
+    aiAccuracy: 'AI ચોકસાઈ',
+    ourImpact: 'અમારી અસર'
+  },
+  ml: {
+    activeFarmers: 'സജീവ കർഷകർ',
+    solvedQueries: 'ചോദ്യങ്ങൾ പരിഹരിച്ചു',
+    listedSchemes: 'പദ്ധതികൾ',
+    aiAccuracy: 'AI കൃത്യത',
+    ourImpact: 'ഞങ്ങളുടെ സ്വാധീനം'
+  }
+}
+
+// Function to get stat translation
+const getStatTranslation = (language, key) => {
+  return statsTranslations[language]?.[key] || statsTranslations.en[key] || key;
+}
+
 export default function StatsSection() {
-  const { t } = useLanguage()
+  const { language, t } = useLanguage()
 
   return (
     <div className="relative py-20 sm:py-28 bg-background overflow-hidden">
@@ -27,16 +71,17 @@ export default function StatsSection() {
               Our Impact
             </span>
           </div>
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 bg-gradient-to-r from-foreground via-primary to-accent bg-clip-text text-transparent">
-            {t('ourImpact')}
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 text-foreground dark:bg-gradient-to-r dark:from-foreground dark:via-primary dark:to-accent dark:bg-clip-text dark:text-transparent break-words px-2">
+            {getStatTranslation(language, 'ourImpact')}
           </h2>
-        
         </div>
         
         {/* Stats grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           {stats.map((stat, idx) => {
             const Icon = stat.icon;
+            const translatedLabel = getStatTranslation(language, stat.label);
+            
             return (
               <div 
                 key={idx} 
@@ -59,13 +104,13 @@ export default function StatsSection() {
                   </div>
                   
                   {/* Stat value */}
-                  <div className="text-4xl sm:text-5xl md:text-6xl font-black mb-3 bg-gradient-to-br from-primary via-accent to-primary bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300">
+                  <div className="text-4xl sm:text-5xl md:text-6xl font-black mb-3 bg-gradient-to-br from-primary via-accent to-primary bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300 break-words">
                     {stat.value}
                   </div>
                   
-                  {/* Stat label */}
-                  <div className="text-sm sm:text-base font-bold text-muted-foreground group-hover:text-foreground transition-colors duration-300">
-                    {t(stat.label)}
+                  {/* Stat label - added break-words and min height for consistency */}
+                  <div className="text-sm sm:text-base font-bold text-muted-foreground group-hover:text-foreground transition-colors duration-300 break-words px-1 min-h-[2.5em] flex items-center justify-center">
+                    {translatedLabel}
                   </div>
                 </div>
               </div>

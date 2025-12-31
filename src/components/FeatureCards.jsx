@@ -79,7 +79,7 @@ export default function FeatureCards() {
     <section className="py-16 sm:py-20 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12 sm:mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent animate-fade-in">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 text-foreground dark:bg-gradient-to-r dark:from-primary dark:to-accent dark:bg-clip-text dark:text-transparent animate-fade-in">
             {t('features')}
           </h2>
           <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto animate-fade-in-delayed">

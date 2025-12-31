@@ -108,7 +108,7 @@ export default function Header() {
                 </span>
               </button>
 
-              {/* Language Dropdown */}
+              {/* Language Dropdown - FIXED: Using theme variables */}
               {showLangMenu && (
                 <div
                   className={`absolute right-0 mt-2 w-44 sm:w-48 rounded-xl shadow-2xl ${
@@ -139,7 +139,10 @@ export default function Header() {
                       }`}
                     >
                       <span className="text-xl sm:text-2xl">{lang.flag}</span>
-                      <span className="font-medium text-sm sm:text-base text-gray-900 dark:text-white">
+                      {/* FIX: Using theme-aware text colors */}
+                      <span className={`font-medium text-sm sm:text-base ${
+                        theme === 'dark' ? 'text-white' : 'text-gray-900'
+                      }`}>
                         {lang.name}
                       </span>
                     </button>

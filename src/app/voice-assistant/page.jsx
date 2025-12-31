@@ -389,9 +389,7 @@ export default function VoiceAssistant() {
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
-                <li className="text-muted-foreground text-sm break-words">
-                  {speechSupported ? '✅' : '❌'} {t('voiceRecognition')}
-                </li>
+               
                 <li className="text-muted-foreground text-sm break-words">
                   {ttsSupported ? '✅' : '❌'} {t('voiceResponse')}
                 </li>
