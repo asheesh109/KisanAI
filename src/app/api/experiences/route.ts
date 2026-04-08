@@ -5,8 +5,8 @@ import { translateExperienceToAllLanguages } from '@/lib/geminiTranslate';
 
 interface ExperienceDocument {
   _id?: ObjectId;
-  content: string; // Original English content
-  translations?: {
+  content: string;
+  translations: {
     en: string;
     hi: string;
     mr: string;
@@ -15,11 +15,11 @@ interface ExperienceDocument {
   };
   upvotes: number;
   downvotes: number;
-  voterIds: string[]; // Track which guests voted
+  voterIds: string[];
   createdAt: Date;
 }
 
-// GET all experiences - sorted by votes (trending)
+// GET all experiences
 export async function GET() {
   try {
     console.log('[API GET] Fetching experiences...');
@@ -33,38 +33,26 @@ export async function GET() {
 
     console.log('[API GET] Found experiences:', experiences.length);
 
-    const formattedExperiences = experiences.map((exp) => {
-      const hasManyLanguages = exp.translations && 
-        exp.translations.en && 
-        exp.translations.hi && 
-        exp.translations.mr;
-      
-      console.log('[API GET] Experience translations status:', {
-        hasTranslations: !!exp.translations,
-        hasManyLanguages,
-        languages: exp.translations ? Object.keys(exp.translations) : 'none',
-      });
+    const formattedExperiences = experiences.map((exp) => ({
+      ...exp,
+      _id: exp._id?.toString(),
+      translations: exp.translations || {
+        en: exp.content,
+        hi: exp.content,
+        mr: exp.content,
+        gu: exp.content,
+        ml: exp.content,
+      },
+    }));
 
-      return {
-        ...exp,
-        _id: exp._id?.toString(),
-        translations: exp.translations || {
-          en: exp.content,
-          hi: exp.content,
-          mr: exp.content,
-          gu: exp.content,
-          ml: exp.content,
-        },
-      };
-    });
-
-    console.log('[API GET] ✅ Returning', formattedExperiences.length, 'experiences with translations');
     return NextResponse.json(formattedExperiences, { status: 200 });
   } catch (error) {
     console.error('❌ GET /api/experiences error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { error: 'Failed to fetch experiences', details: errorMessage },
+      {
+        error: 'Failed to fetch experiences',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
       { status: 500 }
     );
   }
@@ -74,9 +62,9 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     console.log('[API POST] New experience creation request');
+
     const { content } = await request.json();
 
-    // Validate input
     if (!content || typeof content !== 'string' || content.trim() === '') {
       return NextResponse.json(
         { error: 'Experience content is required and must be non-empty' },
@@ -84,29 +72,40 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('[API POST] Content:', content.substring(0, 50) + '...');
+    const cleanContent = content.trim();
 
     const { db } = await connectToDatabase();
 
-    // Get translations from Gemini
-    let translations = {
-      en: content.trim(),
-      hi: content.trim(),
-      mr: content.trim(),
-      gu: content.trim(),
-      ml: content.trim(),
+    // Default fallback translations
+    let translations: ExperienceDocument['translations'] = {
+      en: cleanContent,
+      hi: cleanContent,
+      mr: cleanContent,
+      gu: cleanContent,
+      ml: cleanContent,
     };
 
     console.log('[API POST] Calling translation service...');
+
     try {
-      translations = await translateExperienceToAllLanguages(content.trim());
-      console.log('[API POST] ✅ Translations received:', Object.keys(translations));
+      const result: any = await translateExperienceToAllLanguages(cleanContent);
+
+      // ✅ Safe mapping (prevents TS + runtime errors)
+      translations = {
+        en: result?.en || cleanContent,
+        hi: result?.hi || cleanContent,
+        mr: result?.mr || cleanContent,
+        gu: result?.gu || cleanContent,
+        ml: result?.ml || cleanContent,
+      };
+
+      console.log('[API POST] ✅ Translations received');
     } catch (translateError) {
-      console.error('[API POST] ⚠️ Translation error:', translateError);
+      console.error('[API POST] ⚠️ Translation failed, using fallback:', translateError);
     }
 
     const newExperience: ExperienceDocument = {
-      content: content.trim(),
+      content: cleanContent,
       translations,
       upvotes: 0,
       downvotes: 0,
@@ -114,30 +113,26 @@ export async function POST(request: NextRequest) {
       createdAt: new Date(),
     };
 
-    console.log('[API POST] Inserting experience with translations:', {
-      contentLength: content.length,
-      hasTranslations: !!translations.hi,
-    });
-
-    const result = await db.collection<ExperienceDocument>('experiences').insertOne(newExperience);
+    const result = await db
+      .collection<ExperienceDocument>('experiences')
+      .insertOne(newExperience);
 
     const insertedExperience = {
       _id: result.insertedId.toString(),
-      content: newExperience.content,
-      translations: newExperience.translations,
-      upvotes: 0,
-      downvotes: 0,
-      voterIds: [],
-      createdAt: newExperience.createdAt,
+      ...newExperience,
     };
 
     console.log('[API POST] ✅ Created experience:', insertedExperience._id);
+
     return NextResponse.json(insertedExperience, { status: 201 });
   } catch (error) {
     console.error('❌ POST /api/experiences error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+
     return NextResponse.json(
-      { error: 'Failed to create experience', details: errorMessage },
+      {
+        error: 'Failed to create experience',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
       { status: 500 }
     );
   }
