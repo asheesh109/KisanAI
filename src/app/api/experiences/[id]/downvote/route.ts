@@ -66,6 +66,13 @@ export async function POST(
       .collection('experiences')
       .findOne({ _id: new ObjectId(experienceId) });
 
+    if (!updated) {
+      return NextResponse.json(
+        { error: 'Experience not found' },
+        { status: 404 }
+      );
+    }
+
     console.log('✅ Downvoted experience:', experienceId);
     return NextResponse.json(
       { upvotes: updated.upvotes, downvotes: updated.downvotes },
