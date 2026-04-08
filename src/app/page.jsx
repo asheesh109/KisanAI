@@ -4,6 +4,7 @@ import HeroBanner from "@/components/HeroBanner";
 import FeatureCards from "@/components/FeatureCards";
 import StatsSection from "@/components/StatsSection";
 import AboutSection from "@/components/AboutSection";
+import { FarmersExperienceCarousel } from "@/components/FarmersExperienceCarousel";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <StatsSection />
       <FeatureCards />
       <AboutSection />
+      <FarmersExperienceCarousel />
     </div>
   );
 }

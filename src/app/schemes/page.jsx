@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   CreditCard, Shield, Coins, Leaf, ChevronRight, Phone, ExternalLink, 
   Search, Filter, Bell, FileText, CheckCircle2, Clock,
@@ -8,6 +8,8 @@ import {
   Bot, MessageSquare, Send, RefreshCw, Globe, MapPin, Database, UserCheck, ArrowLeft
 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import EligibilityDrawer from '@/components/EligibilityDrawer';
+import { useSchemeFilter } from '@/hooks/useSchemeFilter';
 
 // Import Gemini AI
 import { GoogleGenerativeAI } from '@google/generative-ai'
@@ -4525,7 +4527,18 @@ export default function SchemesApp() {
   const [showDetails, setShowDetails] = useState(false);
   const [selectedScheme, setSelectedScheme] = useState(null);
   const [error, setError] = useState(null);
+  const [isEligibilityDrawerOpen, setIsEligibilityDrawerOpen] = useState(false);
+  const [showEligibilityFiltered, setShowEligibilityFiltered] = useState(false);
   const { language } = useLanguage();
+
+  // Initialize scheme filter hook
+  const {
+    eligibilityFilters,
+    updateFilter,
+    filteredSchemes: eligibilityFilteredSchemes,
+    resetFilters,
+    eligibilityOnlyCount,
+  } = useSchemeFilter(schemes);
 
   // Check if cache is valid
   const getCachedSchemes = useCallback(() => {
@@ -4724,6 +4737,7 @@ export default function SchemesApp() {
         'filters.allStates': 'All States',
         'filters.reset': 'Reset Filters',
         'filters.showingSchemes': `Showing {0} of {1} schemes`,
+        'checkEligibility': 'Check Eligibility',
         'card.keyBenefits': 'Key Benefits:',
         'card.ministry': 'Ministry:',
         'card.started': 'Started:',
@@ -4769,6 +4783,7 @@ export default function SchemesApp() {
         'filters.allStates': 'सभी राज्य',
         'filters.reset': 'फ़िल्टर रीसेट करें',
         'filters.showingSchemes': '{0} में से {1} योजनाएँ दिखा रहे हैं',
+        'checkEligibility': 'पात्रता जांचें',
         'card.keyBenefits': 'मुख्य लाभ:',
         'card.ministry': 'मंत्रालय:',
         'card.started': 'शुरू:',
@@ -4814,6 +4829,7 @@ export default function SchemesApp() {
         'filters.allStates': 'सर्व राज्ये',
         'filters.reset': 'फिल्टर रीसेट करा',
         'filters.showingSchemes': '{0} पैकी {1} योजना दाखवत आहेत',
+        'checkEligibility': 'पात्रता तपासा',
         'card.keyBenefits': 'मुख्य फायदे:',
         'card.ministry': 'मंत्रालय:',
         'card.started': 'सुरू:',
@@ -4859,6 +4875,7 @@ export default function SchemesApp() {
         'filters.allStates': 'બધા રાજ્યો',
         'filters.reset': 'ફિલ્ટર રીસેટ કરો',
         'filters.showingSchemes': '{0} માંથી {1} યોજનાઓ દર્શાવી રહ્યા છે',
+        'checkEligibility': 'પાત્રતા તપાસો',
         'card.keyBenefits': 'મુખ્ય લાભો:',
         'card.ministry': 'મંત્રાલય:',
         'card.started': 'શરૂ:',
@@ -4904,6 +4921,7 @@ export default function SchemesApp() {
         'filters.allStates': 'എല്ലാ സംസ്ഥാനങ്ങളും',
         'filters.reset': 'ഫിൽട്ടറുകൾ റീസെറ്റ് ചെയ്യുക',
         'filters.showingSchemes': '{0} ൽ നിന്ന് {1} പദ്ധതികൾ കാണിക്കുന്നു',
+        'checkEligibility': 'യോഗ്യത പരിശോധിക്കുക',
         'card.keyBenefits': 'പ്രധാന പ്രയോജനങ്ങൾ:',
         'card.ministry': 'മന്ത്രാലയം:',
         'card.started': 'തുടങ്ങി:',
@@ -5129,7 +5147,7 @@ export default function SchemesApp() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">{t('stats.showing')}</p>
-                <p className="text-2xl font-bold text-card-foreground">{filteredSchemes.length}</p>
+                <p className="text-2xl font-bold text-card-foreground">{(showEligibilityFiltered ? eligibilityFilteredSchemes : filteredSchemes).length}</p>
               </div>
               <UserCheck className="h-8 w-8 text-primary" />
             </div>
@@ -5177,9 +5195,16 @@ export default function SchemesApp() {
           
           <div className="mt-4 pt-4 border-t border-border flex items-center justify-between flex-wrap gap-2">
             <span className="text-sm text-muted-foreground">
-              {t('filters.showingSchemes', filteredSchemes.length, schemes.length)}
+              {t('filters.showingSchemes', (showEligibilityFiltered ? eligibilityFilteredSchemes : filteredSchemes).length, schemes.length)}
             </span>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
+              <button
+                onClick={() => setIsEligibilityDrawerOpen(true)}
+                className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm flex items-center font-medium transition-colors"
+              >
+                <UserCheck className="h-4 w-4 mr-2" />
+                {t('checkEligibility') || 'Check Eligibility'}
+              </button>
               <button
                 onClick={() => fetchSchemesFromGemini(true)}
                 className="px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg text-sm flex items-center"
@@ -5192,6 +5217,8 @@ export default function SchemesApp() {
                   setSearchTerm('');
                   setSelectedCategory('all');
                   setSelectedState('all');
+                  resetFilters();
+                  setShowEligibilityFiltered(false);
                 }}
                 className="px-4 py-2 bg-muted hover:bg-muted/80 text-muted-foreground rounded-lg text-sm flex items-center"
               >
@@ -5346,7 +5373,7 @@ export default function SchemesApp() {
         ) : (
           // Schemes Grid (Original View)
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6 sm:mb-8">
-            {filteredSchemes.map((scheme, index) => {
+            {(showEligibilityFiltered ? eligibilityFilteredSchemes : filteredSchemes).map((scheme, index) => {
               const category = schemeCategories.find(c => c.id === scheme.category);
               
               return (
@@ -5422,7 +5449,7 @@ export default function SchemesApp() {
           </div>
         )}
 
-        {filteredSchemes.length === 0 && !loading && !showDetails && (
+        {(showEligibilityFiltered ? eligibilityFilteredSchemes : filteredSchemes).length === 0 && !loading && !showDetails && (
           <div className="bg-card rounded-lg p-4 sm:p-8 text-center shadow-sm border border-border">
             <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-foreground mb-2">{t('noSchemes.title')}</h3>
@@ -5432,6 +5459,7 @@ export default function SchemesApp() {
                 setSearchTerm('');
                 setSelectedCategory('all');
                 setSelectedState('all');
+                setShowEligibilityFiltered(false);
               }}
               className="inline-flex items-center px-4 py-2 bg-primary hover:bg-accent text-primary-foreground rounded-lg"
             >
@@ -5465,6 +5493,27 @@ export default function SchemesApp() {
             {t('footer.updated')}
           </p>
         </div>
+
+        {/* Eligibility Drawer */}
+        <EligibilityDrawer
+          isOpen={isEligibilityDrawerOpen}
+          onClose={() => setIsEligibilityDrawerOpen(false)}
+          filters={eligibilityFilters}
+          onFilterChange={updateFilter}
+          onApply={() => {
+            // Apply eligibility filters and close drawer
+            setShowEligibilityFiltered(true);
+            setIsEligibilityDrawerOpen(false);
+          }}
+          onReset={() => {
+            // Reset filters and hide eligibility-filtered view
+            resetFilters();
+            setShowEligibilityFiltered(false);
+          }}
+          eligibleCount={eligibilityFilteredSchemes.length}
+          totalCount={schemes.length}
+          isDarkMode={false}
+        />
       </div>
     </div>
   );

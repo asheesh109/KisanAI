@@ -41,6 +41,8 @@ const translations = {
   en: {
     // Common
     'home': 'Home',
+    'calendar': 'Calendar',
+    'farmingTasks': 'Farming Tasks',
     'voiceAssistant': 'Voice Assistant',
     'cropAnalysis': 'Crop Analysis',
     'weather': 'Weather',
@@ -433,7 +435,103 @@ const translations = {
     'smartAnalytics': 'Smart Analytics',
     'farmingRecommendation': 'Farming Recommendation',
     'fastLoading': 'Fast Loading',
-    'fullIndiaCoverage': 'Full India Coverage'
+    'fullIndiaCoverage': 'Full India Coverage',
+    
+    // Farmers Experience Feed
+    'farmersExperiences': 'Farmers\' Experiences',
+    'shareYourFarmingJourney': 'Share your farming journey and upvote experiences that helped you',
+    'shareExperience': 'Share Your Farming Experience',
+    'shareYourFarmingExperienceDesc': 'Share your farming experience, success story, tips, or lessons learned...',
+    'shareExperienceBtn': 'Share Experience',
+    'postedAsGuest': 'Posted as Guest (no login needed)',
+    'farmersExperiencesEmpty': 'No experiences yet!',
+    'beFirstFarmerShare': 'Be the first farmer to share your story',
+    'experiencesFeed': 'Experiences Feed',
+    'previousExperience': 'Previous',
+    'nextExperience': 'Next',
+    'of': 'of',
+    'helpful': 'helpful',
+    'notHelpful': 'not helpful',
+    'farmersExperienceTip': 'Experiences are sorted by how helpful farmers found them. Upvote to help others!',
+    'upvoting': 'Upvoting...',
+    'downvoting': 'Downvoting...',
+    'alreadyUpvoted': 'You already upvoted this',
+    'alreadyDownvoted': 'You already downvoted this',
+    'farmExperience': 'Farm Experience',
+    
+    // Personalized Scheme Finder
+    'checkEligibility': 'Check Eligibility',
+    'personalizeSchemes': 'Personalize Schemes',
+    'eligibilityChecker': 'Eligibility Checker',
+    'findSchemesForYou': 'Find schemes that match your profile',
+    
+    // Form Fields
+    'basicInfo': 'Basic Information',
+    'age': 'Age',
+    'yearOld': 'years old',
+    'gender': 'Gender',
+    'selectGender': 'Select Gender',
+    'male': 'Male',
+    'female': 'Female',
+    'other': 'Other',
+    
+    'locationInfo': 'Location Details',
+    'state': 'State',
+    'selectState': 'Select State',
+    'district': 'District',
+    'optional': 'Optional',
+    
+    'financialInfo': 'Financial Information',
+    'annualIncome': 'Annual Income',
+    'selectIncome': 'Select Income Range',
+    'incomeLessThan1L': '< ₹1 Lakh',
+    'income1Lto5L': '₹1L - ₹5L',
+    'incomeMoreThan5L': '> ₹5L',
+    
+    'farmingDetails': 'Farming Details',
+    'landOwnership': 'Land Ownership',
+    'doYouOwnLand': 'Do you own agricultural land?',
+    'yes': 'Yes',
+    'no': 'No',
+    'landSize': 'Land Size (in acres)',
+    'farmerType': 'Farmer Type',
+    'selectFarmerType': 'Select Farmer Type',
+    'smallFarmer': 'Small Farmer',
+    'marginalFarmer': 'Marginal Farmer',
+    'largeFarmer': 'Large Farmer',
+    
+    'categoryInfo': 'Social Category',
+    'socialCategory': 'Social Category',
+    'selectCategory': 'Select Category',
+    'general': 'General',
+    'obc': 'OBC',
+    'sc': 'SC',
+    'st': 'ST',
+    'womenFarmer': 'Are you a woman farmer?',
+    
+    'documentsInfo': 'Documents Available',
+    'aadhaarAvailable': 'Aadhaar Card Available',
+    'bankAccountLinked': 'Bank Account Linked',
+    
+    'applyFilters': 'Apply Filters',
+    'resetFilters': 'Reset',
+    'eligibleSchemes': 'Eligible Schemes',
+    'noEligibleSchemes': 'No eligible schemes found',
+    'tryAdjustingFilters': 'Try adjusting your filters to find more schemes',
+    'filtersApplied': 'Filters Applied',
+    'matchingSchemes': 'matching schemes found',
+    
+    // Eligibility messages
+    'requiredFieldsEmpty': 'Please fill all required fields',
+    'filtering': 'Applying filters...',
+    
+    // Offline & PWA
+    'offline': 'You are offline',
+    'offline.message': 'You are offline. Showing saved data. Some features may be limited.',
+    'offline.lastUpdated': 'Last updated',
+    'offline.cachedData': 'This is cached data',
+    'offline.refreshWhenOnline': 'Data will refresh when you go online',
+    'offline.limitedFeatures': 'Some features are not available offline'
 
   },
 
@@ -442,6 +540,8 @@ const translations = {
   hi: {
     // Common
     'home': 'होम',
+    'calendar': 'कैलेंडर',
+    'farmingTasks': 'कृषि कार्य',
     'voiceAssistant': 'वॉयस असिस्टेंट',
     'cropAnalysis': 'फसल विश्लेषण',
     'weather': 'मौसम',
@@ -833,7 +933,103 @@ const translations = {
     'smartAnalytics': 'स्मार्ट एनालिटिक्स',
     'farmingRecommendation': 'खेती सिफारिश',
     'fastLoading': 'तेज लोडिंग',
-    'fullIndiaCoverage': 'पूर्ण भारत कवरेज'
+    'fullIndiaCoverage': 'पूर्ण भारत कवरेज',
+    
+    // Farmers Experience Feed
+    'farmersExperiences': 'किसानों का अनुभव',
+    'shareYourFarmingJourney': 'अपनी खेती की यात्रा साझा करें और उपयोगी अनुभवों को वोट दें',
+    'shareExperience': 'अपना खेती का अनुभव साझा करें',
+    'shareYourFarmingExperienceDesc': 'अपना खेती का अनुभव, सफलता की कहानी, सुझाव या सीखे हुए पाठ साझा करें...',
+    'shareExperienceBtn': 'अनुभव साझा करें',
+    'postedAsGuest': 'अतिथि के रूप में पोस्ट किया गया (कोई लॉगिन आवश्यक नहीं)',
+    'farmersExperiencesEmpty': 'अभी कोई अनुभव नहीं!',
+    'beFirstFarmerShare': 'अपनी कहानी साझा करने वाले पहले किसान बनें',
+    'experiencesFeed': 'अनुभव फीड',
+    'previousExperience': 'पिछला',
+    'nextExperience': 'अगला',
+    'of': 'का',
+    'helpful': 'उपयोगी',
+    'notHelpful': 'उपयोगी नहीं',
+    'farmersExperienceTip': 'अनुभव उस क्रम में प्रदर्शित होते हैं जो किसानों को सबसे उपयोगी लगे हैं। दूसरों को मदद करने के लिए वोट दें!',
+    'upvoting': 'वोट दिया जा रहा है...',
+    'downvoting': 'नीचे वोट दिया जा रहा है...',
+    'alreadyUpvoted': 'आपने पहले से इसे वोट दिया है',
+    'alreadyDownvoted': 'आपने पहले से इसे नीचे वोट दिया है',
+    'farmExperience': 'खेती का अनुभव',
+    
+    // Personalized Scheme Finder
+    'checkEligibility': 'पात्रता जांचें',
+    'personalizeSchemes': 'योजनाओं को व्यक्तिगत बनाएं',
+    'eligibilityChecker': 'पात्रता जांचकर्ता',
+    'findSchemesForYou': 'अपनी प्रोफाइल से मेल खाने वाली योजनाएं खोजें',
+    
+    // Form Fields
+    'basicInfo': 'बुनियादी जानकारी',
+    'age': 'आयु',
+    'yearOld': 'साल पुराना',
+    'gender': 'लिंग',
+    'selectGender': 'लिंग चुनें',
+    'male': 'पुरुष',
+    'female': 'महिला',
+    'other': 'अन्य',
+    
+    'locationInfo': 'स्थान विवरण',
+    'state': 'राज्य',
+    'selectState': 'राज्य चुनें',
+    'district': 'जिला',
+    'optional': 'वैकल्पिक',
+    
+    'financialInfo': 'वित्तीय जानकारी',
+    'annualIncome': 'वार्षिक आय',
+    'selectIncome': 'आय रेंज चुनें',
+    'incomeLessThan1L': '< ₹1 लाख',
+    'income1Lto5L': '₹1L - ₹5L',
+    'incomeMoreThan5L': '> ₹5L',
+    
+    'farmingDetails': 'खेती का विवरण',
+    'landOwnership': 'भूमि स्वामित्व',
+    'doYouOwnLand': 'क्या आप कृषि भूमि के मालिक हैं?',
+    'yes': 'हां',
+    'no': 'नहीं',
+    'landSize': 'भूमि का आकार (एकड़ में)',
+    'farmerType': 'किसान का प्रकार',
+    'selectFarmerType': 'किसान का प्रकार चुनें',
+    'smallFarmer': 'छोटा किसान',
+    'marginalFarmer': 'सीमांत किसान',
+    'largeFarmer': 'बड़ा किसान',
+    
+    'categoryInfo': 'सामाजिक श्रेणी',
+    'socialCategory': 'सामाजिक श्रेणी',
+    'selectCategory': 'श्रेणी चुनें',
+    'general': 'सामान्य',
+    'obc': 'अन्य पिछड़ा वर्ग',
+    'sc': 'अनुसूचित जाति',
+    'st': 'अनुसूचित जनजाति',
+    'womenFarmer': 'क्या आप महिला किसान हैं?',
+    
+    'documentsInfo': 'उपलब्ध दस्तावेज',
+    'aadhaarAvailable': 'आधार कार्ड उपलब्ध है',
+    'bankAccountLinked': 'बैंक खाता जुड़ा हुआ है',
+    
+    'applyFilters': 'फिल्टर लागू करें',
+    'resetFilters': 'रीसेट करें',
+    'eligibleSchemes': 'पात्र योजनाएं',
+    'noEligibleSchemes': 'कोई पात्र योजना नहीं मिली',
+    'tryAdjustingFilters': 'अधिक योजनाएं खोजने के लिए अपने फिल्टर को समायोजित करने का प्रयास करें',
+    'filtersApplied': 'फिल्टर लागू किए गए',
+    'matchingSchemes': 'मेल खाने वाली योजनाएं मिलीं',
+    
+    // Eligibility messages
+    'requiredFieldsEmpty': 'कृपया सभी आवश्यक क्षेत्र भरें',
+    'filtering': 'फिल्टर लागू किए जा रहे हैं...',
+    
+    // Offline & PWA
+    'offline': 'आप ऑफलाइन हैं',
+    'offline.message': 'आप ऑफलाइन हैं। संग्रहीत डेटा दिखाया जा रहा है। कुछ सुविधाएं सीमित हो सकती हैं।',
+    'offline.lastUpdated': 'अंतिम अपडेट',
+    'offline.cachedData': 'यह कैश किया गया डेटा है',
+    'offline.refreshWhenOnline': 'जब आप ऑनलाइन हों तो डेटा रिफ्रेश होगा',
+    'offline.limitedFeatures': 'कुछ सुविधाएं ऑफलाइन उपलब्ध नहीं हैं'
   },
   
 
@@ -842,6 +1038,8 @@ const translations = {
   mr: {
     // Common
     'home': 'मुख्यपृष्ठ',
+    'calendar': 'कॅलेंडर',
+    'farmingTasks': 'शेती कार्य',
     'voiceAssistant': 'व्हॉइस असिस्टंट',
     'cropAnalysis': 'पीक विश्लेषण',
     'weather': 'हवामान',
@@ -1234,7 +1432,103 @@ const translations = {
     'smartAnalytics': 'स्मार्ट विश्लेषण',
     'farmingRecommendation': 'शेती शिफारस',
     'fastLoading': 'वेगवान लोडिंग',
-    'fullIndiaCoverage': 'पूर्ण भारत कव्हरेज'
+    'fullIndiaCoverage': 'पूर्ण भारत कव्हरेज',
+    
+    // Farmers Experience Feed
+    'farmersExperiences': 'शेतकर्यांचे अनुभव',
+    'shareYourFarmingJourney': 'आपल्या शेती प्रवासाचे अनुभव साझा करा आणि मदत केलेल्या अनुभवांना मत द्या',
+    'shareExperience': 'आपल्या शेती अनुभवाचे अनुभव साझा करा',
+    'shareYourFarmingExperienceDesc': 'आपल्या शेती अनुभव, यशाचा कहानी, टिप्स किंवा शिखलेले पाठ साझा करा...',
+    'shareExperienceBtn': 'अनुभव साझा करा',
+    'postedAsGuest': 'अतिथी म्हणून पोस्ट केले (कोणतेही लॉगिन आवश्यक नाही)',
+    'farmersExperiencesEmpty': 'अजून कोणताही अनुभव नाही!',
+    'beFirstFarmerShare': 'आपल्या कहानी साझा करणारे पहिले शेतकरी व्हा',
+    'experiencesFeed': 'अनुभव फीड',
+    'previousExperience': 'मागील',
+    'nextExperience': 'पुढील',
+    'of': 'च',
+    'helpful': 'उपयोगी',
+    'notHelpful': 'उपयोगी नाही',
+    'farmersExperienceTip': 'अनुभव त्या क्रमाने दर्शविले जातात ज्या शेतकर्यांना सर्वात उपयोगी वाटले. इतरांना मदत करण्यासाठी मت द्या!',
+    'upvoting': 'मत दिले जात आहे...',
+    'downvoting': 'खाली मत दिले जात आहे...',
+    'alreadyUpvoted': 'आपण यापूर्वी यास मत दिले आहे',
+    'alreadyDownvoted': 'आपण यापूर्वी यास खाली मत दिले आहे',
+    'farmExperience': 'शेती अनुभव',
+    
+    // Personalized Scheme Finder
+    'checkEligibility': 'पात्रता तपासा',
+    'personalizeSchemes': 'योजनांना व्यक्तिगत करा',
+    'eligibilityChecker': 'पात्रता तपासकर्ता',
+    'findSchemesForYou': 'आपल्या प्रोफाइलशी जुळणारी योजना शोधा',
+    
+    // Form Fields
+    'basicInfo': 'मूलभूत माहिती',
+    'age': 'वय',
+    'yearOld': 'वर्षे जुने',
+    'gender': 'लिंग',
+    'selectGender': 'लिंग निवडा',
+    'male': 'नर',
+    'female': 'मादा',
+    'other': 'इतर',
+    
+    'locationInfo': 'स्थान तपशील',
+    'state': 'राज्य',
+    'selectState': 'राज्य निवडा',
+    'district': 'जिल्हा',
+    'optional': 'वैकल्पिक',
+    
+    'financialInfo': 'आर्थिक माहिती',
+    'annualIncome': 'वार्षिक उत्पन्न',
+    'selectIncome': 'उत्पन्न श्रेणी निवडा',
+    'incomeLessThan1L': '< ₹1 लाख',
+    'income1Lto5L': '₹1L - ₹5L',
+    'incomeMoreThan5L': '> ₹5L',
+    
+    'farmingDetails': 'शेती तपशील',
+    'landOwnership': 'जमीन मालकी',
+    'doYouOwnLand': 'तुजमाकडे कृषी जमीन आहे का?',
+    'yes': 'हो',
+    'no': 'नाही',
+    'landSize': 'जमीनीचे क्षेत्र (एकरांमध्ये)',
+    'farmerType': 'शेतकरीचा प्रकार',
+    'selectFarmerType': 'शेतकरीचा प्रकार निवडा',
+    'smallFarmer': 'लहान शेतकरी',
+    'marginalFarmer': 'सीमांत शेतकरी',
+    'largeFarmer': 'मोठा शेतकरी',
+    
+    'categoryInfo': 'सामाजिक श्रेणी',
+    'socialCategory': 'सामाजिक श्रेणी',
+    'selectCategory': 'श्रेणी निवडा',
+    'general': 'सामान्य',
+    'obc': 'अन्य मागास वर्ग',
+    'sc': 'अनुसूचित जाती',
+    'st': 'अनुसूचित जमाती',
+    'womenFarmer': 'तू महिला शेतकरी आहेस का?',
+    
+    'documentsInfo': 'उपलब्ध दस्तऐवज',
+    'aadhaarAvailable': 'आधार कार्ड उपलब्ध',
+    'bankAccountLinked': 'बँक खाते जोडलेले',
+    
+    'applyFilters': 'फिल्टर लागू करा',
+    'resetFilters': 'रीसेट करा',
+    'eligibleSchemes': 'पात्र योजना',
+    'noEligibleSchemes': 'कोणतीही पात्र योजना सापडली नाही',
+    'tryAdjustingFilters': 'अधिक योजना शोधण्यासाठी आपले फिल्टर समायोजित करने चेष्टा करा',
+    'filtersApplied': 'फिल्टर लागू केले',
+    'matchingSchemes': 'जुळणारी योजना आढळली',
+    
+    // Eligibility messages
+    'requiredFieldsEmpty': 'कृपया सर्व आवश्यक फील्ड भरा',
+    'filtering': 'फिल्टर लागू केले जात आहेत...',
+    
+    // Offline & PWA
+    'offline': 'आप ऑफलाइन आहात',
+    'offline.message': 'आप ऑफलाइन आहात. जतन केलेले डेटा दाखवले जात आहे. काही वैशिष्ट्ये मर्यादित असू शकतात.',
+    'offline.lastUpdated': 'शेवटचा अपडेट',
+    'offline.cachedData': 'हा कॅश केलेला डेटा आहे',
+    'offline.refreshWhenOnline': 'जेव्हा आप ऑनलाइन होतील तेव्हा डेटा रीफ्रेश होईल',
+    'offline.limitedFeatures': 'काही वैशिष्ट्ये ऑफलाइन उपलब्ध नाहीत'
   },
   
   
@@ -1242,6 +1536,8 @@ const translations = {
   gu: {
     // Common
     'home': 'હોમ',
+    'calendar': 'કૅલેંડર',
+    'farmingTasks': 'કૃષि કાર્યો',
     'voiceAssistant': 'વૉઇસ સહાયક',
     'cropAnalysis': 'પાક વિશ્લેષણ',
     'weather': 'હવામાન',
@@ -1633,7 +1929,103 @@ const translations = {
     'smartAnalytics': 'સ્માર્ટ એનાલિટિક્સ',
     'farmingRecommendation': 'ખેતી ભલામણ',
     'fastLoading': 'ઝડપી લોડિંગ',
-    'fullIndiaCoverage': 'પૂર્ણ ભારત કવરેજ'
+    'fullIndiaCoverage': 'પૂર્ણ ભારત કવરેજ',
+    
+    // Farmers Experience Feed
+    'farmersExperiences': 'ખેડૂતોનો અનુભવ',
+    'shareYourFarmingJourney': 'તમારી ખેતી યાત્રા શેર કરો અને મદદગાર અનુભવોને મત આપો',
+    'shareExperience': 'તમારો ખેતી અનુભવ શેર કરો',
+    'shareYourFarmingExperienceDesc': 'તમારો ખેતી અનુભવ, સફળતાની કહાણી, ટીપ્સ અથવા શીખેલા પાઠ શેર કરો...',
+    'shareExperienceBtn': 'અનુભવ શેર કરો',
+    'postedAsGuest': 'અતિથી તરીકે પોસ્ટ કરેલ (કોઈ લોગિન જરૂરી નથી)',
+    'farmersExperiencesEmpty': 'હજી કોઈ અનુભવ નથી!',
+    'beFirstFarmerShare': 'તમારી કહાણી શેર કરનારા પહેલા ખેડૂત બનો',
+    'experiencesFeed': 'અનુભવ ફીડ',
+    'previousExperience': 'પહેલાંનું',
+    'nextExperience': 'આગલું',
+    'of': 'ના',
+    'helpful': 'મદદગાર',
+    'notHelpful': 'મદદગાર નથી',
+    'farmersExperienceTip': 'અનુભવો તે ક્રમમાં પ્રદર્શિત થાય છે જેમ ખેડૂતોને સૌથી વધુ મદદગાર વર્ણવ્યા હતા. બીજાઓને મદદ આપવા માટે મત આપો!',
+    'upvoting': 'મતદાન કરવામાં આવે છે...',
+    'downvoting': 'નીચે મતદાન કરવામાં આવે છે...',
+    'alreadyUpvoted': 'તમે પહેલાથી આને મત આપ્યો છે',
+    'alreadyDownvoted': 'તમે પહેલાથી આને નીચે મત આપ્યો છે',
+    'farmExperience': 'ખેતીનો અનુભવ',
+    
+    // Personalized Scheme Finder
+    'checkEligibility': 'પાત્રતા તપાસો',
+    'personalizeSchemes': 'સ્કીમ્સને વ્યક્તિગતકૃત કરો',
+    'eligibilityChecker': 'પાત્રતા તપાસક',
+    'findSchemesForYou': 'તમારી પ્રોફાઇલ સાથે મેળ ખાતી સ્કીમ્સ શોધો',
+    
+    // Form Fields
+    'basicInfo': 'મૂળભૂત માહિતી',
+    'age': 'વય',
+    'yearOld': 'વર્ષ પુરાણું',
+    'gender': 'લિંગ',
+    'selectGender': 'લિંગ પસંદ કરો',
+    'male': 'પુરુષ',
+    'female': 'મહિલા',
+    'other': 'અન્ય',
+    
+    'locationInfo': 'સ્થાન વિગતો',
+    'state': 'રાજ્ય',
+    'selectState': 'રાજ્ય પસંદ કરો',
+    'district': 'જિલ્લો',
+    'optional': 'વૈકલ્પિક',
+    
+    'financialInfo': 'આર્થિક માહિતી',
+    'annualIncome': 'વાર્ષિક આવક',
+    'selectIncome': 'આવક શ્રેણી પસંદ કરો',
+    'incomeLessThan1L': '< ₹1 લાખ',
+    'income1Lto5L': '₹1L - ₹5L',
+    'incomeMoreThan5L': '> ₹5L',
+    
+    'farmingDetails': 'ખેતી વિગતો',
+    'landOwnership': 'જમીનનું માલિકી',
+    'doYouOwnLand': 'શું તમે કૃષિ જમીનના માલિક છો?',
+    'yes': 'હા',
+    'no': 'ના',
+    'landSize': 'જમીનનું કદ (એકરમાં)',
+    'farmerType': 'ખેડૂત પ્રકાર',
+    'selectFarmerType': 'ખેડૂત પ્રકાર પસંદ કરો',
+    'smallFarmer': 'નાનો ખેડૂત',
+    'marginalFarmer': 'સીમાંત ખેડૂત',
+    'largeFarmer': 'મોટો ખેડૂત',
+    
+    'categoryInfo': 'સામાજિક વર્ગ',
+    'socialCategory': 'સામાજિક વર્ગ',
+    'selectCategory': 'વર્ગ પસંદ કરો',
+    'general': 'સામાન્ય',
+    'obc': 'અન્ય પશ્ચાત વર્ગ',
+    'sc': 'અનુસૂચિત જાતિ',
+    'st': 'અનુસૂચિત જનજાતિ',
+    'womenFarmer': 'શું તમે મહિલા ખેડૂત છો?',
+    
+    'documentsInfo': 'ઉપલબ્ધ દસ્તાવેજો',
+    'aadhaarAvailable': 'આધાર કાર્ડ ઉપલબ્ધ',
+    'bankAccountLinked': 'બેંક ખાતું જોડાયેલું',
+    
+    'applyFilters': 'ફિલ્ટર લાગુ કરો',
+    'resetFilters': 'રીસેટ કરો',
+    'eligibleSchemes': 'પાત્ર સ્કીમ્સ',
+    'noEligibleSchemes': 'કોઈ પાત્ર સ્કીમ્સ નથી મળી',
+    'tryAdjustingFilters': 'વધુ સ્કીમ્સ શોધવા માટે તમારા ફિલ્ટર્સ સમાયોજિત કરો',
+    'filtersApplied': 'ફિલ્ટર્સ લાગુ કર્યા',
+    'matchingSchemes': 'મેળ ખાતી સ્કીમ્સ મળી',
+    
+    // Eligibility messages
+    'requiredFieldsEmpty': 'કૃપા કરીને તમામ આવશ્યક ક્ષેત્રો ભરો',
+    'filtering': 'ફિલ્ટર્સ લાગુ કરવામાં આવે છે...',
+    
+    // Offline & PWA
+    'offline': 'તમે ઓફલાઇન છો',
+    'offline.message': 'તમે ઓફલાઇન છો. સંરક્ષિત ડેટા દર્શાવવામાં આવે છે. કેટલીક વૈશિષ્ટ્યો મર્યાદિત હોઈ શકે છે.',
+    'offline.lastUpdated': 'છેલ્લો અપડેટ',
+    'offline.cachedData': 'આ કેશ કરેલ ડેટા છે',
+    'offline.refreshWhenOnline': 'જ્યારે તમે ઓનલાઇન હોશો ત્યારે ડેટા રીફ્રેશ થશે',
+    'offline.limitedFeatures': 'કેટલીક વૈશિષ્ટ્યો ઓફલાઇન ઉપલબ્ધ નથી'
   },
   
   
@@ -1641,6 +2033,8 @@ const translations = {
   ml: {
     // Common
     'home': 'ഹോം',
+    'calendar': 'കാലെൻഡർ',
+    'farmingTasks': 'കൃഷി ജോലികൾ',
     'voiceAssistant': 'വോയ്സ് അസിസ്റ്റന്റ്',
     'cropAnalysis': 'വിള വിശകലനം',
     'weather': 'കാലാവസ്ഥ',
@@ -2032,6 +2426,102 @@ const translations = {
     'smartAnalytics': 'സ്മാർട്ട് അനലിറ്റിക്സ്',
     'farmingRecommendation': 'കൃഷി നിർദ്ദേശം',
     'fastLoading': 'വേഗതയുള്ള ലോഡിംഗ്',
-    'fullIndiaCoverage': 'പൂർണ്ണ ഇന്ത്യ കവറേജ്'
+    'fullIndiaCoverage': 'പൂർണ്ണ ഇന്ത്യ കവറേജ്',
+    
+    // Farmers Experience Feed
+    'farmersExperiences': 'കർഷകരുടെ അനുഭവം',
+    'shareYourFarmingJourney': 'നിങ്ങളുടെ കൃഷി യാത്ര പങ്കിടുക, സഹായകമായ അനുഭവങ്ങൾക്ക് വോട്ട് കൊടുക്കുക',
+    'shareExperience': 'നിങ്ങളുടെ കൃഷി അനുഭവം പങ്കിടുക',
+    'shareYourFarmingExperienceDesc': 'നിങ്ങളുടെ കൃഷി അനുഭവം, വിജയഗാഥ, നുറുങ്ങുകൾ അല്ലെങ്കിൽ പഠിച്ച പാഠങ്ങൾ പങ്കിടുക...',
+    'shareExperienceBtn': 'അനുഭവം പങ്കിടുക',
+    'postedAsGuest': 'അതിഥിയായി പോസ്റ്റ് ചെയ്തത് (വിലാസപയറ്റ് ഇതിനകുന്നേക്ക് ആവശ്യമില്ല)',
+    'farmersExperiencesEmpty': 'ഇതുവരെ അനുഭവങ്ങൾ ഇല്ല!',
+    'beFirstFarmerShare': 'നിങ്ങളുടെ കഥ പങ്കിടുന്ന ആദ്യ കർഷകൻ ആകുക',
+    'experiencesFeed': 'അനുഭവ ഫീഡ്',
+    'previousExperience': 'മുമ്പത്തെ',
+    'nextExperience': 'അടുത്ത',
+    'of': 'ന്റെ',
+    'helpful': 'സഹായകമായ',
+    'notHelpful': 'സഹായകമല്ല',
+    'farmersExperienceTip': 'കർഷകങ്ങൾ സഹായകമായെന്ന് കണ്ടെത്തിയ ക്രമത്തിൽ അനുഭവങ്ങൾ പ്രദർശിപ്പിക്കുന്നു. മറ്റുള്ളവരെ സഹായിക്കാൻ വോട്ട് കൊടുക്കുക!',
+    'upvoting': 'വോട്ട് കൊടുക്കുന്നു...',
+    'downvoting': 'താഴെയിറങ്ങി വോട്ട് കൊടുക്കുന്നു...',
+    'alreadyUpvoted': 'നിങ്ങൾ ഇതിന് ഇതിനകുന്നേക്ക് വോട്ട് കൊടുത്തിട്ടുണ്ട്',
+    'alreadyDownvoted': 'നിങ്ങൾ ഇതിന് ഇതിനകുന്നേക്ക് നിരാശമായ വോട്ട് കൊടുത്തിട്ടുണ്ട്',
+    'farmExperience': 'കൃഷി അനുഭവം',
+    
+    // Personalized Scheme Finder
+    'checkEligibility': 'യോഗ്യത പരിശോധിക്കുക',
+    'personalizeSchemes': 'സ്കീമുകൾ ব്যക്തിഗതകരിക്കുക',
+    'eligibilityChecker': 'യോഗ്യത പരിശോധകൻ',
+    'findSchemesForYou': 'നിങ്ങളുടെ പ്രൊഫൈലിനോട് പൊരുത്തപ്പെടുന്ന സ്കീമുകൾ കണ്ടെത്തുക',
+    
+    // Form Fields
+    'basicInfo': 'അടിസ്ഥാന വിവരങ്ങൾ',
+    'age': 'പ്രായം',
+    'yearOld': 'വർഷം പഴക്കം',
+    'gender': 'ലിംഗം',
+    'selectGender': 'ലിംഗം തിരഞ്ഞെടുക്കുക',
+    'male': 'പുരുഷൻ',
+    'female': 'സ്ത്രീ',
+    'other': 'മറ്റ്',
+    
+    'locationInfo': 'സ്ഥാന വിവരങ്ങൾ',
+    'state': 'സംസ്ഥാനം',
+    'selectState': 'സംസ്ഥാനം തിരഞ്ഞെടുക്കുക',
+    'district': 'ജില്ല',
+    'optional': 'ഐച്ഛികം',
+    
+    'financialInfo': 'സാമ്പത്തിക വിവരങ്ങൾ',
+    'annualIncome': 'വാർഷിക വരുമാനം',
+    'selectIncome': 'വരുമാന പരിധി തിരഞ്ഞെടുക്കുക',
+    'incomeLessThan1L': '< ₹1 ലക്ഷം',
+    'income1Lto5L': '₹1L - ₹5L',
+    'incomeMoreThan5L': '> ₹5L',
+    
+    'farmingDetails': 'കൃഷി വിവരങ്ങൾ',
+    'landOwnership': 'ഭൂമി ഉടമസ്ഥത്വം',
+    'doYouOwnLand': 'നിങ്ങൾ കൃষിഭൂമി소유കാരനാണോ?',
+    'yes': 'അതെ',
+    'no': 'ഇല്ല',
+    'landSize': 'ഭൂമി വിസ്തൃതി (ഏക്കറിൽ)',
+    'farmerType': 'കർഷകന്റെ തരം',
+    'selectFarmerType': 'കർഷകന്റെ തരം തിരഞ്ഞെടുക്കുക',
+    'smallFarmer': 'ചെറിയ കർഷകൻ',
+    'marginalFarmer': 'പരിധിയിലെ കർഷകൻ',
+    'largeFarmer': 'വലിയ കർഷകൻ',
+    
+    'categoryInfo': 'സാമൂഹിക വിഭാഗം',
+    'socialCategory': 'സാമൂഹിക വിഭാഗം',
+    'selectCategory': 'വിഭാഗം തിരഞ്ഞെടുക്കുക',
+    'general': 'സാധാരണ',
+    'obc': 'മറ്റ് പിന്നോക്കം വര്ഗ്ഗം',
+    'sc': 'അനുസൂചിത ജാതി',
+    'st': 'അനുസൂചിത വർഗ്ഗം',
+    'womenFarmer': 'നിങ്ങൾ സ്ത്രീ കർഷകനാണോ?',
+    
+    'documentsInfo': 'ലഭ്യമായ രേഖകൾ',
+    'aadhaarAvailable': 'ആധാർ കാർഡ് ലഭ്യം',
+    'bankAccountLinked': 'ബാങ്ക് അക്കൗണ്ട് ലിങ്ക് ചെയ്തിരിക്കുന്നു',
+    
+    'applyFilters': 'ഫിൽട്ടർ പ്രയോഗിക്കുക',
+    'resetFilters': 'പുനരാരംഭിക്കുക',
+    'eligibleSchemes': 'യോഗ്യതയുള്ള സ്കീമുകൾ',
+    'noEligibleSchemes': 'യോഗ്യതയുള്ള സ്കീമുകൾ കണ്ടെത്തിയില്ല',
+    'tryAdjustingFilters': 'കൂടുതൽ സ്കീമുകൾ കണ്ടെത്താൻ നിങ്ങളുടെ ഫിൽട്ടരുകൾ ക്രമീകരിക്കുന്നത് ശ്രമിക്കുക',
+    'filtersApplied': 'ഫിൽട്ടർ പ്രയോഗിച്ചു',
+    'matchingSchemes': 'പൊരുത്തപ്പെടുന്ന സ്കീമുകൾ കണ്ടെത്തിയിരിക്കുന്നു',
+    
+    // Eligibility messages
+    'requiredFieldsEmpty': 'ദയവായി എല്ലാ ആവശ്യമായ ഫീൽഡുകൾ പൂരിപ്പിക്കുക',
+    'filtering': 'ഫിൽട്ടരുകൾ പ്രയോഗിക്കുകയാണ്...',
+    
+    // Offline & PWA
+    'offline': 'നിങ്ങൾ ഓഫ്‌ലൈനിലാണ്',
+    'offline.message': 'നിങ്ങൾ ഓഫ്‌ലൈനിലാണ്. സേവ് ചെയ്ത ഡാറ്റ കാണിക്കുന്നു. ചില ഫീച്ചറുകൾ പരിമിതമായിരിക്കാം.',
+    'offline.lastUpdated': 'അവസാന അപ്ഡേറ്റ്',
+    'offline.cachedData': 'ഇത് കാഷ് ചെയ്ത ഡാറ്റയാണ്',
+    'offline.refreshWhenOnline': 'നിങ്ങൾ ഓൺലൈനായ്‌ക്കാൾ ഡാറ്റ റിഫ്രെഷ് ചെയ്യപ്പെടും',
+    'offline.limitedFeatures': 'ചില ഫീച്ചറുകൾ ഓഫ്‌ലൈനിൽ ലഭ്യമല്ല'
   }
 };

@@ -9,6 +9,8 @@ import { useLanguage } from '@/contexts/LanguageContext';
 export default function Home() {
   const { language } = useLanguage();
 
+  console.log('[HOMEPAGE] Home component rendering, language:', language);
+
   const aboutContent = {
     en: {
       title: 'About KisanAI',
