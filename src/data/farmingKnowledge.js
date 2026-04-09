@@ -1,12 +1,34 @@
-import { GoogleGenerativeAI } from '@google/generative-ai'
+const OPENROUTER_API_KEY = process.env.NEXT_PUBLIC_OPENROUTER_API_KEY;
+const OPENROUTER_MODEL = 'openai/gpt-oss-120b:free';
+const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
-const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY
-const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
-const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
+if (!OPENROUTER_API_KEY) {
+  console.warn('⚠️ OPENROUTER_API_KEY is not configured in environment variables');
+}
 
 // Multilingual farming knowledge base for AI responses (fallback)
 export const farmingKnowledgeBase = {
   hi: [
+    // Land Price related queries
+    {
+      query: 'एक बीघा जमीन का भाव',
+      response: 'एक बीघा जमीन का भाव क्षेत्र, स्थान और जमीन की गुणवत्ता पर निर्भर करता है। भारत में 1 बीघा = 0.67 एकड़ या लगभग 2700 वर्ग मीटर।\n\n🏞️ शहरी इलाकों में: 5-15 लाख रुपये प्रति बीघा\n🌳 अर्ध-विकसित क्षेत्रों में: 1-5 लाख रुपये प्रति बीघा\n🚜 ग्रामीण क्षेत्रों में: 50,000-2,00,000 रुपये प्रति बीघा\n💧 सिंचित जमीन: ₹2-5 लाख प्रति बीघा\n🏜️ बारानी जमीन: ₹50,000-1,50,000 प्रति बीघा\n\n📍 आपके सटीक क्षेत्र के लिए स्थानीय जमीन दलालों या पटवारी से पूछें।',
+      category: 'pricing',
+      keywords: ['बीघा', 'जमीन', 'भाव', 'कीमत', 'दाम', 'जमीन खरीद', 'बीघे']
+    },
+    {
+      query: 'एक एकड़ जमीन का भाव कितना है',
+      response: 'एक एकड़ जमीन की कीमत क्षेत्र, स्थान, पानी की उपलब्धता और विकास पर निर्भर करती है।\n\n📍 शहरी इलाकों के पास: 10-30 लाख रुपये प्रति एकड़\n🏢 अर्ध-विकसित क्षेत्रों में: 3-10 लाख रुपये प्रति एकड़\n🌾 ग्रामीण/सूखे क्षेत्रों में: 1-3 लाख रुपये प्रति एकड़\n💧 सिंचित क्षेत्रों में: 3-10 लाख रुपये प्रति एकड़\n\n💡 नोट: सिंचित जमीन की कीमत बारानी जमीन से 3-4 गुना अधिक होती है। अपने जिले की वर्तमान दरें जानने के लिए पटवारी या तहसील से संपर्क करें।',
+      category: 'pricing',
+      keywords: ['एकड़', 'जमीन', 'भाव', 'कीमत', 'दाम', 'एकड़ जमीन']
+    },
+    {
+      query: 'खाद कब डालनी चाहिए सही समय',
+      response: 'खाद डालने का सही समय फसल और मौसम पर निर्भर करता है:\n\n🌾 गेहूं:\n• बुवाई के समय: DAP (डाइअमोनियम फॉस्फेट) 46 किग्रा + पोटाश 40 किग्रा प्रति एकड़\n• 20-25 दिन बाद: पहली यूरिया फवारणी 50 किग्रा\n• 45-50 दिन बाद: दूसरी यूरिया फवारणी 50 किग्रा\n\n🌾 धान:\n• बुवाई से पहले: 10-15 टन गोबर खाद मिलाएं\n• 20 दिन की पौध में: 60 किग्रा नाइट्रोजन\n• 40 दिन पर: 30 किग्रा नाइट्रोजन\n\n🌾 कपास/मूंगफली:\n• बुवाई के 30 दिन बाद: पहली निराई के समय खाद\n• बुवाई के 60 दिन बाद: दूसरी निराई के समय\n\n🌾 सब्जियां:\n• हर 15-20 दिन में जैविक खाद या वर्मीकम्पोस्ट\n• गर्मियों में कम, सर्दियों में अधिक\n\n💡 सलाह: मिट्टी की जांच करवाकर पोषक तत्वों के अनुसार खाद डालें।',
+      category: 'fertilizer',
+      keywords: ['खाद', 'समय', 'कब डालें', 'सही समय', 'यूरिया', 'DAP', 'फवारणी', 'खाद कब']
+    },
+
     // Disease related queries
     {
       query: 'मेरी गेहूं की फसल में पीले पत्ते हो रहे हैं',
@@ -22,12 +44,6 @@ export const farmingKnowledgeBase = {
     },
 
     // Fertilizer related queries
-    {
-      query: 'खाद कब डालना चाहिए',
-      response: 'खाद डालने का समय फसल पर निर्भर करता है। गेहूं में बुवाई के समय DAP और पोटाश, 20-25 दिन बाद यूरिया डालें। सब्जियों में हर 15-20 दिन में जैविक खाद डालते रहें।',
-      category: 'fertilizer',
-      keywords: ['खाद', 'उर्वरक', 'समय', 'डालना', 'यूरिया', 'DAP']
-    },
     {
       query: 'कौन सी खाद सबसे अच्छी है',
       response: 'सबसे अच्छी खाद मिट्टी जांच के आधार पर तय होती है। आमतौर पर गोबर की खाद, कम्पोस्ट और हरी खाद सबसे अच्छी मानी जाती है। रासायनिक खाद का उपयोग मिट्टी जांच के बाद ही करें।',
@@ -80,6 +96,26 @@ export const farmingKnowledgeBase = {
     }
   ],
   en: [
+    // Land Price related queries
+    {
+      query: 'Price of one bigha land',
+      response: 'The price of one bigha of land depends on the region, location, and quality of the land. In India, 1 bigha = 0.67 acres or approximately 2700 square meters.\n\n🏞️ Urban areas: ₹5-15 lakhs per bigha\n🌳 Semi-developed areas: ₹1-5 lakhs per bigha\n🚜 Rural areas: ₹50,000-2,00,000 per bigha\n💧 Irrigated land: ₹2-5 lakhs per bigha\n🏜️ Rainfed land: ₹50,000-1,50,000 per bigha\n\n📍 For your exact area, consult local land brokers or the patwari (revenue officer).',
+      category: 'pricing',
+      keywords: ['bigha', 'land', 'price', 'cost', 'rate', 'land price']
+    },
+    {
+      query: 'What is the price of one acre of land',
+      response: 'The price of one acre of land depends on location, water availability, and development status.\n\n📍 Near urban areas: ₹10-30 lakhs per acre\n🏢 Semi-developed areas: ₹3-10 lakhs per acre\n🌾 Rural/dry areas: ₹1-3 lakhs per acre\n💧 Irrigated areas: ₹3-10 lakhs per acre\n\n💡 Note: Irrigated land prices are 3-4 times higher than rainfed land. Contact your district\'s patwari or taluka office for current rates in your area.',
+      category: 'pricing',
+      keywords: ['acre', 'land', 'price', 'cost', 'acre land', 'bhumi']
+    },
+    {
+      query: 'When should I apply fertilizer correct timing',
+      response: 'The correct time to apply fertilizer depends on the crop and season:\n\n🌾 Wheat:\n• At sowing: DAP (Diammonium Phosphate) 46 kg + Potash 40 kg per acre\n• 20-25 days: First urea spray 50 kg\n• 45-50 days: Second urea spray 50 kg\n\n🌾 Paddy:\n• Before sowing: Mix 10-15 tons cow manure\n• At 20-day seedling stage: 60 kg nitrogen\n• At 40 days: 30 kg nitrogen\n\n🌾 Cotton/Groundnut:\n• 30 days after sowing: At first weeding\n• 60 days after sowing: At second weeding\n\n🌾 Vegetables:\n• Every 15-20 days: Organic fertilizer or vermicompost\n• Less in summer, more in winter\n\n💡 Tip: Get soil tested and apply fertilizer based on nutrient requirements.',
+      category: 'fertilizer',
+      keywords: ['fertilizer', 'when', 'timing', 'apply', 'urea', 'DAP', 'schedule']
+    },
+
     // Disease related queries
     {
       query: 'Yellow leaves are appearing in my wheat crop',
@@ -95,12 +131,6 @@ export const farmingKnowledgeBase = {
     },
 
     // Fertilizer related queries
-    {
-      query: 'When should I apply fertilizer',
-      response: 'The timing of fertilizer application depends on the crop. For wheat, apply DAP and potash at sowing time, urea after 20-25 days. For vegetables, apply organic fertilizer every 15-20 days.',
-      category: 'fertilizer',
-      keywords: ['fertilizer', 'nutrient', 'time', 'apply', 'urea', 'DAP']
-    },
     {
       query: 'Which fertilizer is the best',
       response: 'The best fertilizer is determined based on soil testing. Generally, cow dung manure, compost, and green manure are considered the best. Use chemical fertilizers only after soil testing.',
@@ -153,10 +183,30 @@ export const farmingKnowledgeBase = {
     }
   ],
   mr: [
+    // Land Price related queries
+    {
+      query: '१ विघा जमिनीचा भाव किती आहे',
+      response: 'एक विघा जमिनीचा भाव क्षेत्र, स्थान आणि जमिनीच्या गुणवत्तेवर अवलंबून असतो। भारतात 1 विघा = 0.67 एकर किंवा अंदाजे 2700 चौ.मी.\n\n🏞️ शहरी भागात: 5-15 लाख रुपये प्रति विघा\n🌳 अर्धविकसित भागात: 1-5 लाख रुपये प्रति विघा\n🚜 ग्रामीण भागात: 50,000-2,00,000 रुपये प्रति विघा\n💧 सिंचित जमीन: 2-5 लाख रुपये प्रति विघा\n🏜️ बारानी जमीन: 50,000-1,50,000 रुपये प्रति विघा\n\n📍 आपल्या क्षेत्राच्या सटीक दरांसाठी स्थानिक जमीन दलाल किंवा पटवारी याला विचारा.',
+      category: 'pricing',
+      keywords: ['विघा', 'जमीन', 'भाव', 'कीमत', 'दर']
+    },
+    {
+      query: '१ एकर जमिनीचा भाव किती आहे',
+      response: 'एक एकर जमिनीचा भाव स्थान, पाण्याची उपलब्धता आणि विकास स्थितीवर अवलंबून असतो.\n\n📍 शहरी भागाच्या जवळ: 10-30 लाख रुपये प्रति एकर\n🏢 अर्धविकसित भागात: 3-10 लाख रुपये प्रति एकर\n🌾 ग्रामीण/सूख भागात: 1-3 लाख रुपये प्रति एकर\n💧 सिंचित भागात: 3-10 लाख रुपये प्रति एकर\n\n💡 सूचना: सिंचित जमिनीचा भाव बारानी जमिनीपेक्षा 3-4 पट जास्त असतो. आपल्या जिल्ह्यातील सध्याच्या दरांसाठी पटवारी किंवा तहसील कार्यालयाशी संपर्क साधा.',
+      category: 'pricing',
+      keywords: ['एकर', 'जमीन', 'भाव', 'कीमत', 'दर']
+    },
+    {
+      query: 'खत कधी टाकावे सही समय',
+      response: 'खत टाकण्याचा सही समय पिकावर आणि ऋतूवर अवलंबून असतो:\n\n🌾 गहू:\n• लागवडीच्या वेळी: DAP 46 किग्रा + पोटाश 40 किग्रा प्रति एकर\n• 20-25 दिवसांनंतर: पहिली यूरिया फवारणी 50 किग्रा\n• 45-50 दिवसांनंतर: दूसरी यूरिया फवारणी 50 किग्रा\n\n🌾 भात:\n• लागवडीआधी: 10-15 टन गोबर खत मिलवा\n• 20 दिवसांच्या रोपणीमध्ये: 60 किग्रा नायट्रोजन\n• 40 दिवसांनी: 30 किग्रा नायट्रोजन\n\n🌾 कापूस/मूंगफळी:\n• लागवडीच्या 30 दिवसांनंतर: पहिल्या निराईच्या वेळी\n• लागवडीच्या 60 दिवसांनंतर: दूसऱ्या निराईच्या वेळी\n\n🌾 भाजीपाला:\n• प्रत्येक 15-20 दिवसांनी: सेंद्रिय खत किंवा केंचुव्याचा खाद\n• उन्हाळ्यात कमी, हिवाळ्यात जास्त\n\n💡 सूचना: मातीची तपासणी करून पोषक तत्वांनुसार खत टाका.',
+      category: 'fertilizer',
+      keywords: ['खत', 'समय', 'कधी', 'यूरिया', 'DAP', 'फवारणी']
+    },
+
     // Disease related queries
     {
       query: 'माझ्या गहूच्या पिकात पिवळी पाने येत आहेत',
-      response: 'गहू मध्ये पिवळी पाने सामान्यत: नायट्रोजनच्या कमतरतेमुळे किंवा मूळ सडण्यामुळे होतात. ताबडतोब युरिया फवारणी करा आणि पाणी वाहण्याची व्यवस्था सुधारा. समस्या कायम राहिल्यास कृषी तज्ज्ञाशी संपर्क साधा.',
+      response: 'गहू मध्ये पिवळी पाने सामान्यत: नायट्रोजनच्या कमतरतेमुळे किंवा मूळ सडण्यामुळे होतात. ताबडतोब युरिया फवारणी करा आणि पाणी वाहण्याची व्यवस्था सुधारा. समस्या कायम राहिल्यास कृषि तज्ज्ञाशी संपर्क साधा.',
       category: 'disease',
       keywords: ['गहू', 'पिवळे', 'पाने', 'रोग', 'आजार']
     },
@@ -168,12 +218,6 @@ export const farmingKnowledgeBase = {
     },
 
     // Fertilizer related queries
-    {
-      query: 'खत कधी टाकावे',
-      response: 'खत टाकण्याचा वेळ पिकावर अवलंबून असतो. गहूसाठी लागवडीच्या वेळी DAP आणि पोटॅश, २०-२५ दिवसांनंतर युरिया टाका. भाजीपाला साठी दर १५-२० दिवसांत सेंद्रिय खत टाकत राहा.',
-      category: 'fertilizer',
-      keywords: ['खत', 'खते', 'वेळ', 'टाकणे', 'युरिया', 'DAP']
-    },
     {
       query: 'कोणते खत सर्वोत्तम आहे',
       response: 'सर्वोत्तम खत माती तपासणीनुसार ठरते. सामान्यत: गोबर खत, खाद आणि हिरवी खाद सर्वोत्तम मानली जाते. रासायनिक खत माती तपासणीनंतरच वापरा.',
@@ -206,7 +250,7 @@ export const farmingKnowledgeBase = {
     // Seeds related queries
     {
       query: 'कोणते बियाणे पेरावे',
-      response: 'बियाणे निवड तुमच्या भागाच्या हवामान आणि मातीनुसार करा. नेहमी प्रमाणित बियाणे खरेदी करा. स्थानिक वाण आणि हायब्रिड दोन्हींचे फायदे-तोटे समजून घ्या. कृषी विज्ञान केंद्राकडून सल्ला घ्या.',
+      response: 'बियाणे निवड तुमच्या भागाच्या हवामान आणि मातीनुसार करा. नेहमी प्रमाणित बियाणे खरेदी करा. स्थानिक वाण आणि हायब्रिड दोन्हींचे फायदे-तोटे समजून घ्या. कृषि विज्ञान केंद्राकडून सल्ला घ्या.',
       category: 'seeds',
       keywords: ['बियाणे', 'वाण', 'प्रमाणित', 'हायब्रिड']
     },
@@ -214,7 +258,7 @@ export const farmingKnowledgeBase = {
     // General farming queries
     {
       query: 'शेतीत नुकसान होत आहे',
-      response: 'शेतीत नुकसानाचे अनेक कारणे असू शकतात. खर्च कमी करण्यासाठी सेंद्रिय खत वापरा. प्रगत तंत्रज्ञान अवलंबा. पीक विमा करा. मिश्रित शेती करा. स्थानिक कृषी अधिकारी कडून सल्ला घ्या.',
+      response: 'शेतीत नुकसानाचे अनेक कारणे असू शकतात. खर्च कमी करण्यासाठी सेंद्रिय खत वापरा. प्रगत तंत्रज्ञान अवलंबा. पीक विमा करा. मिश्रित शेती करा. स्थानिक कृषि अधिकारी कडून सल्ला घ्या.',
       category: 'general',
       keywords: ['नुकसान', 'खर्च', 'फायदा', 'तंत्रज्ञान']
     },
@@ -226,6 +270,26 @@ export const farmingKnowledgeBase = {
     }
   ],
   gu: [
+    // Land Price related queries
+    {
+      query: 'એક વીઘા જમીનનો ભાવ',
+      response: 'એક વીઘા જમીનની કીમત વિસ્તાર, સ્થાન અને જમીનની ગુણવત્તા પર આધારિત છે. ભારતમાં 1 વીઘો = 0.67 એકર અથવા લગભગ 2700 ચોક્કસ મીટર।\n\n🏞️ શહેરી વિસ્તારમાં: 5-15 લાખ રુપિયા પ્રતિ વીઘો\n🌳 અર્ધવિકસિત વિસ્તારમાં: 1-5 લાખ રુપિયા પ્રતિ વીઘો\n🚜 ગ્રામીણ વિસ્તારમાં: 50,000-2,00,000 રુપિયા પ્રતિ વીઘો\n💧 સિંચિત જમીન: 2-5 લાખ રુપિયા પ્રતિ વીઘો\n🏜️ વરસાદી જમીન: 50,000-1,50,000 રુપિયા પ્રતિ વીઘો\n\n📍 તમારા ચોક્કસ વિસ્તાર માટે સ્થાનિક જમીન દલાલ અથવા પટવારી પાસે પૂછો.',
+      category: 'pricing',
+      keywords: ['વીઘો', 'જમીન', 'ભાવ', 'કીમત', 'દર']
+    },
+    {
+      query: 'એક એકર જમીનનો ભાવ કેટલો આવે',
+      response: 'એક એકર જમીનની કીમત સ્થાન, પાણીની ઉપલબ્ધતા અને વિકાસ સ્થિતિ પર આધારિત છે.\n\n📍 શહેરી વિસ્તારની નજીક: 10-30 લાખ રુપિયા પ્રતિ એકર\n🏢 અર્ધવિકસિત વિસ્તારમાં: 3-10 લાખ રુપિયા પ્રતિ એકર\n🌾 ગ્રામીણ/શુષ્ક વિસ્તારમાં: 1-3 લાખ રુપિયા પ્રતિ એકર\n💧 સિંચિત વિસ્તારમાં: 3-10 લાખ રુપિયા પ્રતિ એકર\n\n💡 સૂચના: સિંચિત જમીનની કીમત વરસાદી જમીન કરતાં 3-4 ગણી વધુ હોય છે. તમારા જિલ્લાના હાલના ભાવ માટે પટવારી અથવા તહસીલ કાર્યાલય સાથે સંપર્ક કરો.',
+      category: 'pricing',
+      keywords: ['એકર', 'જમીન', 'ભાવ', 'કીમત', 'દર']
+    },
+    {
+      query: 'ખાતર ક્યારે મૂકવું સાચો સમય',
+      response: 'ખાતર મૂકવાનો સાચો સમય પાક અને ઋતુ પર આધારિત છે:\n\n🌾 ઘઉં:\n• વાવણીના સમયે: DAP 46 કિગ્રા + પોટાશ 40 કિગ્રા પ્રતિ એકર\n• 20-25 દિવસ બાદ: પહેલું યુરિયા સ્પ્રે 50 કિગ્રા\n• 45-50 દિવસ બાદ: બીજું યુરિયા સ્પ્રે 50 કિગ્રા\n\n🌾 ધાન:\n• વાવણીથી પહેલાં: 10-15 ટન ગોમાંસ ખાતર મિશ્રિત કરો\n• 20 દિવસનો રોપણ તબક્કો: 60 કિગ્રા નાઈટ્રોજન\n• 40 દિવસે: 30 કિગ્રા નાઈટ્રોજન\n\n🌾 કપાસ/મગફળી:\n• વાવણીથી 30 દિવસ બાદ: પહેલી નીણુ સમયે\n• વાવણીથી 60 દિવસ બાદ: બીજી નીણુ સમયે\n\n🌾 શાકભાજી:\n• દર 15-20 દિવસે: જૈવિક ખાતર અથવા કીડો કમ્પોસ્ટ\n• ઉનાળામાં ઓછું, શીતકાળમાં વધુ\n\n💡 ટીપ: માટીની તપાસ કરાવીને પોષક તત્વો અનુસાર ખાતર મૂકો.',
+      category: 'fertilizer',
+      keywords: ['ખાતર', 'સમય', 'ક્યારે', 'યુરિયા', 'DAP']
+    },
+
     // Disease related queries
     {
       query: 'મારા ઘઉંના પાકમાં પીળા પાંદડા આવી રહ્યા છે',
@@ -241,12 +305,6 @@ export const farmingKnowledgeBase = {
     },
 
     // Fertilizer related queries
-    {
-      query: 'ખાતર ક્યારે મૂકવું',
-      response: 'ખાતર મૂકવાનો સમય પાક પર આધારિત છે. ઘઉં માટે વાવણીના સમયે DAP અને પોટાશ, ૨૦-૨૫ દિવસ પછી યુરિયા મૂકો. શાકભાજી માટે દર ૧૫-૨૦ દિવસે સેવાઈખાતર મૂકતા રહો.',
-      category: 'fertilizer',
-      keywords: ['ખાતર', 'ઉર્વરક', 'સમય', 'મૂકવું', 'યુરિયા', 'DAP']
-    },
     {
       query: 'કયું ખાતર સૌથી સારું છે',
       response: 'સૌથી સારું ખાતર માટીની તપાસ પર આધારિત છે. સામાન્ય રીતે ગોમાંસ, કમ્પોસ્ટ અને લીલું ખાતર સૌથી સારું માનવામાં આવે છે. રાસાયણિક ખાતર માટી તપાસ પછી જ વાપરો.',
@@ -299,6 +357,26 @@ export const farmingKnowledgeBase = {
     }
   ],
   ml: [
+    // Land Price related queries
+    {
+      query: 'ഒരു വിഘയുടെ വിലയെന്താണ്',
+      response: 'ഒരു വിഘ ഭൂമിയുടെ വില പ്രദേശം, സ്ഥാനം, ഭൂമിയുടെ ഗുണനിലവാരം എന്നിവയെ ആശ്രയിച്ചിരിക്കുന്നു. ഇന്ത്യയിൽ 1 വിഘ = 0.67 ഏക്കർ അല്ലെങ്കിൽ ഏകദേശം 2700 ചതുരശ്ര മീറ്റർ।\n\n🏞️ നഗരപ്രദേശങ്ങളിൽ: 5-15 ലക്ഷം രൂപ കോ വിഘ\n🌳 പകുതിയോ വികസിത പ്രദേശങ്ങളിൽ: 1-5 ലക്ഷം രൂപ കോ വിഘ\n🚜 ഗ്രാമപ്രദേശങ്ങളിൽ: 50,000-2,00,000 രൂപ കോ വിഘ\n💧 സേചന നിലങ്ങൾ: 2-5 ലക്ഷം രൂപ കോ വിഘ\n🏜️ വർഷാശ്രിത നിലങ്ങൾ: 50,000-1,50,000 രൂപ കോ വിഘ\n\n📍 നിങ്ങളുടെ പ്രത്യേക പ്രദേശത്തിനായി പ്രാദേശിക ഭൂമി ദലാളിൽ നിന്നോ പട്ടോളിൽ നിന്നോ ചോദിക്കുക.',
+      category: 'pricing',
+      keywords: ['വിഘ', 'ഭൂമി', 'വില', 'കിയ', 'നിരക്']
+    },
+    {
+      query: 'ഒരു ഏക്കറിന്റെ വിലയെന്താണ്',
+      response: 'ഒരു ഏക്കർ ഭൂമിയുടെ വില സ്ഥാനം, ജലലഭ്യത, വികാസ നിലവാരം എന്നിവയെ ആശ്രയിച്ചിരിക്കുന്നു.\n\n📍 നഗരപ്രദേശത്തിനടുത്ത്: 10-30 ലക്ഷം രൂപ കോ ഏക്കർ\n🏢 പകുതിയോ വികസിത പ്രദേശങ്ങളിൽ: 3-10 ലക്ഷം രൂപ കോ ഏക്കർ\n🌾 ഗ്രാമപ്രദേശങ്ങൾ/വരണ്ട പ്രദേശങ്ങളിൽ: 1-3 ലക്ഷം രൂപ കോ ഏക്കർ\n💧 സേചന പ്രദേശങ്ങളിൽ: 3-10 ലക്ഷം രൂപ കോ ഏക്കർ\n\n💡 കുറിപ്പ്: സേചന നിലങ്ങളുടെ വില വർഷാശ്രിത നിലങ്ങളുടെ വിലയുടെ 3-4 മടങ്ങ് കൂടുതലാണ്. നിങ്ങളുടെ ജില്ലയിലെ നിലവിലെ നിരക്കിനായി പട്ടോളിനോ തഹസീൽ കാര്യാലയത്തോട് സമീപിക്കുക.',
+      category: 'pricing',
+      keywords: ['ഏക്കർ', 'ഭൂമി', 'വില', 'കിയ', 'നിരക്']
+    },
+    {
+      query: 'വിതരണം എപ്പോൾ ചെയ്യണം ശരിയായ സമയം',
+      response: 'വിതരണം ചെയ്യുന്നതിനുള്ള ശരിയായ സമയം വിളയെയും സീസണിനെയും ആശ്രയിച്ചിരിക്കുന്നു:\n\n🌾 ഗോതമ്പ്:\n• വിതരണത്തിനു സമയമായി: DAP 46 കിലോഗ്രാം + പൊട്ടാഷ് 40 കിലോഗ്രാം കോ ഏക്കർ\n• 20-25 ദിവസത്തിനുശേഷം: ആദ്യം യുറിയ സ്പ്രേ 50 കിലോഗ്രാം\n• 45-50 ദിവസത്തിനുശേഷം: രണ്ടാം യുറിയ സ്പ്രേ 50 കിലോഗ്രാം\n\n🌾 നെൽ:\n• വിതരണത്തിനു മുമ്പായി: 10-15 ടൺ പശുക്കൂട കലർത്തുക\n• 20 ദിവസത്തെ നാണ്യം: 60 കിലോഗ്രാം നൈട്രജൻ\n• 40 ദിവസത്തിൽ: 30 കിലോഗ്രാം നൈട്രജൻ\n\n🌾 പരുപ്പ്/വിലാങ്ങി:\n• വിതരണത്തിന് 30 ദിവസത്തിനുശേഷം: ആദ്യ കളഞ്ഞ സമയത്ത്\n• വിതരണത്തിന് 60 ദിവസത്തിനുശേഷം: രണ്ടാം കളഞ്ഞ സമയത്ത്\n\n🌾 പച്ചക്കറികൾ:\n• ഓരോ 15-20 ദിവസത്തിലും: ജൈവ വിതരണം അല്ലെങ്കിൽ വെർമികമ്പോസ്റ്റ്\n• വേനലിൽ കുറവ്, ശീതകാലത്ത് കൂടുതല്\n\n💡 സഹായി: മണ്ണ് പരിശോധിപ്പിച്ച് പോഷക ആവശ്യ അനുസരിച്ച് വിതരണം ചെയ്യുക.',
+      category: 'fertilizer',
+      keywords: ['വിതരണം', 'സമയം', 'എപ്പോൾ', 'യുറിയ', 'DAP']
+    },
+
     // Disease related queries
     {
       query: 'എന്റെ ഗോതമ്പ് നാറ്റിൽ പച്ച ഇലകൾ വരുന്നു',
@@ -315,22 +393,16 @@ export const farmingKnowledgeBase = {
 
     // Fertilizer related queries
     {
-      query: 'ഉരവിട്ട് എപ്പോൾ വയ്ക്കണം',
-      response: 'ഉരവിട്ട് വയ്ക്കുന്ന സമയം വിളയെ ആശ്രയിച്ചിരിക്കുന്നു. ഗോതമ്പിന് വിതറുന്ന സമയത്ത് DAP, പൊട്ടാഷ്, 20-25 ദിവസത്തിന് ശേഷം യുറിയ. പച്ചക്കറികൾക്ക് 15-20 ദിവസത്തിലൊരിക്കൽ ജൈവ ഉരവിട്ട്.',
+      query: 'ഏത് വിതരണം നല്ലത്',
+      response: 'ഏറ്റവും നല്ല വിതരണം മണ്ണ് പരിശോധനയെ ആശ്രയിച്ചിരിക്കുന്നു. സാധാരണയായി പശുക്കൂട, കമ്പോസ്റ്റ്, പച്ച വിതരണം നല്ലത്. രാസ വിതരണം മണ്ണ് പരിശോധനയ്ക്ക് ശേഷം മാത്രം.',
       category: 'fertilizer',
-      keywords: ['ഉരവിട്ട്', 'പോഷകം', 'സമയം', 'വയ്ക്കുക', 'യുറിയ', 'DAP']
-    },
-    {
-      query: 'ഏത് ഉരവിട്ട് നല്ലത്',
-      response: 'ഏറ്റവും നല്ല ഉരവിട്ട് മണ്ണ് പരിശോധനയെ ആശ്രയിച്ചിരിക്കുന്നു. സാധാരണയായി ആട്ടിൻകുടം, കമ്പോസ്റ്റ്, പച്ച ഉരവിട്ട് നല്ലത്. രാസ ഉരവിട്ട് മണ്ണ് പരിശോധനയ്ക്ക് ശേഷം മാത്രം.',
-      category: 'fertilizer',
-      keywords: ['ഉരവിട്ട്', 'നല്ല', 'ആട്ടിൻകുടം', 'കമ്പോസ്റ്റ്', 'ജൈവ']
+      keywords: ['വിതരണം', 'നല്ല', 'പശുക്കൂട', 'കമ്പോസ്റ്റ്', 'ജൈവ']
     },
 
     // Irrigation related queries
     {
       query: 'എത്ര വെള്ളം നൽകണം',
-      response: 'വെള്ളത്തിന്റെ അളവ് കാലാവസ്ഥ, മണ്ണ്, വിള എന്നിവയെ ആശ്രയിച്ചിരിക്കുന്നു. ഗോതമ്പിന് 4-5 വെള്ളം, നെല്ലിൽ 2-3 ഇഞ്ച് വെള്ളം നിർത്തുക. പച്ചക്കറികൾക്ക് ദിവസവും അല്പം. മണ്ണിലെ ഈർപ്പം കാണിച്ച് വെള്ളം.',
+      response: 'വെള്ളത്തിന്റെ അളവ് കാലാവസ്ഥ, മണ്ണ്, വിള എന്നിവയെ ആശ്രയിച്ചിരിക്കുന്നു. ഗോതമ്പിന് 4-5 വെള്ളം, നെൽ 2-3 ഇഞ്ച് നിൽത്തുക. പച്ചക്കറികൾക്ക് ദിവസവും അല്പം. മണ്ണിലെ ഈർപ്പം കാണിച്ച് വെള്ളം.',
       category: 'irrigation',
       keywords: ['വെള്ളം', 'നീർതാരം', 'അളവ്', 'എത്ര']
     },
@@ -346,7 +418,7 @@ export const farmingKnowledgeBase = {
       query: 'മഴയിൽ എന്ത് ചെയ്യണം',
       response: 'മഴയിൽ വയലിൽ ജലനിർഗമനം ക്രമീകരിക്കുക. കീടനാശിനി സ്പ്രേ ചെയ്യരുത്. വിളയ്ക്ക് പിന്തുണ നൽകുക. മഴയ്ക്ക് ശേഷം മണ്ണ് വരണ്ടുപോകുന്നതുവരെ വയലിൽ പോകരുത്.',
       category: 'weather',
-      keywords: ['മഴ', 'ജലനിർഗമനം', 'മൺസൂൺ']
+      keywords: ['മഴ', 'ജലനിർഗമനം', 'മൻസൂൾ']
     },
 
     // Seeds related queries
@@ -360,52 +432,47 @@ export const farmingKnowledgeBase = {
     // General farming queries
     {
       query: 'കൃഷിയിൽ നഷ്ടം സംഭവിക്കുന്നു',
-      response: 'കൃഷിയിലെ നഷ്ടത്തിന് പല കാരണങ്ങൾ ഉണ്ടാകാം. ചെലവ് കുറയ്ക്കാൻ ജൈവ ഉരവിട്ട് ഉപയോഗിക്കുക. അഡ്വാൻസ്ഡ് ടെക്നിക്കുകൾ അവലംബിക്കുക. വിള ബീമ പോളിസി എടുക്കുക. മിക്സഡ് ഫാമിങ് ചെയ്യുക. പ്രാദേശിക കൃഷി ഉദ്യോഗസ്ഥനിൽ നിന്ന് ഉപദേശം തേടുക.',
+      response: 'കൃഷിയിലെ നഷ്ടത്തിന് പല കാരണങ്ങൾ ഉണ്ടാകാം. ചെലവ് കുറയ്ക്കാൻ ജൈവ വിതരണം ഉപയോഗിക്കുക. അഡ്വാൻസ്ഡ് ടെക്നിക്കുകൾ അവലംബിക്കുക. വിള ബീമ പോളിസി എടുക്കുക. മിക്സഡ് ഫാമിങ് ചെയ്യുക. പ്രാദേശിക കൃഷി ഉദ്യോഗസ്ഥനിൽ നിന്ന് ഉപദേശം തേടുക.',
       category: 'general',
       keywords: ['നഷ്ടം', 'ചെലവ്', 'ലാഭം', 'ടെക്നിക്ക്']
     },
     {
       query: 'ജൈവ കൃഷി എങ്ങനെ',
-      response: 'ജൈവ കൃഷിക്കായി രാസ ഉരവിട്ടും കീടനാശിനികളും ഉപയോഗിക്കരുത്. ആട്ടിൻകുടം, കമ്പോസ്റ്റ്, വേപ്പ് എണ്ണ ഉപയോഗിക്കുക. വിള ചക്രം അവലംബിക്കുക. ജൈവ സർട്ടിഫിക്കേഷനായി അപേക്ഷിക്കുക.',
+      response: 'ജൈവ കൃഷിക്കായി രാസ വിതരണവും കീടനാശിനികളും ഉപയോഗിക്കരുത്. പശുക്കൂട, കമ്പോസ്റ്റ്, വേപ്പ് എണ്ണ ഉപയോഗിക്കുക. വിള ചക്രം അവലംബിക്കുക. ജൈവ സർട്ടിഫിക്കേഷനായി അപേക്ഷിക്കുക.',
       category: 'general',
       keywords: ['ജൈവ', 'കൃഷി', 'പ്രകൃതി', 'കമ്പോസ്റ്റ്']
     }
   ]
 }
 
-// Multilingual default response for unknown queries (fallback)
+// Multilingual default response for unknown queries
 export const defaultResponse = {
-  en: "I'd be happy to help you. Please tell me your question in more detail. You can ask about farming, crops, diseases, fertilizers, water or weather. If your question is very complex, I recommend contacting an agricultural expert.",
-  hi: "मुझे खुशी होगी आपकी मदद करने में। कृपया अपना सवाल और विस्तार से बताएं। आप खेती, फसल, बीमारी, खाद, पानी या मौसम के बारे में पूछ सकते हैं। यदि आपका सवाल बहुत जटिल है तो कृषि विशेषज्ञ से संपर्क करने की सलाह देता हूं।",
-  mr: "मला मदत करण्यात आनंद होईल. कृपया तुमचा प्रश्न अधिक तपशीलवार सांगा. तुम्ही शेती, पिक, रोग, खत, पाणी किंवा हवामानाबद्दल विचारू शकता. तुमचा प्रश्न खूप जटिल असेल तर कृषी तज्ज्ञाशी संपर्क साधण्याचा सल्ला देतो.",
-  gu: "મને મદદ કરવામાં આનંદ થશે. કૃપા કરીને તમારો પ્રશ્ન વધુ વિગતવાર કહો. તમે ખેતી, પાક, રોગ, ખાતર, પાણી અથવા હવામાન વિશે પૂછી શકો છો. જો તમારો પ્રશ્ન ખૂબ જટિલ હોય તો કૃષિ નિષ્ણાતનો સંપર્ક કરવાની સલાહ આપું છું.",
-  ml: "ഞാൻ സന്തോഷത്തോടെ സഹായിക്കാം. ദയവായി നിങ്ങളുടെ ചോദ്യം കൂടുതൽ വിശദമായി പറയുക. നിങ്ങൾ കൃഷി, വിളകൾ, രോഗങ്ങൾ, ഉരവിട്ട്, വെള്ളം അല്ലെങ്കിൽ കാലാവസ്ഥയെക്കുറിച്ച് ചോദിക്കാം. നിങ്ങളുടെ ചോദ്യം വളരെ സങ്കീർണ്ണമാണെങ്കിൽ കൃഷി വിദഗ്ധനെ സമീപിക്കാൻ ഞാൻ ശുപാർശ ചെയ്യുന്നു."
-}
+  en: "I'd be happy to help you. Please tell me your question in more detail. You can ask about farming, crops, diseases, fertilizers, water or weather.",
+  hi: "मुझे खुशी होगी आपकी मदद करने में। कृपया अपना सवाल और विस्तार से बताएं। आप खेती, फसल, बीमारी, खाद, पानी या मौसम के बारे में पूछ सकते हैं।",
+  mr: "मला मदत करण्यात आनंद होईल. कृपया तुमचा प्रश्न अधिक तपशीलवार सांगा.",
+  gu: "મને મદદ કરવામાં આનંદ થશે. કૃપા કરીને તમારો પ્રશ્ન વધુ વિગતવાર કહો.",
+  ml: "ഞാൻ സന്തോഷത്തോടെ സഹായിക്കാം. ദയവായി നിങ്ങളുടെ ചോദ്യം കൂടുതൽ വിശദമായി പറയുക."
+};
 
 // Enhanced markdown cleaning function
 export const cleanMarkdown = (text) => {
   if (!text) return '';
   
   return text
-    // Remove markdown formatting
     .replace(/\*\*(.*?)\*\*/g, '$1')
     .replace(/\*(.*?)\*/g, '$1')
     .replace(/_(.*?)_/g, '$1')
     .replace(/~~(.*?)~~/g, '$1')
     .replace(/`(.*?)`/g, '$1')
-    
-    // Clean up bullet points and lists
     .replace(/\n\s*[*\-•]\s*/g, '\n• ')
     .replace(/\d+\.\s*/g, '')
-    
-    // Remove extra newlines and spaces
     .replace(/\n\s*\n/g, '\n')
     .replace(/ +/g, ' ')
     .trim();
 };
 
 // Timeout function for API calls
-const withTimeout = (promise, timeoutMs) => {
+const withTimeout = (promise, timeoutMs = 25000) => {
   return Promise.race([
     promise,
     new Promise((_, reject) => 
@@ -415,159 +482,115 @@ const withTimeout = (promise, timeoutMs) => {
 };
 
 export async function generateAIResponse(query, language = 'en') {
-  if (!query.trim()) return '';
+  if (!query?.trim()) return '';
 
   const fallbackResponses = {
-    en: "I apologize, but I'm having trouble generating a response right now. Please try again in a few moments or contact our support team for immediate assistance.",
-    hi: "मैं क्षमा चाहता हूं, लेकिन अभी जवाब तैयार करने में समस्या हो रही है। कृपया कुछ क्षणों में पुनः प्रयास करें या तत्काल सहायता के लिए हमारी सहायता टीम से संपर्क करें।",
-    mr: "मला माफ करा, पण आत्ता प्रतिसाद निर्माण करण्यात अडचण येत आहे. कृपया काही क्षणांत पुन्हा प्रयत्न करा किंवा तातडीच्या मदतीसाठी आमच्या समर्थन संघाशी संपर्क साधा.",
-    gu: "હું માફી માંગુ છું, પરંતુ હમણાં જવાબ જનરેટ કરવામાં સમસ્યા આવી રહી છે. કૃપા કરીને થોડી ક્ષણોમાં ફરી પ્રયાસ કરો અથવા તાત્કાલિક સહાય માટે અમારી સપોર્ટ ટીમનો સંપર્ક કરો.",
-    ml: "ക്ഷമിക്കണം, എന്നാൽ ഇപ്പോൾ ഒരു പ്രതികരണം സൃഷ്ടിക്കുന്നതിൽ ഞാൻ പ്രശ്നം അനുഭവിക്കുന്നു. കുറച്ച് നിമിഷങ്ങൾക്കുള്ളിൽ വീണ്ടും ശ്രമിക്കുക അല്ലെങ്കിൽ തൽക്ഷണ സഹായത്തിന് ഞങ്ങളുടെ പിന്തുണ ടീമിൽ ബന്ധപ്പെടുക."
+    en: "I apologize, but I'm having trouble generating a response right now. Please try again in a few moments.",
+    hi: "मैं क्षमा चाहता हूं, लेकिन अभी जवाब तैयार करने में समस्या हो रही है। कृपया कुछ क्षणों में पुनः प्रयास करें।",
+    mr: "मला माफ करा, पण आत्ता प्रतिसाद निर्माण करण्यात अडचण येत आहे.",
+    gu: "હું માફી માંગુ છું, પરંતુ હમણાં જવાબ જનરેટ કરવામાં સમસ્યા આવી રહી છે.",
+    ml: "ക്ഷമിക്കണം, എന്നാൽ ഇപ്പോൾ ഒരു പ്രതികരണം സൃഷ്ടിക്കുന്നതിൽ ഞാൻ പ്രശ്നം അനുഭവിക്കുന്നു."
   };
 
   const prompts = {
-    en: `You are an agricultural expert assistant for Indian farmers. Provide helpful, practical advice for the following question in English:
-
-Question: ${query}
-
-Please provide:
-1. Clear, actionable advice
-2. Specific recommendations if applicable
-3. Any precautions or warnings
-4. Keep response under 150 words
-5. Use simple, easy-to-understand language
-
-Focus on practical farming solutions that Indian farmers can implement.`,
-
-    hi: `आप भारतीय किसानों के लिए एक कृषि विशेषज्ञ सहायक हैं। निम्नलिखित प्रश्न का उत्तर हिंदी में दें:
-
-प्रश्न: ${query}
-
-कृपया निम्नलिखित प्रदान करें:
-1. स्पष्ट, व्यावहारिक सलाह
-2. विशिष्ट सिफारिशें यदि लागू हों
-3. कोई सावधानियां या चेतावनियां
-4. उत्तर 150 शब्दों से कम रखें
-5. सरल, आसानी से समझ में आने वाली भाषा का प्रयोग करें
-
-व्यावहारिक खेती समाधानों पर ध्यान दें जिन्हें भारतीय किसान लागू कर सकते हैं।`,
-
-    mr: `तुम एक कृषी तज्ञ सहायक आहात भारतीय शेतकऱ्यांसाठी. खालील प्रश्नाचे उत्तर मराठीत द्या:
-
-प्रश्न: ${query}
-
-कृपया पुरवा:
-1. स्पष्ट, व्यावहारिक सल्ला
-2. विशिष्ट शिफारसी लागू असल्यास
-3. कोणतीही सावधगिरी किंवा चेतावणी
-4. उत्तर 150 शब्दांपेक्षा कमी ठेवा
-5. सोपी, समजण्यास सोपी भाषा वापरा
-
-व्यावहारिक शेती उपायांवर लक्ष केंद्रित करा जे भारतीय शेतकरी लागू करू शकतात.`,
-
-    gu: `તમે ભારતીય ખેડૂતો માટે કૃષિ નિષ્ણાત સહાયક છો. નીચેના પ્રશ્નનો જવાબ ગુજરાતીમાં આપો:
-
-પ્રશ્ન: ${query}
-
-કૃપા કરીને પ્રદાન કરો:
-1. સ્પષ્ટ, વ્યવહારુ સલાહ
-2. ચોક્કસ ભલામણો જો લાગુ પડતી હોય
-3. કોઈપણ સાવચેતીઓ અથવા ચેતવણીઓ
-4. જવાબ 150 શબ્દોથી ઓછો રાખો
-5. સરળ, સમજવામાં સરળ ભાષા વાપરો
-
-વ્યવહારુ ખેતી ઉકેલો પર ધ્યાન કેન્દ્રિત કરો જે ભારતીય ખેડૂતો લાગુ કરી શકે છે.`,
-
-    ml: `നിങ്ങൾ ഇന്ത്യൻ കർഷകർക്കായുള്ള ഒരു കൃഷി വിദഗ്ധ സഹായിയാണ്. ഇനിപ്പറയുന്ന ചോദ്യത്തിന് മലയാളത്തിൽ ഉപയോഗപ്രദമായ ഉത്തരം നൽകുക:
-
-ചോദ്യം: ${query}
-
-ദയവായി നൽകുക:
-1. വ്യക്തമായ, പ്രായോഗിക ഉപദേശം
-2. പ്രത്യേക ശുപാർശകൾ ബാധകമാണെങ്കിൽ
-3. എന്തെങ്കിലും മുൻകരുതലുകൾ അല്ലെങ്കിൽ മുന്നറിയിപ്പുകൾ
-4. പ്രതികരണം 150 വാക്കുകൾക്കുള്ളിൽ നിലനിർത്തുക
-5. ലളിതമായ, മനസ്സിലാക്കാൻ എളുപ്പമുള്ള ഭാഷ ഉപയോഗിക്കുക
-
-ഇന്ത്യൻ കർഷകർക്ക് നടപ്പിലാക്കാൻ കഴിയുന്ന പ്രായോഗിക കാർഷിക പരിഹാരങ്ങളിൽ ശ്രദ്ധ കേന്ദ്രീകരിക്കുക।`
+    en: `You are an agricultural expert assistant for Indian farmers. Provide helpful, practical advice in English.\n\nQuestion: ${query}\n\nGive clear, actionable advice in simple language. Keep response under 180 words.`,
+    
+    hi: `आप भारतीय किसानों के लिए कृषि विशेषज्ञ सहायक हैं। निम्नलिखित प्रश्न का हिंदी में व्यावहारिक उत्तर दें:\n\nप्रश्न: ${query}\n\nसरल भाषा में स्पष्ट सलाह दें। उत्तर 180 शब्दों से कम रखें।`,
+    
+    mr: `तुम भारतीय शेतकऱ्यांसाठी कृषी तज्ञ आहात. खालील प्रश्नाचे मराठीत सोपे उत्तर द्या:\n\nप्रश्न: ${query}\n\nव्यावहारिक सल्ला द्या. उत्तर १८० शब्दांपेक्षा कमी ठेवा.`,
+    
+    gu: `તમે ભારતીય ખેડૂતો માટે કૃષિ નિષ્ણાત સહાયક છો. નીચેના પ્રશ્નનો ગુજરાતીમાં વ્યવહારુ જવાબ આપો:\n\nપ્રશ્ન: ${query}\n\nસરળ ભાષામાં સ્પષ્ટ સલાહ આપો. જવાબ 180 શબ્દોથી ઓછો રાખો.`,
+    
+    ml: `നിങ്ങൾ ഇന്ത്യൻ കർഷകർക്കായുള്ള കൃഷി വിദഗ്ധ സഹായിയാണ്. ചോദ്യത്തിന് മലയാളത്തിൽ പ്രായോഗിക ഉത്തരം നൽകുക:\n\nചോദ്യം: ${query}\n\nലളിതമായ ഭാഷയിൽ ഉപയോഗപ്രദമായ ഉപദേശം നൽകുക. 180 വാക്കുകൾക്കുള്ളിൽ നിർത്തുക.`
   };
 
   const prompt = prompts[language] || prompts['en'];
-  
-  // First, try Gemini API via SDK with timeout
+
+  // Try OpenRouter API
   try {
-    if (!GEMINI_API_KEY) {
-      throw new Error('API key not configured');
+    if (!OPENROUTER_API_KEY) {
+      throw new Error('OpenRouter API key not configured');
     }
 
-    const result = await withTimeout(
-      model.generateContent(prompt),
-      20000 // 20 second timeout
+    const response = await withTimeout(
+      fetch(OPENROUTER_API_URL, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+          'HTTP-Referer': process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+          'X-Title': 'Farming AI Assistant',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: OPENROUTER_MODEL,
+          messages: [
+            { role: 'user', content: prompt }
+          ],
+          temperature: 0.7,
+          max_tokens: 600,
+        }),
+      }),
+      30000 // 30 second timeout
     );
-    
-    const response = await result.response;
-    const aiText = response.text();
 
-    // If Gemini returns a valid response, clean and use it
+    if (!response.ok) {
+      throw new Error(`OpenRouter API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const aiText = data.choices?.[0]?.message?.content;
+
     if (aiText && aiText.trim()) {
-      const cleanedText = cleanMarkdown(aiText);
-      return cleanedText;
+      return cleanMarkdown(aiText);
     }
   } catch (error) {
-    console.error('Gemini integration error:', error);
-    // Fall back to knowledge base for all languages
+    console.error('OpenRouter API Error:', error.message);
+    // Fall through to knowledge base
   }
 
-  // Fallback to knowledge base for all languages, or generic fallback
+  // Fallback to knowledge base
   try {
-    const match = await withTimeout(
-      Promise.resolve(findBestMatch(query, language)),
-      20000 // 2 second timeout for fallback
-    );
-    
-    return match ? match.response : defaultResponse[language] || defaultResponse['en'];
-  } catch (timeoutError) {
-    console.error('Fallback timeout:', timeoutError);
-    return fallbackResponses[language] || fallbackResponses['en'];
+    const match = findBestMatch(query, language);
+    if (match?.response) {
+      return match.response;
+    }
+  } catch (fbError) {
+    console.error('Knowledge base error:', fbError);
   }
+
+  // Final fallback
+  return defaultResponse[language] || defaultResponse['en'];
 }
 
-// Function to find the best match for a query (updated for multilingual support)
+// Find best match from knowledge base
 export function findBestMatch(userQuery, language = 'en') {
   const base = farmingKnowledgeBase[language] || farmingKnowledgeBase['hi'];
-  const query = userQuery.toLowerCase()
-  
-  // First, try to find exact keyword matches
-  const exactMatches = base.filter(item => 
-    item.keywords.some(keyword => query.includes(keyword.toLowerCase()))
-  )
-  
-  if (exactMatches.length > 0) {
-    // Return the match with the most keyword matches
-    return exactMatches.reduce((best, current) => {
-      const bestMatches = best.keywords.filter(k => query.includes(k.toLowerCase())).length
-      const currentMatches = current.keywords.filter(k => query.includes(k.toLowerCase())).length
-      return currentMatches > bestMatches ? current : best
-    })
+  const query = userQuery.toLowerCase().trim();
+
+  let bestMatch = null;
+  let highestScore = 0;
+
+  for (const item of base) {
+    let score = 0;
+    for (const keyword of item.keywords) {
+      const k = keyword.toLowerCase();
+      if (query.includes(k)) score += 3;
+      if (k.includes(query)) score += 2;
+    }
+    if (score > highestScore) {
+      highestScore = score;
+      bestMatch = item;
+    }
   }
-  
-  // If no exact matches, try partial matches
-  const partialMatches = base.filter(item =>
-    item.keywords.some(keyword => 
-      keyword.toLowerCase().includes(query) || query.includes(keyword.toLowerCase())
+
+  if (highestScore >= 2) return bestMatch;
+
+  // Partial match fallback
+  return base.find(item =>
+    item.keywords.some(kw => 
+      query.includes(kw.toLowerCase()) || kw.toLowerCase().includes(query)
     )
-  )
-  
-  return partialMatches.length > 0 ? partialMatches[0] : null
+  ) || null;
 }
 
-// src/data/farmingKnowledge.js
-const fallbackResponses = [
-  "Sorry, I didn’t get that.",
-  "Can you repeat that?",
-  "Hmm, I’m not sure about that topic yet."
-];
-
-
-
-export { fallbackResponses as fallbackResponses };
+export { fallbackResponses_old as fallbackResponses };

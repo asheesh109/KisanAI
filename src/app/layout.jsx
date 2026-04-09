@@ -3,10 +3,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LanguageProvider } from "@/contexts/LanguageContext";
-import { MicrophoneProvider } from "@/contexts/MicrophoneContext";
-import { VoiceAssistantProvider } from "@/contexts/VoiceAssistantContext";
 import OfflineBanner from "@/components/OfflineBanner";
-import { VoiceAssistant } from "@/components/VoiceAssistant";
 
 export const metadata = {
   title: "KisanAI - AI-Powered Farming Assistant | किसान AI सहायक",
@@ -39,17 +36,13 @@ export default function RootLayout({ children }) {
           storageKey="kisanai-theme"
         >
           <LanguageProvider>
-            <VoiceAssistantProvider>
-              <MicrophoneProvider>
-                <OfflineBanner />
-                <VoiceAssistant position="fixed" showTranscript={true} />
-                <Header />
-                <main className="flex-1">
-                  {children}
-                </main>
-                <Footer />
-              </MicrophoneProvider>
-            </VoiceAssistantProvider>
+            <OfflineBanner />
+            
+            <Header />
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer />
           </LanguageProvider>
         </ThemeProvider>
       </body>

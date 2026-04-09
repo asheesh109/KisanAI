@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Mic, MicOff, Volume2, VolumeX, MessageCircle, Loader2, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
@@ -8,8 +8,6 @@ import { useSpeechRecognition } from '@/hooks/useSpeechRecognition'
 import { useSpeechSynthesis } from '@/hooks/useSpeechSynthesis'
 import { generateAIResponse, fallbackResponses } from '@/data/farmingKnowledge'
 import { useLanguage } from '@/contexts/LanguageContext'
-import { useMicrophone } from '@/contexts/MicrophoneContext'
-import { useVoiceAssistantContext } from '@/contexts/VoiceAssistantContext'
 
 export default function VoiceAssistant() {
   const [conversations, setConversations] = useState([])
@@ -17,21 +15,6 @@ export default function VoiceAssistant() {
   const [textInput, setTextInput] = useState('')
   const [lastQueryTime, setLastQueryTime] = useState(0)
   const { language, t } = useLanguage()
-  const { requestMic, releaseMic } = useMicrophone()
-  const { pauseBackground, resumeBackground } = useVoiceAssistantContext()
-  
-  const micRequestIdRef = useRef('voice-assistant-page-' + Math.random().toString(36).slice(2))
-
-  // Pause background voice assistant when this page loads
-  useEffect(() => {
-    console.log('[VA-PAGE] 📄 Page mounted - Pausing background voice assistant');
-    pauseBackground();
-
-    return () => {
-      console.log('[VA-PAGE] 📄 Page unmounted - Resuming background voice assistant');
-      resumeBackground();
-    };
-  }, [pauseBackground, resumeBackground]);
 
   const getTTSLang = (lang) => {
     const langMap = {
@@ -136,11 +119,8 @@ export default function VoiceAssistant() {
   const handleVoiceToggle = () => {
     if (isListening) {
       stopListening()
-      releaseMic(micRequestIdRef.current)
-      console.log('[VA-PAGE] 🎤 Mic released - stopped listening')
     } else {
       startListening()
-      console.log('[VA-PAGE] 🎤 Started listening')
     }
   }
 
@@ -148,17 +128,6 @@ export default function VoiceAssistant() {
     setConversations([])
     stopSpeaking()
   }
-
-  // Cleanup mic on unmount (backup)
-  useEffect(() => {
-    return () => {
-      if (isListening) {
-        stopListening()
-      }
-      releaseMic(micRequestIdRef.current)
-      console.log('[VA-PAGE] 🎤 Page cleanup - Mic released')
-    }
-  }, [isListening, stopListening, releaseMic])
 
   // Multilingual quick questions
   const quickQuestions = {

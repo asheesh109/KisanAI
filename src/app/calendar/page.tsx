@@ -6,22 +6,27 @@ import { useState, useEffect } from 'react';
 
 export default function CalendarPage() {
   const { language } = useLanguage();
-  const [userId, setUserId] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Get user ID from localStorage or use a default one
     const storedUserId = localStorage.getItem('kisanai_user_id');
     if (storedUserId) {
       setUserId(storedUserId);
     } else {
-      // Generate a simple user ID for demo purposes
       const generatedId = `user_${Date.now()}_${Math.random().toString(36).slice(2)}`;
       localStorage.setItem('kisanai_user_id', generatedId);
       setUserId(generatedId);
     }
     setIsLoading(false);
   }, []);
+
+  // ✅ Notification only — no fetch, no duplicate DELETE
+  const handleEventDelete = (eventId: string): void => {
+    // ProfessionalCalendar already deleted the event and called fetchEvents().
+    // Add any page-level side effects here (toast, analytics, etc.)
+    console.log('Event deleted:', eventId);
+  };
 
   if (isLoading) {
     return (
@@ -36,5 +41,14 @@ export default function CalendarPage() {
     );
   }
 
-  return <>{userId && <ProfessionalCalendar userId={userId} />}</>;
+  return (
+    <>
+      {userId && (
+        <ProfessionalCalendar
+          userId={userId}
+          onEventDelete={handleEventDelete}
+        />
+      )}
+    </>
+  );
 }

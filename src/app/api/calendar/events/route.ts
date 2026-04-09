@@ -1,15 +1,16 @@
 import mongoose from 'mongoose';
 import FarmingEvent from '@/models/FarmingEvent';
 import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = process.env.MONGODB_URI as string;
 
-async function connectDB() {
+async function connectDB(): Promise<void> {
   if (mongoose.connections[0].readyState) return;
   await mongoose.connect(MONGODB_URI);
 }
 
-export async function GET(request) {
+export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     await connectDB();
 
@@ -19,13 +20,11 @@ export async function GET(request) {
     const endDate = searchParams.get('endDate');
 
     if (!userId) {
-      return NextResponse.json(
-        { error: 'User ID is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
     }
 
-    const query = { userId };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const query: Record<string, any> = { userId };
 
     if (startDate && endDate) {
       query.date = {
@@ -35,23 +34,22 @@ export async function GET(request) {
     }
 
     const events = await FarmingEvent.find(query).sort({ date: 1 });
-
     return NextResponse.json(events, { status: 200 });
   } catch (error) {
     console.error('GET /api/calendar/events error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch events' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch events' }, { status: 500 });
   }
 }
 
-export async function POST(request) {
+export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     await connectDB();
 
     const body = await request.json();
-    const { userId, title, date, description, category, startTime, endTime, priority, notes, tags, reminder, reminderTime } = body;
+    const {
+      userId, title, date, description, category,
+      startTime, endTime, priority, notes, tags, reminder, reminderTime,
+    } = body;
 
     if (!userId || !title || !date) {
       return NextResponse.json(
@@ -61,28 +59,16 @@ export async function POST(request) {
     }
 
     const event = new FarmingEvent({
-      userId,
-      title,
+      userId, title,
       date: new Date(date),
-      description,
-      category,
-      startTime,
-      endTime,
-      priority,
-      notes,
-      tags,
-      reminder,
-      reminderTime,
+      description, category, startTime, endTime,
+      priority, notes, tags, reminder, reminderTime,
     });
 
     await event.save();
-
     return NextResponse.json(event, { status: 201 });
   } catch (error) {
     console.error('POST /api/calendar/events error:', error);
-    return NextResponse.json(
-      { error: 'Failed to create event' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to create event' }, { status: 500 });
   }
 }

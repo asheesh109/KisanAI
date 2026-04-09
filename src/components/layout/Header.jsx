@@ -10,7 +10,6 @@ import { useLanguage } from '@/contexts/LanguageContext'
 const navigation = [
   { name: 'home', href: '/' },
   { name: 'calendar', href: '/calendar' },
-  { name: 'farmingTasks', href: '/tasks' },
   { name: 'voiceAssistant', href: '/voice-assistant' },
   { name: 'cropAnalysis', href: '/crop-analysis' },
   { name: 'weather', href: '/weather' },
