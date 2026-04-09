@@ -16,7 +16,7 @@ import {
   ShieldAlert,
 } from 'lucide-react';
 import type { CalendarEvent } from './ProfessionalCalendar';
-import type { RescheduleResponse, RescheduledEvent } from '@/app/api/calendar/events/reschedule/route';
+import type { RescheduleResponse, RescheduledEvent } from '@/app/calendar/reschedule/route';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

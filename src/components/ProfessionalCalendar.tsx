@@ -27,7 +27,7 @@ import {
   getFullDayName,
 } from '@/lib/calendarUtils';
 import { SmartReschedulePanel } from './SmartReschedulePanel';
-import type { RescheduledEvent } from '@/app/api/calendar/events/reschedule/route';
+import type { RescheduledEvent } from '@/app/calendar/reschedule/route';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
