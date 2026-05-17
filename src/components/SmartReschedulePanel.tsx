@@ -16,7 +16,7 @@ import {
   ShieldAlert,
 } from 'lucide-react';
 import type { CalendarEvent } from './ProfessionalCalendar';
-import type { RescheduleResponse, RescheduledEvent } from '@/app/calendar/reschedule/route';
+import type { RescheduleResponse, RescheduledEvent } from '@/app/api/calendar/events/reschedule/route';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -280,6 +280,8 @@ export function SmartReschedulePanel({
     setMode('analyzing');
     setError(null);
     try {
+      console.log('[SmartReschedule] Sending request to /api/calendar/events/reschedule');
+
       const res = await fetch('/api/calendar/events/reschedule', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -302,24 +304,44 @@ export function SmartReschedulePanel({
         }),
       });
 
+      console.log('[SmartReschedule] Response status:', res.status);
+
       const contentType = res.headers.get('content-type') ?? '';
       if (!contentType.includes('application/json')) {
         const text = await res.text();
-        console.error('Non-JSON response from reschedule API:', text.slice(0, 200));
+        console.error('[SmartReschedule] Non-JSON response:', {
+          status: res.status,
+          contentType,
+          body: text.slice(0, 500),
+        });
+
         throw new Error(
           res.status === 404
-            ? 'Reschedule API route not found. Make sure the file is at app/api/calendar/events/reschedule/route.ts'
-            : `Server returned non-JSON response (${res.status})`
+            ? 'Reschedule API route not found. File should be at: app/api/calendar/events/reschedule/route.ts'
+            : res.status === 405
+            ? 'Method not allowed. Check that the API route exists and accepts POST requests.'
+            : res.status === 503
+            ? 'AI service not configured. Please set OPENROUTER_API_KEY in .env.local'
+            : `Server error (${res.status}): ${text.slice(0, 100)}`
         );
       }
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? 'Unknown error');
+      console.log('[SmartReschedule] Parsed response:', data);
+
+      if (!res.ok) {
+        throw new Error(
+          data.error ??
+          data.message ??
+          `API error (${res.status})`
+        );
+      }
 
       setResult(data as RescheduleResponse);
       setMode('result');
     } catch (err) {
       const msg = err instanceof Error ? err.message : t('errorMsg');
+      console.error('[SmartReschedule] Error:', msg);
       setError(msg);
       setMode('disaster');
     }
@@ -353,8 +375,7 @@ export function SmartReschedulePanel({
           className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 bg-red-500 hover:bg-red-600 active:bg-red-700 text-white rounded-xl font-semibold text-xs sm:text-sm shadow transition w-full xs:w-auto"
         >
           <AlertTriangle className="w-4 h-4 shrink-0" />
-          <span className="hidden xs:inline">{t('reportDisaster')}</span>
-          <span className="xs:hidden">{t('reportDisaster')}</span>
+          <span>{t('reportDisaster')}</span>
         </button>
         {weatherAlert && (
           <button
