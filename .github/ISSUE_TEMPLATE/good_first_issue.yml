@@ -1,0 +1,28 @@
+name: Good first issue
+about: Issues specifically for first-time contributors
+title: "[GOOD FIRST ISSUE] "
+labels: ["good first issue", "beginner friendly"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: "This template helps maintainers provide clear, approachable tasks for new contributors."
+  - type: input
+    id: summary
+    attributes:
+      label: Short summary of the task
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to complete
+      description: Include code pointers and files to edit
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+  - type: input
+    id: estimated_time
+    attributes:
+      label: Estimated time to complete
+      description: e.g., 30 minutes - 2 hours

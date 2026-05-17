@@ -1,0 +1,17 @@
+name: community-workflows
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened]
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Welcome message
+        uses: actions-ecosystem/action-add-pr-comment@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          message: |
+            Thanks for your contribution! Please read the CONTRIBUTING.md and follow the PR template.

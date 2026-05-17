@@ -1,0 +1,19 @@
+name: Question
+about: Ask a question about the project
+title: "[QUESTION] "
+labels: ["question", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: "Use this template for questions about development, setup, or contribution."
+  - type: input
+    id: question
+    attributes:
+      label: Your question
+  - type: input
+    id: context
+    attributes:
+      label: Context
+      description: Any additional details (OS, browser, steps taken)

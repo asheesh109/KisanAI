@@ -1,0 +1,90 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: production-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build project
+        run: npm run build
+        env:
+          NODE_ENV: production
+          NEXT_PUBLIC_GEMINI_API_KEY: ${{ secrets.NEXT_PUBLIC_GEMINI_API_KEY }}
+          NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      
+      - name: Run tests
+        run: npm run test:ci
+      
+      - name: Generate build info
+        run: |
+          echo "Build Date: $(date)" > .build-info
+          echo "Commit: ${{ github.sha }}" >> .build-info
+          echo "Branch: ${{ github.ref }}" >> .build-info
+      
+      - name: Deploy to Vercel
+        uses: vercel/action@master
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          production: true
+      
+      - name: Notify Slack (success)
+        if: success()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: 'KisanAI deployed successfully to production ✅'
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+          fields: repo,message,commit,author
+      
+      - name: Notify Slack (failure)
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: 'KisanAI deployment failed ❌'
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+          fields: repo,message,commit,author
+
+  smoke-tests:
+    needs: deploy
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run smoke tests
+        run: |
+          echo "Running smoke tests..."
+          # Add your smoke tests here
+          curl -f ${{ secrets.NEXT_PUBLIC_APP_URL }} || exit 1
+      
+      - name: Check API endpoints
+        run: |
+          echo "Checking API health..."
+          curl -f ${{ secrets.NEXT_PUBLIC_APP_URL }}/api/health || exit 1

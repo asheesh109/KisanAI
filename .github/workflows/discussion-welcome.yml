@@ -1,0 +1,18 @@
+name: 'Welcome to Discussions'
+
+on:
+  discussion:
+    types: [created]
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post welcome comment
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const discussion = context.payload.discussion;
+            const body = `Thanks @${discussion.author.login} for starting this discussion — the maintainers will follow up soon. For contribution-related questions, see CONTRIBUTING.md. — _Ashish Parab_`;
+            github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number: discussion.number, body });

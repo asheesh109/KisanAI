@@ -1,0 +1,78 @@
+name: Labels
+labels:
+  - name: bug
+    color: ff0000
+    description: Something isn't working
+  - name: enhancement
+    color: a2eeef
+    description: New feature or request
+  - name: good first issue
+    color: 0e8a16
+    description: Good for newcomers
+  - name: documentation
+    color: 0075ca
+    description: Documentation changes
+  - name: question
+    color: d876e3
+    description: Further information is requested
+  - name: help wanted
+    color: 008672
+    description: Extra attention is needed
+  - name: discussion
+    color: 5319e7
+    description: Discussion-worthy issues
+  - name: wontfix
+    color: 444444
+    description: Issue will not be worked on
+labels:
+  - name: good first issue
+    color: 0e8a16
+    description: "Good for newcomers. Small, well-scoped tasks."
+  - name: beginner friendly
+    color: 1d76db
+    description: "Beginner friendly tasks with guidance."
+  - name: frontend
+    color: f29513
+    description: "Frontend related issues and tasks."
+  - name: backend
+    color: eb6420
+    description: "Backend, API and server issues."
+  - name: ai/ml
+    color: 5319e7
+    description: "AI/ML related tasks."
+  - name: documentation
+    color: 0075ca
+    description: "Documentation improvements."
+  - name: enhancement
+    color: a2eeef
+    description: "Feature enhancements."
+  - name: bug
+    color: d73a4a
+    description: "Something isn't working."
+  - name: help wanted
+    color: 008672
+    description: "Extra attention requested."
+  - name: security
+    color: b60205
+    description: "Security vulnerability or concern."
+  - name: accessibility
+    color: 0e8a16
+    description: "Accessibility improvements."
+  - name: performance
+    color: fef2c0
+    description: "Performance related tasks."
+  - name: testing
+    color: c2e0c6
+    description: "Add or improve tests."
+  - name: refactor
+    color: 7057ff
+    description: "Code refactoring without feature changes."
+  - name: high priority
+    color: b60205
+    description: "High priority issue."
+  - name: medium priority
+    color: fbca04
+    description: "Medium priority issue."
+  - name: low priority
+    color: 0e8a16
+    description: "Low priority issue."

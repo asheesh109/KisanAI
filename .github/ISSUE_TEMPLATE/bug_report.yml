@@ -1,0 +1,50 @@
+name: Bug report
+about: Create a report to help us improve KisanAI
+title: "[BUG] "
+labels: ["bug", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: "Describe the bug and steps to reproduce. Attach screenshots and logs where possible."
+  - type: input
+    id: os
+    attributes:
+      label: OS / Environment
+      description: e.g., Windows 11, Chrome 120
+      placeholder: "Windows 11"
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Be specific and list exact steps
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error messages / logs
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Critical
+        - High
+        - Medium
+        - Low
+  - type: checkbox
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched for existing issues
+        - label: I can reproduce this issue
+        - label: I included logs and steps

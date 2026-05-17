@@ -1,0 +1,14 @@
+# Labeler config for actions/labeler
+docs:
+  - 'docs/**'
+  - '*.md'
+frontend:
+  - 'src/app/**'
+  - 'src/components/**'
+backend:
+  - 'src/api/**'
+tests:
+  - 'src/__tests__/**'
+ci:
+  - '.github/**'
+  - 'package.json'
