@@ -1,11 +1,11 @@
 # KisanAI
 
-KisanAI — an open-source, farmer-facing Next.js app providing curated government schemes, market prices, voice assistant, and tools to help farmers make informed decisions.
+KisanAI  an open source, farmer facing Next.js app providing curated government schemes, market prices, voice assistant, and tools to help farmers make informed decisions.
 
-Badges: [build] [license] [contributors] [GSSoC-ready]
+Badges: [build] [license] [contributors]
 
 Overview
-- Purpose: central portal for Indian farmers with translations, AI-assisted insights, and offline-friendly features.
+- Purpose: central portal for Indian farmers with translations, AI assisted insights, and offline friendly features.
 - Tech: Next.js (App Router), React, TypeScript, Tailwind CSS, Jest
 
 Quick links
@@ -28,14 +28,8 @@ Maintainers
 - See CODEOWNERS and repository maintainers in the docs.
 # KisanAI
 
-![KisanAI Logo](public/logo.png)
 
-![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
-![Build](https://github.com/your-org/KisanAI/actions/workflows/ci.yml/badge.svg)](.github/workflows/ci.yml)
-![GSSoC Ready](https://img.shields.io/badge/GSSoC-Ready-blue)](#)
-![Hacktoberfest](https://img.shields.io/badge/Hacktoberfest-friendly-orange)](#)
-
-KisanAI — AI-powered assistant for farmers to access crop insights, schemes, market data, and voice tools.
+KisanAI  AI powered assistant for farmers to access crop insights, schemes, market data, and voice tools.
 
 ## Table of Contents
 - About
@@ -45,7 +39,7 @@ KisanAI — AI-powered assistant for farmers to access crop insights, schemes, m
 - Folder Structure
 - Quick Start
 - Local Development
-Badges: [build] [license] [contributors] [GSSoC-ready] ![Hacktoberfest](https://img.shields.io/badge/Hacktoberfest-friendly-orange)](#)
+Badges: [build] [license] [contributors] [GSSoC]
 - Tech Stack
 - Contributing
 - Open Source Programs
@@ -65,9 +59,9 @@ KisanAI is a progressive web app built with Next.js + TypeScript that provides f
 - Government scheme tracking
 - Responsive, accessible UI
 
-## Screenshots & Demo
 
-Demo GIF: `public/demo.gif` (placeholder)
+
+
 - Maintainer: Ashish Parab ([asheesh109](https://github.com/asheesh109)) — ashishparab03@gmail.com
 ## Architecture Overview
 
@@ -93,7 +87,7 @@ Key folders:
 1. Clone
 
 ```bash
-git clone https://github.com/your-org/KisanAI.git
+git clone https://github.com/asheesh109/KisanAI.git
 cd KisanAI
 npm install
 ```
@@ -186,7 +180,7 @@ MIT — see `LICENSE`
 
 ## 📱 About KisanAI
 
-KisanAI is a **cutting-edge AI-powered farmer assistant platform** designed specifically for Indian farmers. Built with modern web technologies and powered by advanced AI models, KisanAI provides intelligent, actionable insights to help farmers make better decisions.
+KisanAI is a **cutting edge AI powered farmer assistant platform** designed specifically for Indian farmers. Built with modern web technologies and powered by advanced AI models, KisanAI provides intelligent, actionable insights to help farmers make better decisions.
 
 Whether it's crop disease analysis, weather forecasting, market prices, or government scheme navigation, KisanAI delivers comprehensive assistance through an intuitive, voice-enabled interface in Hindi and English.
 
@@ -274,15 +268,15 @@ A future where every farmer has access to real-time insights, AI-powered decisio
 
 ## 🚀 Live Demo
 
-**Live URL**: [kisanai.example.com](https://kisanai.example.com)
+**Live URL**: [kisanai]([https://kisanai.example.com](https://kisan-ai-m12i.vercel.app/))
 *(Demo environment - May contain sample data)*
 
 Try features:
-- 🎤 [Voice Assistant Demo](https://kisanai.example.com/voice-assistant)
-- 📸 [Crop Analysis Demo](https://kisanai.example.com/crop-analysis)
-- 🌦️ [Weather Demo](https://kisanai.example.com/weather)
-- 📈 [Market Prices Demo](https://kisanai.example.com/market-prices)
-- 📋 [Schemes Portal Demo](https://kisanai.example.com/schemes)
+- 🎤 [Voice Assistant Demo](https://kisan-ai-m12i.vercel.app/voice-assistant)
+- 📸 [Crop Analysis Demo](https://kisan-ai-m12i.vercel.app/crop-analysis)
+- 🌦️ [Weather Demo](https://kisan-ai-m12i.vercel.app/weather)
+- 📈 [Market Prices Demo](https://kisan-ai-m12i.vercel.app/market-prices)
+- 📋 [Schemes Portal Demo](https://kisan-ai-m12i.vercel.app/schemes)
 
 ---
 
@@ -538,19 +532,19 @@ Complete documentation is available in the [`docs/`](./docs) directory:
 
 ### For Beginners
 1. **[Read CONTRIBUTING.md](./CONTRIBUTING.md)** - Understand our process
-2. **[Check Good First Issues](https://github.com/yourusername/KisanAI/labels/good%20first%20issue)** - Find starter tasks
+2. **[Check Good First Issues](https://github.com/asheesh109/KisanAI/labels/good%20first%20issue)** - Find starter tasks
 3. **[Follow Setup Guide](./docs/SETUP.md)** - Get development environment running
 4. **[Read CODING_STANDARDS.md](./docs/CODING_STANDARDS.md)** - Learn code style
 5. **[Create your PR!](./CONTRIBUTING.md#pull-request-process)** - Submit changes
 
 ### For Intermediate Developers
-- Check **[Intermediate Issues](https://github.com/yourusername/KisanAI/labels/intermediate)**
+- Check **[Intermediate Issues](https://github.com/asheesh109/KisanAI/labels/intermediate)**
 - Review **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)** for system design
 - Explore feature implementation patterns
 - Help code review pull requests
 
 ### For Advanced Contributors
-- Check **[Advanced Issues](https://github.com/yourusername/KisanAI/labels/advanced)**
+- Check **[Advanced Issues](https://github.com/asheesh109/KisanAI/labels/advanced)**
 - Lead feature implementation
 - Review and mentor other contributors
 - Help maintain architecture quality
@@ -577,7 +571,7 @@ Perfect for Hacktoberfest participation:
 - ✅ Quick-win tasks perfect for month-long challenge
 - ✅ Supportive community for first-time contributors
 
-**[Find Hacktoberfest Issues](https://github.com/yourusername/KisanAI/labels/hacktoberfest)**
+**[Find Hacktoberfest Issues](https://github.com/asheesh109/KisanAI/labels/hacktoberfest)**
 
 ---
 
@@ -613,8 +607,8 @@ Perfect for Hacktoberfest participation:
 
 We ❤️ our contributors! 
 
-<a href="https://github.com/yourusername/KisanAI/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=yourusername/KisanAI" />
+<a href="https://github.com/asheesh109/KisanAI/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=asheesh109/KisanAI" />
 </a>
 
 **Want to join?** [Start here!](./CONTRIBUTING.md)
@@ -625,15 +619,15 @@ We ❤️ our contributors!
 
 ### Get Help
 - 📖 [Documentation](./docs)
-- 💬 [GitHub Discussions](https://github.com/yourusername/KisanAI/discussions)
-- 🐛 [Report Issues](https://github.com/yourusername/KisanAI/issues)
-- 💌 [Email Support](mailto:support@kisanai.example.com)
+- 💬 [GitHub Discussions](https://github.com/asheesh109/KisanAI/discussions)
+- 🐛 [Report Issues](https://github.com/asheesh109/KisanAI/issues)
+- 💌 [Email Support](mailto:ashishparab03@gmail.com)
 
 ### Connect With Us
-- 🐙 [GitHub](https://github.com/yourusername/KisanAI)
-- 🐦 [Twitter/X](https://twitter.com/kisanai)
-- 💼 [LinkedIn](https://linkedin.com/company/kisanai)
-- 📧 [Newsletter](https://kisanai.example.com/newsletter)
+- 🐙 [GitHub](https://github.com/asheesh109/KisanAI)
+- 🐦 [Twitter/X](https://x.com/ParabAshis49319)
+- 💼 [LinkedIn](https://www.linkedin.com/in/ashish-parab-dev/)
+
 
 ### Code of Conduct
 Please read our **[CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)** - we are committed to providing a welcoming and inclusive environment.
@@ -679,9 +673,9 @@ By contributing, you agree that your contributions will be licensed under its MI
 
 ### Made with ❤️ for Indian Farmers
 
-**[⭐ Star us on GitHub](https://github.com/yourusername/KisanAI)** if you find this project helpful!
+**[⭐ Star us on GitHub](https://github.com/asheesh109/KisanAI)** if you find this project helpful!
 
-[Contribute](./CONTRIBUTING.md) • [Discuss](https://github.com/yourusername/KisanAI/discussions) • [Report Bug](https://github.com/yourusername/KisanAI/issues) • [Request Feature](https://github.com/yourusername/KisanAI/issues)
+[Contribute](./CONTRIBUTING.md) • [Discuss](https://github.com/asheesh109/KisanAI/discussions) • [Report Bug](https://github.com/asheesh109/KisanAI/issues) • [Request Feature](https://github.com/asheesh109/KisanAI/issues)
 
 ```
 🌾 KisanAI - Empowering Farmers with AI 🚀
