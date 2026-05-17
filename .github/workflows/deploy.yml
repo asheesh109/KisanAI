@@ -45,13 +45,28 @@ jobs:
           echo "Commit: ${{ github.sha }}" >> .build-info
           echo "Branch: ${{ github.ref }}" >> .build-info
       
-      - name: Deploy to Vercel
-        uses: vercel/action@master
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          production: true
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Vercel: Pull, Build, Deploy (CLI)
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
+        run: |
+          set -e
+          echo "Checking Vercel CLI version"
+          vercel --version
+
+          echo "Pulling Vercel project configuration (production)"
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+          echo "Running Vercel build"
+          vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+          echo "Deploying prebuilt output to Vercel (production)"
+          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
       
       - name: Notify Slack (success)
         if: success()
