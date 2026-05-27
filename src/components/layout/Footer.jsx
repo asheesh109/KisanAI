@@ -225,7 +225,7 @@ export default function Footer() {
         {/* Bottom note */}
         <div className="mt-8 pt-6 border-t border-border text-center">
           <p className="text-xs text-muted-foreground break-words">
-            {t('governmentInitiativeNote') || 'An initiative to support farmers with modern technology.'}
+            {t('governmentInitiativeNote') || 'An initiative to support farmers with modern technology.'} | 2026
           </p>
         </div>
       </div>
