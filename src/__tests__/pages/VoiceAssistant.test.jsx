@@ -27,33 +27,33 @@ describe('Voice Assistant Page', () => {
   it('renders voice assistant interface', () => {
     render(<VoiceAssistant />)
     
-    expect(screen.getByText('आवाज सहायक')).toBeInTheDocument()
+    expect(screen.getByText(/आवाज सहायक/)).toBeInTheDocument()
     expect(screen.getByText(/हिंदी में अपने खेती संबंधी सवाल पूछें/)).toBeInTheDocument()
   })
 
   it('displays microphone button', () => {
     render(<VoiceAssistant />)
     
-    const micButton = screen.getByRole('button', { name: /बोलना शुरू करें/i })
+    const micButton = screen.getByRole('button', { name: /अभी बोलें/i })
     expect(micButton).toBeInTheDocument()
   })
 
   it('shows text input area', () => {
     render(<VoiceAssistant />)
     
-    expect(screen.getByPlaceholderText(/टाइप करें/)).toBeInTheDocument()
+    expect(screen.getByPlaceholderText(/अपना प्रश्न यहाँ लिखें/)).toBeInTheDocument()
   })
 
   it('displays common questions section', () => {
     render(<VoiceAssistant />)
     
-    expect(screen.getByText(/आम सवाल/)).toBeInTheDocument()
+    expect(screen.getByText(/अक्सर पूछे जाने वाले प्रश्न/)).toBeInTheDocument()
   })
 
   it('handles mic button click', async () => {
     render(<VoiceAssistant />)
     
-    const micButton = screen.getByRole('button', { name: /बोलना शुरू करें/i })
+    const micButton = screen.getByRole('button', { name: /अभी बोलें/i })
     fireEvent.click(micButton)
     
     // Should handle the click without errors
@@ -65,8 +65,8 @@ describe('Voice Assistant Page', () => {
   it('displays quick question examples', () => {
     render(<VoiceAssistant />)
     
-    expect(screen.getByText(/गेहूं की फसल में पीले पत्ते/)).toBeInTheDocument()
-    expect(screen.getByText(/कौन सी फसल बोनी चाहिए/)).toBeInTheDocument()
-    expect(screen.getByText(/जैविक खेती कैसे करें/)).toBeInTheDocument()
+    expect(screen.getAllByText(/गेहूं की फसल में पीले पत्ते/)[0]).toBeInTheDocument()
+    expect(screen.getAllByText(/कौन सी फसल बोनी चाहिए/)[0]).toBeInTheDocument()
+    expect(screen.getAllByText(/जैविक खेती कैसे करें/)[0]).toBeInTheDocument()
   })
 })

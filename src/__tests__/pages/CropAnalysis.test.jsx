@@ -21,7 +21,7 @@ describe('Crop Analysis Page', () => {
     render(<CropAnalysis />)
     
     expect(screen.getByText('फसल विश्लेषण')).toBeInTheDocument()
-    expect(screen.getByText(/अपनी फसल की फोटो अपलोड करें/)).toBeInTheDocument()
+    expect(screen.getByText(/फसल स्वास्थ्य विश्लेषण करें/)).toBeInTheDocument()
   })
 
   it('displays file upload area', () => {

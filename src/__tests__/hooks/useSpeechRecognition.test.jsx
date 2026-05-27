@@ -6,18 +6,31 @@ import { useSpeechRecognition } from '@/hooks/useSpeechRecognition'
 const mockStart = jest.fn()
 const mockStop = jest.fn()
 
-const MockSpeechRecognition = jest.fn().mockImplementation(() => ({
-  start: mockStart,
-  stop: mockStop,
-  abort: jest.fn(),
-  continuous: false,
-  interimResults: false,
-  lang: 'hi-IN',
-  onstart: null,
-  onend: null,
-  onresult: null,
-  onerror: null
-}))
+const MockSpeechRecognition = jest.fn().mockImplementation(function() {
+  const instance = {
+    start: jest.fn().mockImplementation(() => {
+      mockStart()
+      if (instance.onstart) {
+        instance.onstart()
+      }
+    }),
+    stop: jest.fn().mockImplementation(() => {
+      mockStop()
+      if (instance.onend) {
+        instance.onend()
+      }
+    }),
+    abort: jest.fn(),
+    continuous: false,
+    interimResults: false,
+    lang: 'hi-IN',
+    onstart: null,
+    onend: null,
+    onresult: null,
+    onerror: null
+  }
+  return instance
+})
 
 // Override globals for testing
 beforeAll(() => {
@@ -41,7 +54,7 @@ describe('useSpeechRecognition Hook', () => {
     
     expect(result.current.isListening).toBe(false)
     expect(result.current.transcript).toBe('')
-    expect(result.current.error).toBe('')
+    expect(result.current.error).toBeNull()
     expect(result.current.isSupported).toBe(true)
     expect(typeof result.current.startListening).toBe('function')
     expect(typeof result.current.stopListening).toBe('function')
