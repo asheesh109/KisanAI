@@ -4,6 +4,7 @@ import Footer from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import OfflineBanner from "@/components/OfflineBanner";
+import ScrollToTop from "@/components/layout/ScrollToTop";
 
 export const metadata = {
   title: "KisanAI - AI-Powered Farming Assistant | किसान AI सहायक",
@@ -43,6 +44,7 @@ export default function RootLayout({ children }) {
               {children}
             </main>
             <Footer />
+            <ScrollToTop />
           </LanguageProvider>
         </ThemeProvider>
       </body>

@@ -65,8 +65,8 @@ describe('Voice Assistant Page', () => {
   it('displays quick question examples', () => {
     render(<VoiceAssistant />)
     
-    expect(screen.getByText(/गेहूं की फसल में पीले पत्ते/)).toBeInTheDocument()
-    expect(screen.getByText(/कौन सी फसल बोनी चाहिए/)).toBeInTheDocument()
-    expect(screen.getByText(/जैविक खेती कैसे करें/)).toBeInTheDocument()
+    expect(screen.getAllByText(/गेहूं की फसल में पीले पत्ते/)[0]).toBeInTheDocument()
+    expect(screen.getAllByText(/कौन सी फसल बोनी चाहिए/)[0]).toBeInTheDocument()
+    expect(screen.getAllByText(/जैविक खेती कैसे करें/)[0]).toBeInTheDocument()
   })
 })

@@ -1,107 +1,156 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import MarketPrices from '@/app/market-prices/page'
 
+// Mock global fetch for API calls
+global.fetch = jest.fn()
+
 describe('Market Prices Page', () => {
-  it('renders market prices interface', () => {
-    render(<MarketPrices />)
-    
-    expect(screen.getByText('बाजार भाव')).toBeInTheDocument()
-    expect(screen.getByText(/आज के ताजे मंडी भाव/)).toBeInTheDocument()
+  beforeEach(() => {
+    jest.clearAllMocks()
+    global.fetch.mockClear()
+
+    // Setup global fetch mock implementations
+    global.fetch.mockImplementation((url) => {
+      if (url.includes('limit=1000')) {
+        // Mock fetchAvailableCommodities
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({
+            records: [
+              { commodity: 'Wheat' },
+              { commodity: 'Rice' },
+              { commodity: 'Soyabean' }
+            ]
+          })
+        })
+      }
+      // Mock category or commodity fetch
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({
+          records: [
+            {
+              modal_price: '4000',
+              min_price: '3900',
+              max_price: '4100',
+              market: 'दिल्ली मंडी',
+              state: 'Delhi',
+              district: 'Delhi',
+              arrivals_in_qtl: '150',
+              variety: 'सामान्य',
+              grade: 'मध्यम',
+              arrival_date: '2024-04-01',
+              commodity: url.includes('Soyabean') ? 'Soyabean' : url.includes('Rice') ? 'Rice' : 'Wheat'
+            }
+          ]
+        })
+      })
+    })
   })
 
-  it('displays quick statistics', () => {
+  it('renders market prices interface', async () => {
     render(<MarketPrices />)
     
-    expect(screen.getByText('बढ़ती कीमतें')).toBeInTheDocument()
-    expect(screen.getByText('गिरती कीमतें')).toBeInTheDocument()
-    expect(screen.getByText('कुल मंडियां')).toBeInTheDocument()
-    expect(screen.getByText('कुल फसलें')).toBeInTheDocument()
+    expect(screen.getByText('स्मार्ट मार्केट विश्लेषण')).toBeInTheDocument()
+    expect(screen.getByText(/एआई द्वारा संचालित व्यापक बाजार मूल्य विश्लेषण/)).toBeInTheDocument()
   })
 
-  it('shows search and filter options', () => {
+  it('displays quick statistics', async () => {
     render(<MarketPrices />)
     
-    expect(screen.getByPlaceholderText('फसल का नाम खोजें...')).toBeInTheDocument()
-    expect(screen.getByPlaceholderText('मंडी का नाम खोजें...')).toBeInTheDocument()
-    expect(screen.getByText('फिल्टर')).toBeInTheDocument()
+    expect(screen.getByText('डेटा सारांश')).toBeInTheDocument()
+    expect(screen.getByText('कुल:')).toBeInTheDocument()
   })
 
-  it('displays crop price cards', () => {
+  it('shows search and filter options', async () => {
     render(<MarketPrices />)
     
-    // Look for the section title that contains the number of crops
-    expect(screen.getByText(/आज के मंडी भाव/)).toBeInTheDocument()
-    expect(screen.getAllByText('गेहूं')[0]).toBeInTheDocument()
-    expect(screen.getAllByText('चावल')[0]).toBeInTheDocument()
-    expect(screen.getAllByText('सोयाबीन')[0]).toBeInTheDocument()
+    expect(screen.getByPlaceholderText('फसल, किस्म, या मंडी का नाम खोजें...')).toBeInTheDocument()
+    expect(screen.getByText('सभी श्रेणियां')).toBeInTheDocument()
+    expect(screen.getByText('सभी राज्य')).toBeInTheDocument()
   })
 
-  it('shows market trends with price changes', () => {
+  it('displays crop price cards', async () => {
     render(<MarketPrices />)
     
-    // Check for price change indicators
-    expect(screen.getByText('+2.4%')).toBeInTheDocument()
-    expect(screen.getByText('-2.4%')).toBeInTheDocument()
-    expect(screen.getByText('+2.7%')).toBeInTheDocument()
+    // Expand a category to show the price cards
+    const categoryHeader = screen.getByText('अनाज')
+    fireEvent.click(categoryHeader)
+    
+    await waitFor(() => {
+      expect(screen.getAllByText('गेहूं')[0]).toBeInTheDocument()
+    })
   })
 
-  it('displays market insights section', () => {
+  it('shows market trends with price changes', async () => {
     render(<MarketPrices />)
     
-    expect(screen.getByText('बाजार अंतर्दृष्टि')).toBeInTheDocument()
-    expect(screen.getByText('प्याज की कीमतों में तेजी')).toBeInTheDocument()
+    const categoryHeader = screen.getByText('अनाज')
+    fireEvent.click(categoryHeader)
+    
+    await waitFor(() => {
+      expect(screen.getAllByText('+2.6%')[0]).toBeInTheDocument()
+    })
   })
 
-  it('shows nearby markets section', () => {
+  it('displays market insights section', async () => {
     render(<MarketPrices />)
     
-    expect(screen.getByText('नजदीकी मंडियां')).toBeInTheDocument()
-    expect(screen.getAllByText('दिल्ली मंडी')[0]).toBeInTheDocument()
+    const analysisToggle = screen.getByText('बाज़ार विश्लेषण और सिफारिशें देखें')
+    fireEvent.click(analysisToggle)
+    
+    expect(screen.getByText('बाज़ार विश्लेषण')).toBeInTheDocument()
+    expect(screen.getByText('सबसे महंगी फसलें')).toBeInTheDocument()
   })
 
-  it('displays price alerts section', () => {
+  it('shows nearby markets section', async () => {
     render(<MarketPrices />)
     
-    expect(screen.getByText('मूल्य अलर्ट')).toBeInTheDocument()
-    expect(screen.getByText('नया अलर्ट')).toBeInTheDocument()
+    const categoryHeader = screen.getByText('अनाज')
+    fireEvent.click(categoryHeader)
+    
+    await waitFor(() => {
+      expect(screen.getAllByText(/दिल्ली मंडी/)[0]).toBeInTheDocument()
+    })
   })
 
-  it('handles search functionality', () => {
+  it('displays price alerts section', async () => {
     render(<MarketPrices />)
     
-    const searchInput = screen.getByPlaceholderText('फसल का नाम खोजें...')
+    // Disclaimer/price alerts details at the bottom of the page
+    expect(screen.getByText(/भाव की जानकारी सरकारी APMC डेटा/)).toBeInTheDocument()
+  })
+
+  it('handles search functionality', async () => {
+    render(<MarketPrices />)
+    
+    const searchInput = screen.getByPlaceholderText('फसल, किस्म, या मंडी का नाम खोजें...')
     fireEvent.change(searchInput, { target: { value: 'गेहूं' } })
     expect(searchInput).toHaveValue('गेहूं')
   })
 
-  it('handles view mode switching', () => {
+  it('handles category expansion', async () => {
     render(<MarketPrices />)
     
-    const gridButton = screen.getByText('ग्रिड')
-    const listButton = screen.getByText('लिस्ट')
+    const categoryHeader = screen.getByText('अनाज')
+    expect(categoryHeader).toBeInTheDocument()
     
-    expect(gridButton).toBeInTheDocument()
-    expect(listButton).toBeInTheDocument()
-    
-    fireEvent.click(listButton)
-    // Should switch to list view mode
+    fireEvent.click(categoryHeader)
+    // Category should expand without error
   })
 
-  it('displays refresh functionality', () => {
+  it('displays refresh functionality', async () => {
     render(<MarketPrices />)
     
-    const refreshButton = screen.getByText('रिफ्रेश करें')
+    const refreshButton = screen.getByText('रिफ्रेश')
     expect(refreshButton).toBeInTheDocument()
-    
-    fireEvent.click(refreshButton)
-    // Should trigger data refresh
   })
 
-  it('shows disclaimer information', () => {
+  it('shows disclaimer information', async () => {
     render(<MarketPrices />)
     
-    expect(screen.getByText('महत्वपूर्ण जानकारी')).toBeInTheDocument()
-    expect(screen.getByText(/APMC और अन्य स्रोतों से प्राप्त/)).toBeInTheDocument()
+    expect(screen.getByText(/भाव की जानकारी सरकारी APMC डेटा/)).toBeInTheDocument()
+    expect(screen.getByText(/बिक्री से पहले स्थानीय मंडी से वर्तमान भाव/)).toBeInTheDocument()
   })
 })

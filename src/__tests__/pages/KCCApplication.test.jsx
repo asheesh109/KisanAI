@@ -6,8 +6,8 @@ describe('KCC Application Page', () => {
   it('renders KCC application interface', () => {
     render(<KCCApplication />)
     
-    expect(screen.getByText('किसान क्रेडिट कार्ड आवेदन')).toBeInTheDocument()
-    expect(screen.getByText(/आसान तरीके से KCC के लिए ऑनलाइन आवेदन करें/)).toBeInTheDocument()
+    expect(screen.getByText('किसान क्रेडिट कार्ड')).toBeInTheDocument()
+    expect(screen.getByText(/समय पर ऋण, समृद्ध किसान/)).toBeInTheDocument()
   })
 
   it('displays application steps', () => {
@@ -21,6 +21,10 @@ describe('KCC Application Page', () => {
 
   it('shows loan benefits', () => {
     render(<KCCApplication />)
+    
+    // Switch to Information tab
+    const infoTab = screen.getByText('जानकारी')
+    fireEvent.click(infoTab)
     
     expect(screen.getByText(/कम ब्याज दर/)).toBeInTheDocument()
     expect(screen.getByText(/2% ब्याज सब्सिडी उपलब्ध/)).toBeInTheDocument()
@@ -40,7 +44,7 @@ describe('KCC Application Page', () => {
   it('shows eligibility criteria', () => {
     render(<KCCApplication />)
     
-    expect(screen.getByText('पात्रता मापदंड')).toBeInTheDocument()
+    expect(screen.getByText('पात्रता मानदंड')).toBeInTheDocument()
     expect(screen.getByText(/भारतीय नागरिक होना आवश्यक/)).toBeInTheDocument()
     expect(screen.getByText(/कृषि भूमि का मालिक/)).toBeInTheDocument()
   })
@@ -48,21 +52,21 @@ describe('KCC Application Page', () => {
   it('displays application status section', () => {
     render(<KCCApplication />)
     
-    expect(screen.getByText('आवेदन की स्थिति जांचें')).toBeInTheDocument()
+    expect(screen.getByText('आवेदन स्थिति जांचें')).toBeInTheDocument()
     expect(screen.getByPlaceholderText(/आवेदन संख्या दर्ज करें/)).toBeInTheDocument()
   })
 
   it('handles application start button click', async () => {
     render(<KCCApplication />)
     
-    const startButton = screen.getByRole('button', { name: /आवेदन शुरू करें/i })
-    expect(startButton).toBeInTheDocument()
+    const startLink = screen.getByRole('link', { name: /आवेदन शुरू करें/i })
+    expect(startLink).toBeInTheDocument()
     
-    fireEvent.click(startButton)
+    fireEvent.click(startLink)
     
     // Should handle the click without errors
     await waitFor(() => {
-      expect(startButton).toBeInTheDocument()
+      expect(startLink).toBeInTheDocument()
     })
   })
 })
