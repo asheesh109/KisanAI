@@ -166,7 +166,8 @@ MIT — see `LICENSE`
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1-06B6D4?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com/)
 
-[![GSSoC-2025](https://img.shields.io/badge/GSSoC-2025-FF6B6B?style=for-the-badge)](https://www.girlscript.tech/home/gssoc)
+<!-- Fix: Updated GSSoC badge year from 2025 to 2026 -->
+[![GSSoC-2026](https://img.shields.io/badge/GSSoC-2026-FF6B6B?style=for-the-badge)](https://www.girlscript.tech/home/gssoc)
 [![Hacktoberfest](https://img.shields.io/badge/Hacktoberfest-2025-FF5733?style=for-the-badge)](https://hacktoberfest.com/)
 [![Open Source](https://img.shields.io/badge/Open%20Source-MIT-green?style=for-the-badge)](https://opensource.org/)
 
@@ -551,10 +552,10 @@ Complete documentation is available in the [`docs/`](./docs) directory:
 
 ---
 
-## 🔗 GSSoC 2025 & Hacktoberfest
+## 🔗 GSSoC 2026 & Hacktoberfest
 
-### GSSoC 2025 Support ✨
-KisanAI is an official GSSoC 2025 project! 
+### GSSoC 2026 Support ✨
+KisanAI is an official GSSoC 2026 project! 
 
 - 📝 **110+ Issues** specifically curated for different skill levels
 - 🏆 **Regular Milestones** with achievable goals
