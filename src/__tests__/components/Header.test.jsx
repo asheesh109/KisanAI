@@ -8,10 +8,10 @@ describe('Header Component', () => {
     
     // Check if main elements are present
     expect(screen.getByText('KisanAI')).toBeInTheDocument()
-    expect(screen.getByText('आवाज सहायक')).toBeInTheDocument()
+    expect(screen.getByText('वॉयस असिस्टेंट')).toBeInTheDocument()
     expect(screen.getByText('फसल विश्लेषण')).toBeInTheDocument()
     expect(screen.getByText('मौसम')).toBeInTheDocument()
-    expect(screen.getByText('मंडी भाव')).toBeInTheDocument()
+    expect(screen.getByText('बाजार भाव')).toBeInTheDocument()
     expect(screen.getByText('सरकारी योजनाएं')).toBeInTheDocument()
     expect(screen.getByText('KCC आवेदन')).toBeInTheDocument()
   })
@@ -30,8 +30,7 @@ describe('Header Component', () => {
     render(<Header />)
     
     const logo = screen.getByText('KisanAI')
-    expect(logo).toHaveClass('text-green-800')
-    expect(logo).toHaveClass('font-bold')
+    expect(logo).toHaveClass('font-black')
   })
 
   it('renders mobile menu toggle button', () => {

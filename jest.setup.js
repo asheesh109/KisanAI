@@ -1,5 +1,15 @@
 import '@testing-library/jest-dom'
 
+// Mock fetch globally
+global.fetch = jest.fn().mockImplementation(() =>
+  Promise.resolve({
+    json: () => Promise.resolve({}),
+    ok: true,
+    status: 200,
+  })
+)
+window.fetch = global.fetch
+
 // Mock Web APIs that are not available in jsdom
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -25,6 +35,7 @@ const mockGeolocation = {
 Object.defineProperty(global.navigator, 'geolocation', {
   value: mockGeolocation,
   writable: true,
+  configurable: true,
 })
 
 // Mock Speech Recognition
@@ -48,6 +59,18 @@ global.speechSynthesis = {
   removeEventListener: jest.fn(),
 }
 
+global.SpeechSynthesisUtterance = class SpeechSynthesisUtterance {
+  constructor(text) {
+    this.text = text || ''
+    this.lang = ''
+    this.rate = 1
+    this.pitch = 1
+    this.volume = 1
+    this.onend = null
+    this.onerror = null
+  }
+}
+
 // Mock FileReader
 global.FileReader = class {
   readAsDataURL = jest.fn()
@@ -65,7 +88,8 @@ jest.mock('@/contexts/LanguageContext', () => {
   const mockTranslations = {
     ...getTranslations('hi'),
     'search.placeholder': 'योजना खोजें...',
-    'card.started': 'शुरुआत वर्ष'
+    'card.started': 'शुरुआत वर्ष',
+    'filters.reset': 'फ़िल्टर रीसेट करें'
   };
   
   const mockT = (key, params = {}) => {

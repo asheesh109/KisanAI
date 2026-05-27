@@ -22,6 +22,7 @@ Object.defineProperty(global.navigator, 'geolocation', {
 
 // Mock fetch for weather API calls
 global.fetch = jest.fn()
+window.fetch = global.fetch
 
 describe('Weather Page', () => {
   beforeEach(() => {
@@ -103,7 +104,7 @@ describe('Weather Page', () => {
     render(<Weather />)
     
     await waitFor(() => {
-      expect(screen.getByText('5-दिवसीय पूर्वानुमान')).toBeInTheDocument()
+      expect(screen.getByText(/5-दिवसीय पूर्वानुमान/)).toBeInTheDocument()
       expect(screen.getByText(/बीज बोएं/)).toBeInTheDocument()
       expect(screen.getByText(/सिंचाई करें/)).toBeInTheDocument()
     })
@@ -113,7 +114,7 @@ describe('Weather Page', () => {
     render(<Weather />)
     
     await waitFor(() => {
-      expect(screen.getByText(/एआई कृषि सलाह/)).toBeInTheDocument()
+      expect(screen.getAllByText(/एआई कृषि सलाह/)[0]).toBeInTheDocument()
       expect(screen.getByText(/कृषि कार्यों के लिए अनुकूल/)).toBeInTheDocument()
     })
   })

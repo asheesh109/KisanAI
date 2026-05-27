@@ -29,6 +29,8 @@ export const useSpeechSynthesis = (options = {}) => {
 
   const speak = useCallback(
     (text) => {
+      if (!text) return
+
       if (!synthRef.current || !isSupported) {
         setError('Speech synthesis not supported')
         return

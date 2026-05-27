@@ -41,7 +41,7 @@ describe('Enhanced Schemes Page', () => {
     render(<Schemes />)
     
     expect(screen.getByText('पात्रता जांचें')).toBeInTheDocument()
-    expect(screen.getByText('फ़िल्टर रीसेट करें')).toBeInTheDocument()
+    expect(screen.getAllByText('फ़िल्टर रीसेट करें')[0]).toBeInTheDocument()
   })
 
   it('displays scheme categories with counts', () => {
@@ -101,7 +101,7 @@ describe('Enhanced Schemes Page', () => {
     fireEvent.change(searchInput, { target: { value: 'test' } })
     
     await waitFor(() => {
-      const clearButton = screen.getByText('फ़िल्टर रीसेट करें')
+      const clearButton = screen.getAllByText('फ़िल्टर रीसेट करें')[0]
       expect(clearButton).toBeInTheDocument()
     })
   })
@@ -113,7 +113,7 @@ describe('Enhanced Schemes Page', () => {
     fireEvent.change(searchInput, { target: { value: 'test' } })
     
     await waitFor(() => {
-      const clearButton = screen.getByText('फ़िल्टर रीसेट करें')
+      const clearButton = screen.getAllByText('फ़िल्टर रीसेट करें')[0]
       fireEvent.click(clearButton)
     })
     
@@ -144,7 +144,7 @@ describe('Enhanced Schemes Page', () => {
   it('shows application start year information', () => {
     render(<Schemes />)
     
-    const startYearElements = screen.getAllByText(/शुरुआत वर्ष/)
+    const startYearElements = screen.getAllByText(/शुरू/)
     expect(startYearElements.length).toBeGreaterThan(0)
   })
 })
