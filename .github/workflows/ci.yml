@@ -1,33 +1,3 @@
-name: CI
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: Install dependencies
-        run: npm ci
-      - name: Lint
-        run: npm run lint
-      - name: Type check
-        run: npm run type-check
-      - name: Run tests
-        run: npm test -- --ci --reporters=default
-      - name: Build
-        run: npm run build
 name: CI/CD Pipeline
 
 on:
@@ -41,193 +11,28 @@ env:
   NPM_VERSION: '9'
 
 jobs:
-  # Job 1: Install and Cache
-  setup:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-      
-      - name: Install dependencies
-        run: npm ci
-      
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-  # Job 2: Lint Code
-  lint:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-      
+          node-version: '18'
+
       - name: Install dependencies
         run: npm ci
-      
-      - name: Run ESLint
+
+      - name: Lint
         run: npm run lint
-      
-      - name: Comment PR with lint results
-        if: failure() && github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '❌ Linting failed. Please fix the errors above.'
-            })
 
-  # Job 3: Type Check
-  typecheck:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-      
-      - name: Install dependencies
-        run: npm ci
-      
       - name: Type check
-        run: npx tsc --noEmit
+        run: npm run type-check
 
-  # Job 4: Unit Tests
-  test:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-      
-      - name: Install dependencies
-        run: npm ci
-      
       - name: Run tests
-        run: npm run test:ci
-      
-      - name: Upload coverage
-        uses: codecov/codecov-action@v3
-        with:
-          files: ./coverage/lcov.info
-          flags: unittests
-          name: codecov-umbrella
-          fail_ci_if_error: false
+        run: npm test -- --ci --reporters=default
 
-  # Job 5: Build
-  build:
-    needs: [lint, typecheck, test]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-      
-      - name: Install dependencies
-        run: npm ci
-      
-      - name: Build project
+      - name: Build
         run: npm run build
-        env:
-          NEXT_PUBLIC_GEMINI_API_KEY: ${{ secrets.NEXT_PUBLIC_GEMINI_API_KEY }}
-      
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: next-build
-          path: .next
-          retention-days: 5
-
-  # Job 6: Security Check
-  security:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-      
-      - name: Install dependencies
-        run: npm ci
-      
-      - name: Run npm audit
-        run: npm audit --production || true
-      
-      - name: Check for secrets
-        uses: trufflesecurity/trufflehog@main
-        with:
-          path: ./
-          base: ${{ github.event.repository.default_branch }}
-          head: HEAD
-
-  # Job 7: Dependency Check
-  dependency-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Check for vulnerable dependencies
-        run: npm audit --audit-level=moderate
-        continue-on-error: true
-
-  # Summary Job
-  summary:
-    needs: [lint, typecheck, test, build, security]
-    runs-on: ubuntu-latest
-    if: always()
-    steps:
-      - name: Check job status
-        run: |
-          if [[ "${{ needs.lint.result }}" == "failure" ]] || \
-             [[ "${{ needs.typecheck.result }}" == "failure" ]] || \
-             [[ "${{ needs.test.result }}" == "failure" ]] || \
-             [[ "${{ needs.build.result }}" == "failure" ]]; then
-            echo "❌ CI Pipeline failed"
-            exit 1
-          fi
-          echo "✅ CI Pipeline passed"
-      
-      - name: Comment PR success
-        if: success() && github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '✅ All checks passed! Your PR is ready for review.'
-            })

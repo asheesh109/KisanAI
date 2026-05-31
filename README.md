@@ -249,6 +249,9 @@ A future where every farmer has access to real-time insights, AI-powered decisio
 - **Fast Loading**: Optimized performance
 - **Mobile Responsive**: Perfect on all devices
 
+### DASHBOARD:<img width="1203" height="651" alt="DASHBOARD IMAGE" src="https://github.com/user-attachments/assets/c4ec5e29-8ad8-4b7a-bdcd-6acd63f85ae5" />
+
+
 ---
 
 ## 🖼️ Screenshots
