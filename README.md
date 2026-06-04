@@ -253,16 +253,13 @@ A future where every farmer has access to real-time insights, AI-powered decisio
 
 ## 🖼️ Screenshots
 
-| Feature | Preview |
-|---------|---------|
-| **Home Page** | Dashboard with quick access to all features |
-| **Voice Assistant** | Conversational AI in Hindi and English |
-| **Crop Analysis** | Disease detection from images |
-| **Market Prices** | Real-time commodity pricing |
-| **Schemes Portal** | Government schemes discovery |
-| **Weather** | Location-based weather forecasts |
+| Home Page | Voice Assistant |
+|-----------|-----------------|
+| ![KisanAI home page with feature cards and farmer-focused dashboard](./public/screenshots/home.png) | ![KisanAI voice assistant page for multilingual farming support](./public/screenshots/voice-assistant.png) |
 
-*Screenshots coming soon - [Help us add them!](docs/contributing/screenshots.md)*
+| Crop Analysis | Market Prices |
+|---------------|---------------|
+| ![KisanAI crop analysis page for plant disease checks](./public/screenshots/crop-analysis.png) | ![KisanAI market prices page for commodity insights](./public/screenshots/market-prices.png) |
 
 ---
 
