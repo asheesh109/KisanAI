@@ -50,15 +50,21 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-18">
           {/* Logo Section - Flex shrink to prevent overflow */}
-          <Link href="/" className="flex items-center space-x-2 flex-shrink-0">
-            <div className="relative">
-              <Sprout className="h-7 w-7 sm:h-8 sm:w-8 text-emerald-600 dark:text-emerald-500" />
-              <div className="absolute inset-0 bg-emerald-600/20 blur-xl"></div>
-            </div>
-            <span className="text-xl sm:text-2xl font-black bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-500 dark:to-teal-500 bg-clip-text text-transparent">
-              KisanAI
-            </span>
-          </Link>
+         
+<Link
+  href="/"
+  aria-label="Go to homepage"
+  className="flex items-center space-x-2 flex-shrink-0"
+>
+  <div className="relative">
+    <Sprout className="h-7 w-7 sm:h-8 sm:w-8 text-emerald-600 dark:text-emerald-500" />
+    <div className="absolute inset-0 bg-emerald-600/20 blur-xl"></div>
+  </div>
+
+  <span className="text-xl sm:text-2xl font-black bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-500 dark:to-teal-500 bg-clip-text text-transparent">
+    KisanAI
+  </span>
+</Link>
 
           {/* Desktop Navigation - Hidden on mobile */}
           <nav className="hidden lg:flex items-center space-x-1 xl:space-x-2">
