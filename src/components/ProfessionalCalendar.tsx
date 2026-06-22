@@ -203,7 +203,7 @@ const TRANSLATIONS: TranslationMap = {
     other: 'અન્ય',
     low: 'ઓછું',
     medium: 'મધ્યમ',
-    high: 'ઉચ્ચ',
+    high: 'ઉચ્च',
     deleteEventConfirmation: 'શું તમે આ ઇવેન્ટ કાઢી શો છો?',
     today: 'આજ',
     noEvents: 'ઇવેન્ટ ઉમેરવા માટે તારીખ પર ટૅપ કરો',
@@ -555,7 +555,7 @@ export function ProfessionalCalendar({
             className="w-full flex items-center gap-3 px-4 py-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl text-left hover:bg-amber-100 dark:hover:bg-amber-950/50 transition"
           >
             <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
-            <p className="text-sm text-amber-800 dark:text-amber-200 font-medium truncate">
+            <p className="text-xs sm:text-sm text-amber-800 dark:text-amber-200 font-medium break-words flex-1 min-w-0">
               {weatherAlert}
             </p>
             <span className="ml-auto text-xs text-amber-600 dark:text-amber-400 font-semibold shrink-0">
@@ -629,7 +629,7 @@ export function ProfessionalCalendar({
                   key={day}
                   onClick={() => handleDateClick(day)}
                   className={`
-                    min-h-[44px] sm:min-h-[88px] p-1 sm:p-2
+                    min-h-[48px] sm:min-h-[88px] p-1 sm:p-2 w-full overflow-hidden
                     border-b border-r border-border/40
                     cursor-pointer transition-colors touch-manipulation select-none
                     ${
@@ -690,7 +690,7 @@ export function ProfessionalCalendar({
                         />
                       ))}
                       {dayEvts.length > 3 && (
-                        <span className="text-[9px] leading-none text-muted-foreground">
+                        <span className="text-[9px] leading-none text-muted-foreground block truncate max-w-full">
                           +{dayEvts.length - 3}
                         </span>
                       )}
