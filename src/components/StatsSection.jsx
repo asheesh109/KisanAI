@@ -104,8 +104,8 @@ export default function StatsSection() {
                   </div>
                   
                   {/* Stat value */}
-                  <div className="text-4xl sm:text-5xl md:text-6xl font-black mb-3 bg-gradient-to-br from-primary via-accent to-primary bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300 break-words">
-                    {stat.value}
+                  <div className="text-4xl sm:text-5xl md:text-6xl font-black mb-3 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform duration-300 break-words">
+                  {stat.value}
                   </div>
                   
                   {/* Stat label - added break-words and min height for consistency */}
