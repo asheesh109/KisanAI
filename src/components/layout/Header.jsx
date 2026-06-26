@@ -1,6 +1,8 @@
 'use client'
 
+
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { Menu, X, Sprout, Globe, Sun, Moon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -22,6 +24,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [showLangMenu, setShowLangMenu] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const pathname = usePathname()
   const { theme, setTheme } = useTheme()
   const { language, languages, t, changeLanguage } = useLanguage()
 
@@ -64,12 +67,16 @@ export default function Header() {
           <nav className="hidden lg:flex items-center space-x-1 xl:space-x-2">
             {navigation.map((link) => (
               <Link
-                key={link.name}
-                href={link.href}
-                className="px-3 py-2 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-all duration-200"
-              >
-                {t(link.name)}
-              </Link>
+  key={link.name}
+  href={link.href}
+  className={`px-3 py-2 text-sm font-semibold rounded-lg transition-all duration-200 ${
+    pathname === link.href
+      ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-gray-800 border-b-2 border-emerald-600'
+      : 'text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+  }`}
+>
+  {t(link.name)}
+</Link>
             ))}
           </nav>
 
@@ -174,13 +181,17 @@ export default function Header() {
           <nav className="px-4 py-4 space-y-1">
             {navigation.map((link) => (
               <Link
-                key={link.name}
-                href={link.href}
-                className="block rounded-lg px-4 py-3 text-base font-semibold text-gray-900 dark:text-white hover:bg-emerald-50 dark:hover:bg-gray-700 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all duration-200"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {t(link.name)}
-              </Link>
+  key={link.name}
+  href={link.href}
+  className={`block rounded-lg px-4 py-3 text-base font-semibold transition-all duration-200 ${
+    pathname === link.href
+      ? 'bg-emerald-50 text-emerald-600 dark:bg-gray-700 dark:text-emerald-400'
+      : 'text-gray-900 dark:text-white hover:bg-emerald-50 dark:hover:bg-gray-700 hover:text-emerald-600 dark:hover:text-emerald-400'
+  }`}
+  onClick={() => setMobileMenuOpen(false)}
+>
+  {t(link.name)}
+</Link>
             ))}
           </nav>
         </div>
