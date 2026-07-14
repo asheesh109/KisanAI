@@ -81,7 +81,8 @@ type TranslationKey =
   | 'irrigation' | 'fertilizer' | 'harvest' | 'spray' | 'sowing'
   | 'weeding' | 'pestManagement' | 'other'
   | 'low' | 'medium' | 'high'
-  | 'deleteEventConfirmation' | 'today' | 'noEvents' | 'smartReschedule';
+  | 'deleteEventConfirmation' | 'today' | 'noEvents' | 'smartReschedule'
+  | 'previousMonth' | 'nextMonth' | 'closeDialog';
 
 type Translations = Record<TranslationKey, string>;
 type TranslationMap = Record<Language, Translations>;
@@ -118,6 +119,9 @@ const TRANSLATIONS: TranslationMap = {
     today: 'Today',
     noEvents: 'Tap a date to add an event',
     smartReschedule: 'Smart Reschedule',
+    previousMonth: 'Previous month',
+    nextMonth: 'Next month',
+    closeDialog: 'Close',
   },
   hi: {
     farmingCalendar: 'कृषि कैलेंडर',
@@ -148,6 +152,9 @@ const TRANSLATIONS: TranslationMap = {
     today: 'आज',
     noEvents: 'ईवेंट जोड़ने के लिए किसी दिन पर टैप करें',
     smartReschedule: 'स्मार्ट पुनर्निर्धारण',
+    previousMonth: 'पिछला महीना',
+    nextMonth: 'अगला महीना',
+    closeDialog: 'बंद करें',
   },
   mr: {
     farmingCalendar: 'कृषि कॅलेंडर',
@@ -178,6 +185,9 @@ const TRANSLATIONS: TranslationMap = {
     today: 'आज',
     noEvents: 'इव्हेंट जोडण्यासाठी तारखेवर टॅप करा',
     smartReschedule: 'स्मार्ट पुनर्निर्धारण',
+    previousMonth: 'मागील महिना',
+    nextMonth: 'पुढील महिना',
+    closeDialog: 'बंद करा',
   },
   gu: {
     farmingCalendar: 'કૃષિ કેલેન્ડર',
@@ -208,6 +218,9 @@ const TRANSLATIONS: TranslationMap = {
     today: 'આજ',
     noEvents: 'ઇવેન્ટ ઉમેરવા માટે તારીખ પર ટૅપ કરો',
     smartReschedule: 'સ્માર્ટ પુનઃ-સૂચિ',
+    previousMonth: 'પાછલો મહિનો',
+    nextMonth: 'આગલો મહિનો',
+    closeDialog: 'બંધ કરો',
   },
   ml: {
     farmingCalendar: 'കൃഷി കാലെൻഡർ',
@@ -238,6 +251,9 @@ const TRANSLATIONS: TranslationMap = {
     today: 'ഇന്ന്',
     noEvents: 'ഇവന്റ് ചേർക്കാൻ തീയതി ടാപ്പ് ചെയ്യുക',
     smartReschedule: 'സ്മാർട്ട് ഷെഡ്യൂൾ മാറ്റം',
+    previousMonth: 'മുൻ മാസം',
+    nextMonth: 'അടുത്ത മാസം',
+    closeDialog: 'അടയ്ക്കുക',
   },
 };
 
@@ -517,20 +533,22 @@ export function ProfessionalCalendar({
           <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => setShowReschedule((v) => !v)}
+              aria-label={t('smartReschedule')}
               className={`flex items-center gap-1.5 px-3 py-2 rounded-xl font-semibold text-xs sm:text-sm shadow transition ${
                 showReschedule
                   ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-700'
                   : 'bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white'
               }`}
             >
-              <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+              <AlertTriangle className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
               <span className="hidden sm:inline">{t('smartReschedule')}</span>
             </button>
             <button
               onClick={() => openAddModal(new Date())}
+              aria-label={t('addEvent')}
               className="flex items-center gap-1.5 px-3 py-2 sm:px-5 sm:py-2.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white rounded-xl shadow-md transition font-semibold text-sm shrink-0"
             >
-              <Plus className="w-4 h-4 shrink-0" />
+              <Plus className="w-4 h-4 shrink-0" aria-hidden="true" />
               <span className="hidden sm:inline">{t('addEvent')}</span>
             </button>
           </div>
@@ -554,7 +572,7 @@ export function ProfessionalCalendar({
             onClick={() => setShowReschedule(true)}
             className="w-full flex items-center gap-3 px-4 py-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl text-left hover:bg-amber-100 dark:hover:bg-amber-950/50 transition"
           >
-            <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+            <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" aria-hidden="true" />
             <p className="text-sm text-amber-800 dark:text-amber-200 font-medium truncate">
               {weatherAlert}
             </p>
@@ -572,9 +590,10 @@ export function ProfessionalCalendar({
                 new Date(currentDate.getFullYear(), currentDate.getMonth() - 1)
               )
             }
+            aria-label={t('previousMonth')}
             className="p-2 hover:bg-muted active:bg-muted/70 rounded-xl transition touch-manipulation"
           >
-            <ChevronLeft className="w-5 h-5 text-foreground" />
+            <ChevronLeft className="w-5 h-5 text-foreground" aria-hidden="true" />
           </button>
           <h2 className="text-sm sm:text-xl font-bold text-foreground">
             {getMonthName(currentDate, language)} {currentDate.getFullYear()}
@@ -585,9 +604,10 @@ export function ProfessionalCalendar({
                 new Date(currentDate.getFullYear(), currentDate.getMonth() + 1)
               )
             }
+            aria-label={t('nextMonth')}
             className="p-2 hover:bg-muted active:bg-muted/70 rounded-xl transition touch-manipulation"
           >
-            <ChevronRight className="w-5 h-5 text-foreground" />
+            <ChevronRight className="w-5 h-5 text-foreground" aria-hidden="true" />
           </button>
         </div>
 
@@ -745,7 +765,7 @@ export function ProfessionalCalendar({
                   onClick={() => openAddModal(daySheetDate)}
                   className="flex items-center gap-1.5 px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm rounded-xl font-semibold shadow"
                 >
-                  <Plus className="w-3.5 h-3.5" />
+                  <Plus className="w-3.5 h-3.5" aria-hidden="true" />
                   {t('addEvent')}
                 </button>
               </div>
@@ -770,16 +790,18 @@ export function ProfessionalCalendar({
                     </div>
                     <button
                       onClick={() => handleEditEvent(ev)}
+                      aria-label={`${t('edit')}: ${ev.title}`}
                       className="p-2 hover:bg-muted rounded-lg transition shrink-0"
                     >
-                      <Edit2 className="w-4 h-4 text-foreground" />
+                      <Edit2 className="w-4 h-4 text-foreground" aria-hidden="true" />
                     </button>
                     <button
                       onClick={() => handleDeleteEvent(ev._id)}
                       disabled={deleteLoading}
+                      aria-label={`${t('deleteEvent')}: ${ev.title}`}
                       className="p-2 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition shrink-0 disabled:opacity-50"
                     >
-                      <Trash2 className="w-4 h-4 text-red-500" />
+                      <Trash2 className="w-4 h-4 text-red-500" aria-hidden="true" />
                     </button>
                   </div>
                 ))}
@@ -806,9 +828,10 @@ export function ProfessionalCalendar({
               </h2>
               <button
                 onClick={() => setShowModal(false)}
+                aria-label={t('closeDialog')}
                 className="p-2 hover:bg-muted rounded-xl transition"
               >
-                <X className="w-5 h-5 text-foreground" />
+                <X className="w-5 h-5 text-foreground" aria-hidden="true" />
               </button>
             </div>
 
