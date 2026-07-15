@@ -19,6 +19,8 @@ export const metadata = {
   },
 };
 
+import { NetworkProvider } from "@/contexts/NetworkContext";
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -36,13 +38,15 @@ export default function RootLayout({ children }) {
           storageKey="kisanai-theme"
         >
           <LanguageProvider>
-            <OfflineBanner />
-            
-            <Header />
-            <main className="flex-1">
-              {children}
-            </main>
-            <Footer />
+            <NetworkProvider>
+              <OfflineBanner />
+              
+              <Header />
+              <main className="flex-1">
+                {children}
+              </main>
+              <Footer />
+            </NetworkProvider>
           </LanguageProvider>
         </ThemeProvider>
       </body>
