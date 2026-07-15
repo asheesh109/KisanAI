@@ -1,711 +1,1015 @@
-# Coding Standards 📝
+# 📝 KisanAI — Coding Standards & Contribution Conventions
 
-Guidelines for writing code in KisanAI that is consistent, maintainable, and high-quality.
+> **Issue #52** · Maintainer: [@asheesh109](https://github.com/asheesh109) · Contact: ashishparab03@gmail.com
+
+Consistent code and commit style reduces friction, speeds up code reviews, and makes the history of KisanAI readable for every contributor — from first-time open-source contributors to experienced engineers. This document is the single source of truth for all style, tooling, and workflow expectations.
 
 ---
 
 ## 📋 Table of Contents
 
-1. [TypeScript](#typescript)
-2. [React & JSX](#react--jsx)
-3. [Naming Conventions](#naming-conventions)
-4. [File Organization](#file-organization)
-5. [Comments & Documentation](#comments--documentation)
-6. [Error Handling](#error-handling)
-7. [Testing](#testing)
-8. [Performance](#performance)
-9. [Accessibility](#accessibility)
-10. [Security](#security)
+1. [Commit Message Conventions](#-commit-message-conventions)
+2. [Branch Naming Conventions](#-branch-naming-conventions)
+3. [Code Style & Formatting](#-code-style--formatting)
+4. [TypeScript Standards](#-typescript-standards)
+5. [React & JSX Standards](#-react--jsx-standards)
+6. [Naming Conventions](#-naming-conventions)
+7. [File & Folder Organization](#-file--folder-organization)
+8. [Comments & Documentation](#-comments--documentation)
+9. [Error Handling](#-error-handling)
+10. [Testing Standards](#-testing-standards)
+11. [Performance Patterns](#-performance-patterns)
+12. [Accessibility Standards](#-accessibility-standards)
+13. [Security Practices](#-security-practices)
+14. [Pre-commit Hook Setup](#-pre-commit-hook-setup)
+15. [Pre-PR Checklist](#-pre-pr-checklist)
+16. [Code Review Guidelines](#-code-review-guidelines)
 
 ---
 
-## TypeScript
+## ✉️ Commit Message Conventions
 
-### Type Definitions
+KisanAI uses the **[Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)** specification. Every commit message must be structured and machine-readable to power automated changelogs and semantic versioning.
+
+### Format
+
+```
+<type>(<scope>): <short summary>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+### Types
+
+| Type | When to use | Triggers version bump? |
+|------|-------------|------------------------|
+| `feat` | A new feature visible to users | ✅ Minor |
+| `fix` | A bug fix | ✅ Patch |
+| `docs` | Documentation only changes | ❌ |
+| `style` | Formatting, missing semicolons, no logic change | ❌ |
+| `refactor` | Code change that neither fixes a bug nor adds a feature | ❌ |
+| `perf` | Performance improvement | ✅ Patch |
+| `test` | Adding or correcting tests | ❌ |
+| `chore` | Build process, dependency updates, tooling | ❌ |
+| `ci` | CI configuration changes | ❌ |
+| `revert` | Reverts a previous commit | ✅ Patch |
+| `build` | Changes to the build system | ❌ |
+
+### Scope (optional but recommended)
+
+The scope should be the area of the codebase affected:
+
+```
+feat(crop-analysis): add Gemini Vision disease detection
+fix(weather-api): handle timeout on slow connections
+docs(readme): update local setup instructions
+test(useWeather): add network-error test case
+chore(deps): upgrade next to v16
+```
+
+Common KisanAI scopes: `crop-analysis`, `weather`, `market`, `auth`, `ui`, `api`, `i18n`, `voice`, `pwa`, `db`
+
+### Rules
+
+- **Subject line**: 50 characters or fewer
+- **Imperative mood**: "add feature" not "added feature" or "adds feature"
+- **No period** at the end of the subject
+- **Body** (optional): Wrap at 72 characters; explain *what* and *why*, not *how*
+- **Breaking changes**: Add `!` after the type/scope and a `BREAKING CHANGE:` footer
+
+### Examples ✅
+
+```
+feat(crop-analysis): add Hindi-language disease report output
+
+Gemini API now supports multi-lingual output. We pass the locale
+from the user's language preference context so farmers receive
+results in their native language.
+
+Closes #42
+```
+
+```
+fix(weather-api): handle timeout on 2G connections
+
+Previously, the fetch call had no timeout, causing infinite loading
+spinners on slow rural connections. Added AbortController with a
+10s timeout.
+
+Fixes #78
+```
+
+```
+feat(auth)!: replace session cookies with JWT tokens
+
+BREAKING CHANGE: All existing session cookies are invalidated.
+Users must log in again after deploying this change.
+```
+
+```
+docs(coding-standards): add commit conventions and pre-commit guide
+
+Closes #52
+```
+
+### Examples ❌
+
+```
+fixed stuff
+Updated README
+WIP
+asdfgh
+commit
+```
+
+---
+
+## 🌿 Branch Naming Conventions
+
+Branch names must be lowercase, hyphen-separated, and prefixed with a category.
+
+### Format
+
+```
+<category>/<short-description>
+```
+
+### Categories
+
+| Category | Purpose | Example |
+|----------|---------|---------|
+| `feat/` | New feature | `feat/voice-crop-diagnosis` |
+| `fix/` | Bug fix | `fix/weather-widget-crash` |
+| `docs/` | Documentation | `docs/coding-standards-and-commit-conventions` |
+| `refactor/` | Code restructure | `refactor/api-layer-abstraction` |
+| `test/` | Tests only | `test/useweather-hook-coverage` |
+| `chore/` | Tooling, deps | `chore/upgrade-eslint-v9` |
+| `ci/` | CI/CD config | `ci/add-github-actions-lint` |
+| `hotfix/` | Urgent production fix | `hotfix/market-api-null-crash` |
+| `release/` | Release preparation | `release/v1.2.0` |
+
+### Rules
+
+- ✅ Use lowercase letters, numbers, and hyphens only
+- ✅ Keep names short but descriptive (2–5 words)
+- ✅ Reference issue number if applicable: `feat/voice-diagnosis-#42`
+- ❌ No spaces, underscores, or uppercase letters
+- ❌ Never commit directly to `main` or `develop`
+- ❌ Avoid generic names like `my-branch`, `fix`, `update`
+
+### Examples ✅
+
+```
+docs/coding-standards-and-commit-conventions
+feat/gemini-multilingual-response
+fix/market-price-null-pointer
+test/crop-analysis-unit-tests
+chore/prettier-config-setup
+```
+
+### Examples ❌
+
+```
+MyBranch
+update_readme
+fix
+new feature
+TEMP
+```
+
+---
+
+## 🎨 Code Style & Formatting
+
+### Tooling
+
+KisanAI uses:
+- **[ESLint](https://eslint.org/)** — static analysis (`next/core-web-vitals` + `next/typescript`)
+- **[Prettier](https://prettier.io/)** — opinionated code formatter
+- **[TypeScript](https://www.typescriptlang.org/)** — strict type checking
+
+### Prettier Configuration
+
+Create or confirm `.prettierrc` at the project root:
+
+```json
+{
+  "semi": true,
+  "trailingComma": "es5",
+  "singleQuote": true,
+  "printWidth": 100,
+  "tabWidth": 2,
+  "useTabs": false,
+  "bracketSpacing": true,
+  "arrowParens": "always",
+  "endOfLine": "lf"
+}
+```
+
+### ESLint Configuration
+
+The project uses a flat ESLint config (`eslint.config.mjs`):
+
+```js
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { FlatCompat } from '@eslint/eslintrc';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const compat = new FlatCompat({ baseDirectory: __dirname });
+
+const eslintConfig = [
+  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+];
+
+export default eslintConfig;
+```
+
+### Running Checks Locally
+
+```bash
+# Lint your code
+npm run lint
+
+# Auto-fix lint issues
+npm run lint -- --fix
+
+# Format with Prettier
+npm run format
+
+# Type-check without emitting JS
+npm run type-check
+```
+
+> **Before every commit**, run both `lint` and `type-check`. Never push code with TypeScript errors.
+
+---
+
+## 🔷 TypeScript Standards
+
+### Always Use Explicit Types
 
 ```typescript
 // ✅ Good: Explicit types
-interface UserProfile {
+interface FarmerProfile {
   id: string;
   name: string;
-  email: string;
-  preferences: UserPreferences;
+  district: string;
+  crops: string[];
+  preferredLanguage: 'en' | 'hi' | 'mr' | 'pa' | 'te';
 }
 
-type UserRole = 'admin' | 'contributor' | 'viewer';
-
-const getUserProfile = (userId: string): Promise<UserProfile> => {
+const getFarmerProfile = (farmerId: string): Promise<FarmerProfile> => {
   // implementation
 };
 
-// ❌ Bad: Using any
-const getUserProfile = (userId: any): any => {
+// ❌ Bad: Using `any` defeats TypeScript's purpose
+const getFarmerProfile = (farmerId: any): any => {
   // implementation
 };
 ```
 
-### Interfaces vs Types
+### Interfaces vs. Types
 
 ```typescript
-// ✅ Use interfaces for objects
-interface ComponentProps {
-  title: string;
-  onClick: () => void;
+// ✅ Use interfaces for object shapes (they support declaration merging)
+interface CropAnalysisResult {
+  disease: string;
+  confidence: number;
+  treatment: string;
+  severity: 'low' | 'medium' | 'high';
 }
 
-// ✅ Use types for unions/primitives
-type Status = 'loading' | 'success' | 'error';
+// ✅ Use type aliases for unions, intersections, and primitives
+type SupportedLocale = 'en' | 'hi' | 'mr' | 'pa' | 'te';
+type ApiStatus = 'idle' | 'loading' | 'success' | 'error';
 type Coordinates = [number, number];
 
-// ✅ Extend interfaces
-interface ExtendedProps extends ComponentProps {
-  disabled?: boolean;
+// ✅ Extend interfaces instead of duplicating
+interface DetailedAnalysis extends CropAnalysisResult {
+  imageUrl: string;
+  analyzedAt: Date;
 }
-```
-
-### Function Types
-
-```typescript
-// ✅ Good: Clear parameter and return types
-const calculateYield = (
-  cropType: string,
-  rainfall: number,
-  temperature: number
-): number => {
-  return rainfall * 0.5 + temperature * 0.3;
-};
-
-const processWeatherData = async (
-  location: string
-): Promise<WeatherData[]> => {
-  // implementation
-};
-
-// ❌ Bad: Unclear types
-const calculate = (a, b, c) => {
-  return a * 0.5 + b * 0.3;
-};
 ```
 
 ### Generics
 
 ```typescript
-// ✅ Good: Reusable with generics
+// ✅ Good: Generic API response wrapper
 interface ApiResponse<T> {
   data: T;
   status: 'success' | 'error';
   message: string;
+  timestamp: string;
 }
 
-const fetchData = async <T,>(
-  endpoint: string
-): Promise<ApiResponse<T>> => {
-  // implementation
+const fetchData = async <T>(endpoint: string): Promise<ApiResponse<T>> => {
+  const res = await fetch(endpoint);
+  if (!res.ok) throw new ApiError(`HTTP ${res.status}`, res.status);
+  return res.json();
 };
 
-// Usage:
+// Usage
 const crops = await fetchData<Crop[]>('/api/crops');
+```
+
+### Strict Mode
+
+Ensure `tsconfig.json` has strict mode enabled:
+
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  }
+}
 ```
 
 ---
 
-## React & JSX
+## ⚛️ React & JSX Standards
 
-### Functional Components
+### Functional Components with TypeScript
 
 ```typescript
-// ✅ Good: Functional component with TypeScript
+// ✅ Good
 interface WeatherCardProps {
   temperature: number;
   location: string;
+  humidity: number;
   onRefresh: () => void;
 }
 
 export const WeatherCard: React.FC<WeatherCardProps> = ({
   temperature,
   location,
+  humidity,
   onRefresh,
 }) => {
   return (
     <div className="weather-card">
       <h2>{location}</h2>
       <p className="temperature">{temperature}°C</p>
-      <button onClick={onRefresh}>Refresh</button>
+      <p className="humidity">Humidity: {humidity}%</p>
+      <button onClick={onRefresh} aria-label="Refresh weather data">
+        Refresh
+      </button>
     </div>
   );
 };
 
-// ❌ Bad: Class component (outdated)
-class WeatherCard extends React.Component {
-  // implementation
-}
+// ❌ Bad: Class components (outdated in modern React)
+class WeatherCard extends React.Component { /* ... */ }
 ```
 
-### Hooks Usage
+### Custom Hooks
+
+Extract stateful logic into custom hooks (files named `useXxx.ts`):
 
 ```typescript
-// ✅ Good: Custom hooks
+// ✅ Good: Reusable, testable hook
 const useWeather = (location: string) => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!location) return;
+
+    const controller = new AbortController();
+
     const fetchWeather = async () => {
-      setLoading(true);
-      const data = await getWeather(location);
-      setWeather(data);
-      setLoading(false);
+      setIsLoading(true);
+      setError(null);
+      try {
+        const data = await getWeather(location, { signal: controller.signal });
+        setWeather(data);
+      } catch (err) {
+        if (!(err instanceof DOMException && err.name === 'AbortError')) {
+          setError('Failed to fetch weather data');
+        }
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchWeather();
+    return () => controller.abort(); // cleanup on unmount / location change
   }, [location]);
 
-  return { weather, loading };
-};
-
-// Usage
-const { weather, loading } = useWeather('Mumbai');
-
-// ❌ Bad: Logic in component
-export const WeatherComponent = ({ location }) => {
-  const [weather, setWeather] = useState(null);
-
-  useEffect(() => {
-    // Fetch logic directly in component
-    getWeather(location).then(setWeather);
-  }, [location]);
-};
-```
-
-### Props Management
-
-```typescript
-// ✅ Good: Destructured props with types
-interface FormProps {
-  initialValue?: string;
-  onSubmit: (value: string) => void;
-  disabled?: boolean;
-  error?: string;
-}
-
-export const Form: React.FC<FormProps> = ({
-  initialValue = '',
-  onSubmit,
-  disabled = false,
-  error,
-}) => {
-  // implementation
-};
-
-// ❌ Bad: Props object without destructuring
-const Form = (props) => {
-  return <input value={props.initialValue} />;
+  return { weather, isLoading, error };
 };
 ```
 
 ### Keys in Lists
 
 ```typescript
-// ✅ Good: Use unique, stable IDs
-const CropList: React.FC<{ crops: Crop[] }> = ({ crops }) => {
-  return (
-    <ul>
-      {crops.map((crop) => (
-        <li key={crop.id}>{crop.name}</li>
-      ))}
-    </ul>
-  );
-};
+// ✅ Good: Use stable, unique IDs (never array index for dynamic lists)
+const CropList: React.FC<{ crops: Crop[] }> = ({ crops }) => (
+  <ul>
+    {crops.map((crop) => (
+      <li key={crop.id}>{crop.name}</li>
+    ))}
+  </ul>
+);
 
-// ❌ Bad: Using array index as key
-{
-  crops.map((crop, index) => <li key={index}>{crop.name}</li>);
-}
-
-// ❌ Bad: No key at all
-{
-  crops.map((crop) => <li>{crop.name}</li>);
-}
+// ❌ Bad: Index as key causes reconciliation bugs when list reorders
+{crops.map((crop, index) => <li key={index}>{crop.name}</li>)}
 ```
 
 ---
 
-## Naming Conventions
+## 🏷️ Naming Conventions
 
-### Constants
-
-```typescript
-// ✅ Good: UPPER_SNAKE_CASE
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
-const API_TIMEOUT_MS = 5000;
-const SUPPORTED_LANGUAGES = ['en', 'hi', 'mr'];
-```
-
-### Variables & Functions
-
-```typescript
-// ✅ Good: camelCase
-const userName = 'John Farmer';
-const cropYieldPerHectare = 25;
-
-const calculateYield = () => {};
-const fetchWeatherData = async () => {};
-```
-
-### Components & Types
+| Entity | Convention | Example |
+|--------|-----------|---------|
+| Variables & functions | `camelCase` | `cropYieldPerHectare`, `fetchWeatherData` |
+| Constants | `UPPER_SNAKE_CASE` | `MAX_IMAGE_SIZE_MB`, `API_TIMEOUT_MS` |
+| React components | `PascalCase` | `WeatherCard`, `CropAnalysisForm` |
+| Interfaces & types | `PascalCase` | `FarmerProfile`, `ApiResponse` |
+| Hooks | `camelCase` with `use` prefix | `useWeather`, `useSpeechRecognition` |
+| Boolean variables | `is/has/can` prefix | `isLoading`, `hasError`, `canEdit` |
+| Event handlers | `handle` prefix | `handleClick`, `handleFormSubmit` |
+| Files (components) | `PascalCase.tsx` | `WeatherCard.tsx` |
+| Files (hooks/utils) | `camelCase.ts` | `useWeather.ts`, `validators.ts` |
+| CSS modules | `camelCase` selectors | `.weatherCard`, `.primaryButton` |
 
 ```typescript
-// ✅ Good: PascalCase
-const WeatherCard = () => {};
-const CropAnalysisForm = () => {};
+// ✅ Good examples
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024;  // UPPER_SNAKE_CASE constant
+const isVoiceEnabled = true;               // Boolean prefix
+const handleFormSubmit = (data: FormData) => {};  // Event handler
+const fetchCropData = async () => {};      // Async function
 
-interface UserProfile {}
-type WeatherData = {};
-enum CropType {}
-```
-
-### Boolean Variables
-
-```typescript
-// ✅ Good: prefix with is/has/can
-const isLoading = false;
-const hasError = true;
-const canEdit = true;
-const isVoiceEnabled = true;
-
-// ❌ Bad: ambiguous names
-const loading = false;
-const error = true;
-const editable = true;
-```
-
-### Event Handlers
-
-```typescript
-// ✅ Good: prefix with handle
-const handleClick = () => {};
-const handleInputChange = (value: string) => {};
-const handleFormSubmit = (data: FormData) => {};
-
-// ❌ Bad: unclear purpose
-const onClick = () => {};
-const onChange = () => {};
+// ❌ Bad examples
+const maxsize = 5000000;     // No convention
+const loading = false;       // Ambiguous boolean
+const onClick = () => {};    // No 'handle' prefix
+const FetchData = () => {};  // PascalCase for function
 ```
 
 ---
 
-## File Organization
-
-### Folder Structure
+## 📁 File & Folder Organization
 
 ```
 src/
-├── app/                          # Next.js pages
-│   ├── page.jsx                 # Home page
-│   ├── layout.jsx               # Root layout
-│   ├── [feature]/
-│   │   ├── page.jsx            # Feature page
-│   │   └── layout.jsx          # Feature layout
-│   └── api/                     # API routes
-│       └── [route]/
-│           └── route.ts
+├── app/                        # Next.js App Router pages
+│   ├── (public)/               # Route group — public pages
+│   │   ├── page.tsx            # Home page
+│   │   └── layout.tsx
+│   ├── (auth)/                 # Route group — authenticated pages
+│   ├── api/                    # API routes
+│   │   └── [route]/
+│   │       └── route.ts
+│   └── layout.tsx              # Root layout
 │
 ├── components/
-│   ├── ui/                      # Reusable UI
+│   ├── ui/                     # Reusable primitive UI components
 │   │   ├── Button.tsx
 │   │   ├── Card.tsx
-│   │   └── [components]/
-│   ├── layout/
+│   │   └── Input.tsx
+│   ├── layout/                 # Layout components
 │   │   ├── Header.tsx
-│   │   ├── Footer.tsx
-│   │   └── Sidebar.tsx
-│   └── [feature]/               # Feature-specific
+│   │   └── Footer.tsx
+│   └── [feature]/              # Feature-specific components
 │       ├── WeatherCard.tsx
-│       ├── WeatherWidget.tsx
 │       └── __tests__/
-│           ├── WeatherCard.test.tsx
-│           └── WeatherWidget.test.tsx
+│           └── WeatherCard.test.tsx
 │
-├── hooks/
+├── hooks/                      # Custom React hooks
 │   ├── useWeather.ts
-│   ├── useSpeechRecognition.js
+│   ├── useSpeechRecognition.ts
 │   └── __tests__/
-│       ├── useWeather.test.ts
-│       └── useSpeechRecognition.test.js
 │
-├── lib/
-│   ├── api.ts                   # API client
-│   ├── mongodb.ts              # Database
-│   ├── validators.ts           # Validation
-│   └── [utilities]/
+├── lib/                        # Pure utilities, clients, helpers
+│   ├── gemini.ts               # Gemini API client
+│   ├── mongodb.ts              # Database connection
+│   └── validators.ts
 │
-├── types/
-│   ├── index.ts                # Exported types
+├── types/                      # Global TypeScript types
+│   ├── index.ts                # Re-exports
 │   ├── api.ts
-│   ├── models.ts
-│   └── [domain]/
+│   └── models.ts
 │
-├── constants/
-│   ├── index.ts
+├── constants/                  # App-wide constants
 │   ├── api.ts
-│   ├── messages.ts
-│   └── [feature]/
+│   └── messages.ts
 │
-├── contexts/
-│   ├── LanguageContext.tsx
-│   ├── UserContext.tsx
-│   └── [contexts]/
-│
-└── __tests__/
-    ├── components/
-    ├── hooks/
-    ├── lib/
-    └── pages/
+└── contexts/                   # React context providers
+    ├── LanguageContext.tsx
+    └── AuthContext.tsx
 ```
 
-### Import Organization
+### Import Order
+
+Always organize imports in the following order (ESLint `import/order` enforces this):
 
 ```typescript
-// ✅ Good: Organized imports
-import { FC, useState } from 'react';
+// 1. Node built-ins
+import path from 'path';
+
+// 2. External packages
+import { FC, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
+// 3. Internal aliases (@ paths)
 import { Button } from '@/components/ui/Button';
-import { WeatherCard } from '@/components/Weather';
 import { useWeather } from '@/hooks/useWeather';
-import { API_BASE_URL } from '@/constants/api';
-import { WeatherData } from '@/types/weather';
+import { API_TIMEOUT_MS } from '@/constants/api';
+import { WeatherData } from '@/types/models';
 
-import styles from './styles.module.css';
+// 4. Relative imports
+import { formatTemperature } from './utils';
 
-// ❌ Bad: Random order
-import styles from './styles.module.css';
-import { WeatherData } from '@/types/weather';
-import { FC } from 'react';
-import { Button } from '@/components/ui/Button';
+// 5. Style imports (last)
+import styles from './WeatherCard.module.css';
 ```
 
 ---
 
-## Comments & Documentation
+## 💬 Comments & Documentation
 
-### Code Comments
+### Write *Why*, Not *What*
 
 ```typescript
-// ✅ Good: Explains WHY, not WHAT
-// Limit image size to prevent memory issues on older mobile devices
+// ✅ Good: Explains reasoning
+// Limit image size to prevent OOM crashes on 1GB-RAM devices common in rural India
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
-// This regex ensures farmer IDs follow state-based format
+// Regex ensures state-based farmer IDs: e.g., MH123456, UP987654
 const FARMER_ID_REGEX = /^[A-Z]{2}\d{6}$/;
 
-// ❌ Bad: Obvious from code
-const MAX_SIZE = 5242880; // max image size
+// ❌ Bad: Redundant — the code already says this
+const MAX_SIZE = 5242880; // max image size in bytes
 const regex = /^[A-Z]{2}\d{6}$/; // regex pattern
 ```
 
-### JSDoc Comments
+### JSDoc for All Public Functions
 
 ```typescript
-// ✅ Good: Complete documentation
 /**
- * Analyzes crop disease from image using Google Gemini API
- * @param imageFile - Image file to analyze
- * @param locale - Language for results ('en' | 'hi')
- * @returns Promise with disease analysis and treatment
- * @throws {ValidationError} If image is too large
- * @throws {ApiError} If Gemini API call fails
+ * Analyzes a crop image for diseases using Google Gemini Vision API.
+ *
+ * @param imageFile - The image file to analyze (max 5 MB)
+ * @param locale    - Language for the response ('en' | 'hi' | 'mr')
+ * @returns Promise resolving to a disease analysis with treatment advice
+ * @throws {ValidationError} When the image exceeds the size limit
+ * @throws {ApiError}        When the Gemini API returns a non-2xx response
+ *
  * @example
+ * ```ts
  * const result = await analyzeCropDisease(file, 'hi');
- * console.log(result.disease, result.confidence);
+ * console.log(result.disease);   // "पाउडरी मिल्ड्यू"
+ * console.log(result.treatment); // "नीम आधारित कवकनाशी का उपयोग करें"
+ * ```
  */
-const analyzeCropDisease = async (
+export const analyzeCropDisease = async (
   imageFile: File,
-  locale: 'en' | 'hi' = 'en'
+  locale: SupportedLocale = 'en'
 ): Promise<CropAnalysisResult> => {
-  // implementation
-};
-
-// ❌ Bad: Missing documentation
-const analyze = (file) => {
   // implementation
 };
 ```
 
 ---
 
-## Error Handling
+## 🚨 Error Handling
 
-### Try-Catch Blocks
-
-```typescript
-// ✅ Good: Specific error handling
-try {
-  const result = await fetchWeather(location);
-  setWeather(result);
-} catch (error) {
-  if (error instanceof ValidationError) {
-    setError('Invalid location format');
-  } else if (error instanceof NetworkError) {
-    setError('Network error. Please try again.');
-  } else if (error instanceof ApiError) {
-    setError(`API error: ${error.message}`);
-  } else {
-    setError('An unexpected error occurred');
-  }
-}
-
-// ❌ Bad: Generic catch
-try {
-  const result = await fetchWeather(location);
-  setWeather(result);
-} catch (error) {
-  setError('Error occurred');
-}
-
-// ❌ Bad: Swallow errors
-try {
-  const result = await fetchWeather(location);
-  setWeather(result);
-} catch {
-  // Silently fail
-}
-```
-
-### Custom Error Classes
+### Specific Error Classes
 
 ```typescript
-// ✅ Good: Custom errors
-class ValidationError extends Error {
-  constructor(message: string, public code: string) {
+// ✅ Good: Typed, named custom errors
+export class ValidationError extends Error {
+  constructor(message: string, public readonly code: string) {
     super(message);
     this.name = 'ValidationError';
   }
 }
 
-class ApiError extends Error {
-  constructor(message: string, public statusCode: number) {
+export class ApiError extends Error {
+  constructor(message: string, public readonly statusCode: number) {
     super(message);
     this.name = 'ApiError';
   }
 }
 ```
 
----
-
-## Testing
-
-### Test Structure
+### Try-Catch Pattern
 
 ```typescript
-// ✅ Good: Clear test organization
-describe('useWeather Hook', () => {
-  describe('successful fetch', () => {
-    it('should fetch weather data for given location', async () => {
-      const { result } = renderHook(() => useWeather('Mumbai'));
-      
-      await waitFor(() => {
-        expect(result.current.weather).toBeDefined();
-      });
-    });
-  });
+// ✅ Good: Handle each error type specifically
+try {
+  const result = await fetchWeather(location);
+  setWeather(result);
+} catch (error) {
+  if (error instanceof ValidationError) {
+    setError('Invalid location. Please check the name and try again.');
+  } else if (error instanceof ApiError && error.statusCode === 429) {
+    setError('Rate limit reached. Please wait a moment and retry.');
+  } else if (error instanceof ApiError) {
+    setError(`Service error (${error.statusCode}). Please try again.`);
+  } else {
+    setError('An unexpected error occurred. Please refresh the page.');
+    console.error('[WeatherFetch] Unknown error:', error);
+  }
+}
 
-  describe('error handling', () => {
-    it('should handle network errors', async () => {
-      const { result } = renderHook(() => useWeather('Invalid'));
-      
-      await waitFor(() => {
-        expect(result.current.error).toBeDefined();
-      });
-    });
-  });
-});
+// ❌ Bad: Swallowed or overly generic errors
+try {
+  const result = await fetchWeather(location);
+  setWeather(result);
+} catch {
+  // silently ignored — never do this
+}
 ```
 
-### Test Naming
+---
+
+## 🧪 Testing Standards
+
+### Test File Location
+
+Place test files next to the source file in a `__tests__` folder:
+
+```
+components/
+└── WeatherCard/
+    ├── WeatherCard.tsx
+    └── __tests__/
+        └── WeatherCard.test.tsx
+```
+
+### Naming Convention
 
 ```typescript
-// ✅ Good: Clear, descriptive names
-it('should display loading spinner while fetching weather', () => {});
-it('should show error message on API failure', () => {});
-it('should update weather when location changes', () => {});
+// ✅ Good: Descriptive, behaviour-driven names
+describe('WeatherCard', () => {
+  describe('rendering', () => {
+    it('should display the location name', () => {});
+    it('should display temperature in °C', () => {});
+  });
 
-// ❌ Bad: Unclear names
+  describe('interactions', () => {
+    it('should call onRefresh when the Refresh button is clicked', () => {});
+    it('should show loading spinner while data is being fetched', () => {});
+  });
+
+  describe('error states', () => {
+    it('should display an error message on API failure', () => {});
+  });
+});
+
+// ❌ Bad: Vague names
 it('works', () => {});
-it('test loading', () => {});
+it('test1', () => {});
+it('renders', () => {});
 ```
+
+### Running Tests
+
+```bash
+# Run all tests once
+npm test
+
+# Run in watch mode during development
+npm run test:watch
+
+# Generate coverage report
+npm run test:coverage
+
+# Run tests in CI mode (no watch, with coverage)
+npm run test:ci
+```
+
+> **Minimum coverage target**: 70% for new features. Do not reduce existing coverage.
 
 ---
 
-## Performance
-
-### Optimization Patterns
+## ⚡ Performance Patterns
 
 ```typescript
-// ✅ Good: useMemo for expensive calculations
-const MemoizedWeatherCard = React.memo(({ data }) => {
-  const analysis = useMemo(() => {
-    return expensiveCalculation(data);
-  }, [data]);
+// ✅ useMemo for expensive derived values
+const sortedCrops = useMemo(
+  () => [...crops].sort((a, b) => a.name.localeCompare(b.name, 'hi')),
+  [crops]
+);
 
-  return <div>{analysis}</div>;
+// ✅ useCallback for stable function references passed as props
+const handleDelete = useCallback(
+  (id: string) => deleteCrop(id),
+  [deleteCrop]
+);
+
+// ✅ React.memo to prevent unnecessary re-renders
+export const CropCard = React.memo<CropCardProps>(({ crop, onSelect }) => {
+  return <div onClick={() => onSelect(crop.id)}>{crop.name}</div>;
 });
 
-// ✅ Good: useCallback for stable functions
-const handleClick = useCallback(() => {
-  doSomething(id);
-}, [id]);
-```
-
-### Lazy Loading
-
-```typescript
-// ✅ Good: Code splitting
-const HeavyComponent = lazy(() => import('./HeavyComponent'));
-
-export const Page = () => {
-  return (
-    <Suspense fallback={<Loading />}>
-      <HeavyComponent />
-    </Suspense>
-  );
-};
+// ✅ Dynamic imports for heavy components
+const DiseaseReport = dynamic(() => import('./DiseaseReport'), {
+  loading: () => <Skeleton />,
+  ssr: false,
+});
 ```
 
 ---
 
-## Accessibility
-
-### ARIA Labels
+## ♿ Accessibility Standards
 
 ```typescript
-// ✅ Good: ARIA labels
-const VoiceButton = () => {
-  const [isListening, setIsListening] = useState(false);
+// ✅ Always provide ARIA labels on icon-only buttons
+<button
+  onClick={toggleListening}
+  aria-label={isListening ? 'Stop voice input' : 'Start voice input'}
+  aria-pressed={isListening}
+>
+  <MicIcon aria-hidden="true" />
+</button>
 
-  return (
-    <button
-      onClick={() => setIsListening(!isListening)}
-      aria-label={isListening ? 'Stop listening' : 'Start listening'}
-      aria-pressed={isListening}
-      className="voice-button"
-    >
-      <Icon name={isListening ? 'mic-on' : 'mic-off'} />
-    </button>
-  );
-};
-```
+// ✅ Use semantic HTML elements
+<header>
+  <nav aria-label="Main navigation">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/crops">Crop Analysis</a></li>
+    </ul>
+  </nav>
+</header>
 
-### Semantic HTML
-
-```typescript
-// ✅ Good: Semantic elements
-export const Header = () => {
-  return (
-    <header className="app-header">
-      <nav>
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/crops">Crops</a></li>
-        </ul>
-      </nav>
-    </header>
-  );
-};
-
-// ❌ Bad: Generic divs
-const Header = () => {
-  return (
-    <div className="header">
-      <div className="nav">
-        <div className="nav-link">Home</div>
-      </div>
-    </div>
-  );
-};
+// ✅ Associate form labels
+<label htmlFor="location-input">Location</label>
+<input
+  id="location-input"
+  type="text"
+  placeholder="e.g., Nashik, Maharashtra"
+  aria-describedby="location-hint"
+/>
+<span id="location-hint">Enter your district or city name</span>
 ```
 
 ---
 
-## Security
+## 🔒 Security Practices
+
+### Environment Variables
+
+```bash
+# .env.local — NEVER commit this file
+GEMINI_API_KEY=your_secret_key_here          # server-only
+MONGODB_URI=mongodb+srv://...               # server-only
+
+# NEXT_PUBLIC_ prefix ONLY for values safe to expose to the browser
+NEXT_PUBLIC_APP_URL=https://kisanai.vercel.app
+```
+
+```typescript
+// ✅ Server-only secrets — use only in API routes / Server Components
+const geminiKey = process.env.GEMINI_API_KEY;
+
+// ✅ Public config — safe for client bundles
+const appUrl = process.env.NEXT_PUBLIC_APP_URL;
+
+// ❌ Never access server secrets in client components
+```
 
 ### Input Validation
 
 ```typescript
-// ✅ Good: Validate all inputs
-const searchCrops = (query: string) => {
+// ✅ Validate before processing
+const searchCrops = (query: string): Promise<Crop[]> => {
   if (!query || query.trim().length === 0) {
-    throw new ValidationError('Search query required');
+    throw new ValidationError('Search query is required', 'EMPTY_QUERY');
   }
-
   if (query.length > 100) {
-    throw new ValidationError('Query too long');
+    throw new ValidationError('Query must be 100 characters or fewer', 'QUERY_TOO_LONG');
   }
-
-  return fetchCrops(query);
+  return fetchCrops(sanitize(query));
 };
-
-// ✅ Good: Sanitize outputs
-const displayUserComment = (comment: string) => {
-  // Escape HTML entities
-  return <div>{sanitizeHtml(comment)}</div>;
-};
-```
-
-### Environment Variables
-
-```typescript
-// ✅ Good: Only expose necessary variables
-// NEXT_PUBLIC_ prefix only for client-side safe variables
-const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-
-// Server-side secrets never in client code
-// Only use in API routes or server components
-const dbPassword = process.env.MONGODB_PASSWORD;
 ```
 
 ---
 
-## Linting & Formatting
+## 🪝 Pre-commit Hook Setup
 
-### ESLint
+Pre-commit hooks automatically run linting and formatting checks **before every commit**, preventing broken code from entering the repository.
+
+### 1. Install Husky and lint-staged
 
 ```bash
-# Check style
-npm run lint
-
-# Fix auto-fixable issues
-npm run lint -- --fix
+npm install --save-dev husky lint-staged
 ```
 
-### Prettier
+### 2. Initialize Husky
 
 ```bash
-# Format code
-npm run format
+npx husky init
+```
+
+This creates a `.husky/` directory and adds a `prepare` script to `package.json`.
+
+### 3. Configure the pre-commit hook
+
+Edit `.husky/pre-commit`:
+
+```bash
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx lint-staged
+```
+
+### 4. Configure lint-staged in `package.json`
+
+```json
+{
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{js,jsx,mjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ],
+    "*.{css,scss}": [
+      "prettier --write"
+    ]
+  }
+}
+```
+
+### 5. Full `package.json` scripts block (after setup)
+
+```json
+{
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --coverage --watchAll=false",
+    "prepare": "husky"
+  }
+}
+```
+
+### 6. Add a commit-msg hook (optional but recommended)
+
+Enforce Conventional Commits format using `commitlint`:
+
+```bash
+npm install --save-dev @commitlint/cli @commitlint/config-conventional
+```
+
+Create `commitlint.config.js`:
+
+```js
+/** @type {import('@commitlint/types').UserConfig} */
+module.exports = {
+  extends: ['@commitlint/config-conventional'],
+  rules: {
+    'type-enum': [
+      2,
+      'always',
+      ['feat', 'fix', 'docs', 'style', 'refactor', 'perf', 'test', 'chore', 'ci', 'revert', 'build'],
+    ],
+    'subject-max-length': [2, 'always', 72],
+    'subject-case': [2, 'always', 'lower-case'],
+  },
+};
+```
+
+Add the commit-msg hook:
+
+```bash
+echo "npx --no -- commitlint --edit \$1" > .husky/commit-msg
+```
+
+### Example: What happens on `git commit`
+
+```
+$ git commit -m "feat(crop-analysis): add multilingual disease report"
+
+✔ lint-staged: Running ESLint on 3 files...
+✔ lint-staged: Running Prettier on 3 files...
+✔ commitlint: Commit message passes Conventional Commits rules
+
+[docs/coding-standards #abc1234] feat(crop-analysis): add multilingual disease report
+```
+
+```
+$ git commit -m "fixed stuff"
+
+✖ commitlint: subject may not be empty
+✖ commitlint: type must be one of: feat, fix, docs ...
+
+husky - commit-msg hook exited with code 1 (error)
 ```
 
 ---
 
-## Code Review Checklist
+## ✅ Pre-PR Checklist
 
-- [ ] Types are explicit (no `any`)
-- [ ] Naming is clear and follows conventions
-- [ ] Functions are small and focused
-- [ ] Error handling is comprehensive
-- [ ] Tests cover happy path and errors
-- [ ] Comments explain "why", not "what"
-- [ ] No console.logs (except in dev)
-- [ ] Performance considered (memo, callback)
-- [ ] Accessibility standards met
-- [ ] Security vulnerabilities addressed
+Before opening a Pull Request, verify **every item** in this checklist:
+
+### Code Quality
+- [ ] `npm run lint` passes with **zero errors**
+- [ ] `npm run type-check` passes with **zero TypeScript errors**
+- [ ] `npm run format:check` passes (no unformatted files)
+- [ ] No `console.log` statements left in production code
+- [ ] No `// TODO` comments unless tracked in an issue
+
+### Testing
+- [ ] New features have corresponding unit/integration tests
+- [ ] All existing tests still pass (`npm test`)
+- [ ] Coverage has not decreased (`npm run test:coverage`)
+
+### Documentation
+- [ ] New public functions have JSDoc comments
+- [ ] `README.md` updated if user-facing behavior changed
+- [ ] API changes reflected in `docs/api/`
+
+### Conventions
+- [ ] Branch name follows `<category>/short-description` pattern
+- [ ] All commit messages follow Conventional Commits
+- [ ] No `any` types introduced without a justification comment
+
+### PR Description
+- [ ] PR title follows Conventional Commits format: `type(scope): description`
+- [ ] PR description explains **what** was changed and **why**
+- [ ] Linked to the issue number (`Closes #52`)
+- [ ] Screenshots/GIFs attached if UI was changed
+
+---
+
+## 👀 Code Review Guidelines
+
+### For Authors
+
+- Keep PRs small and focused — one feature or fix per PR
+- Self-review your diff before requesting review
+- Respond to all comments before marking conversations resolved
+- Avoid force-pushing after review has started (use new commits)
+
+### For Reviewers
+
+- Review within **48 hours** of the PR being opened
+- Use clear, constructive language — critique the code, not the author
+- Distinguish between **blocking** and **non-blocking** feedback:
+  - `[blocking]` — must be addressed before merge
+  - `[nit]` — minor suggestion, author's discretion
+  - `[question]` — seeking understanding, not requiring change
+- Approve only when all blocking comments are resolved
+
+### Merge Strategy
+
+- Use **Squash and Merge** for feature/fix branches to keep `main` history clean
+- Use **Merge Commit** only for release branches
+- Never force-push to `main` or `develop`
+
+---
+
+## 📚 Additional Resources
+
+| Resource | Link |
+|----------|------|
+| Conventional Commits Specification | https://www.conventionalcommits.org |
+| Semantic Versioning | https://semver.org |
+| Next.js Documentation | https://nextjs.org/docs |
+| TypeScript Handbook | https://www.typescriptlang.org/docs/ |
+| ESLint Docs | https://eslint.org/docs/latest/ |
+| Prettier Docs | https://prettier.io/docs/en/ |
+| Husky Docs | https://typicode.github.io/husky/ |
+| lint-staged Docs | https://github.com/okonet/lint-staged |
+| commitlint Docs | https://commitlint.js.org |
+| WCAG 2.1 Accessibility | https://www.w3.org/TR/WCAG21/ |
+| React Testing Library | https://testing-library.com/docs/react-testing-library/intro/ |
 
 ---
 
 <div align="center">
 
-### Questions About Coding Standards?
+**Questions or suggestions?** Open a [Discussion](https://github.com/asheesh109/KisanAI/discussions) or reach out to the maintainer at ashishparab03@gmail.com.
 
-[Start a Discussion](https://github.com/yourusername/KisanAI/discussions)
+Made with ❤️ for the KisanAI community · GSSoC '26
 
 </div>
