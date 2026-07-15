@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback } from 'react'
 import { Camera, Upload, FileImage as ImageIcon, CheckCircle, AlertTriangle, Leaf, Bug, Droplets, Sun, X, RotateCcw, Info } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
+import ErrorBoundary from '@/components/ErrorBoundary'
 
 // Import Gemini AI
 import { GoogleGenerativeAI } from '@google/generative-ai'
@@ -606,7 +607,8 @@ export default function CropAnalysis() {
   }, [language])
 
   return (
-    <div className="min-h-screen bg-background py-4 sm:py-8">
+    <ErrorBoundary scopeName="Crop analysis page">
+      <div className="min-h-screen bg-background py-4 sm:py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {error && (
           <div className="mb-4 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
@@ -855,6 +857,7 @@ export default function CropAnalysis() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </ErrorBoundary>
   )
 }
