@@ -111,7 +111,8 @@ npm run type-check
 Create `.env.local` with at least:
 
 - `NEXT_PUBLIC_API_URL` — API base URL
-- `MONGODB_URI` — optional DB connection
+- `MONGODB_URI` — MongoDB connection string
+- `MONGODB_DB_NAME` — Optional MongoDB database name (defaults to `MessagePool` if not provided)
 - `OPENAI_API_KEY` — optional for AI features
 
 ## Tech Stack
