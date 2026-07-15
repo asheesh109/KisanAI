@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import { connectToDatabase } from '@/lib/mongodb';
+import { sanitizeError } from '@/lib/errors';
 
 interface MessageDocument {
   _id?: ObjectId;
@@ -36,9 +37,10 @@ export async function GET() {
     return NextResponse.json(formattedMessages, { status: 200 });
   } catch (error) {
     console.error('GET /api/messages error:', error);
+    const appError = sanitizeError(error);
     return NextResponse.json(
-      { error: 'Failed to fetch messages' },
-      { status: 500 }
+      { error: appError.message, code: appError.code },
+      { status: appError.statusCode }
     );
   }
 }
@@ -76,9 +78,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(insertedMessage, { status: 201 });
   } catch (error) {
     console.error('POST /api/messages error:', error);
+    const appError = sanitizeError(error);
     return NextResponse.json(
-      { error: 'Failed to create message' },
-      { status: 500 }
+      { error: appError.message, code: appError.code },
+      { status: appError.statusCode }
     );
   }
 }

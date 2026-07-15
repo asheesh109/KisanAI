@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import { connectToDatabase } from '@/lib/mongodb';
+import { sanitizeError } from '@/lib/errors';
 
 interface VoteRequest {
   guestId: string; // Guest browser ID
@@ -80,10 +81,10 @@ export async function POST(
     );
   } catch (error) {
     console.error('❌ Upvote error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const appError = sanitizeError(error);
     return NextResponse.json(
-      { error: 'Failed to upvote', details: errorMessage },
-      { status: 500 }
+      { error: appError.message, code: appError.code },
+      { status: appError.statusCode }
     );
   }
 }
