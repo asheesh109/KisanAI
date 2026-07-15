@@ -1,177 +1,498 @@
 'use client'
 
 import { useLanguage } from '@/contexts/LanguageContext'
-import { ChevronRight, Mic, Sparkles } from 'lucide-react'
+import { ChevronRight, Mic, Sparkles, Check, Leaf, CloudSun, TrendingUp, FileText, Bot } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+
+/* ---------- small sub-components ---------- */
+
+function MetricCard({ value, label, icon, delay = 0 }) {
+  return (
+    <div
+      className="hero-metric-card"
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      <div className="hero-metric-icon">{icon}</div>
+      <div className="hero-metric-value">{value}</div>
+      <div className="hero-metric-label">{label}</div>
+    </div>
+  )
+}
+
+function FeaturePill({ icon: Icon, label }) {
+  return (
+    <span className="hero-pill">
+      <Icon className="h-3.5 w-3.5 flex-shrink-0" />
+      {label}
+    </span>
+  )
+}
+
+/* ---------- main component ---------- */
 
 export default function HeroBanner() {
   const { t } = useLanguage()
 
+  const featurePills = [
+    { icon: Bot,       label: 'Voice AI' },
+    { icon: Leaf,      label: 'Crop Analysis' },
+    { icon: CloudSun,  label: 'Weather' },
+    { icon: TrendingUp,label: 'Market Prices' },
+    { icon: FileText,  label: 'Govt. Schemes' },
+  ]
+
+  const trustItems = [
+    'Free to Use',
+    'No Login Required',
+    '5 Languages',
+  ]
+
   return (
-    <div className="relative min-h-[600px] sm:min-h-[650px] overflow-hidden bg-background">
-      {/* Enhanced Animated Background with multiple layers */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/3 via-accent/3 to-primary/3"></div>
-      <div className="absolute inset-0 bg-gradient-to-tl from-primary/5 to-transparent opacity-75 animate-gradient-shift"></div>
-      
-      {/* Floating Geometric Shapes with varied animations */}
-      <div className="absolute top-16 sm:top-20 right-16 sm:right-20 w-64 sm:w-72 h-64 sm:h-72 bg-primary/8 dark:bg-primary/15 rounded-full blur-3xl animate-float-slow"></div>
-      <div className="absolute bottom-16 sm:bottom-20 left-16 sm:left-20 w-80 sm:w-96 h-80 sm:h-96 bg-accent/8 dark:bg-accent/15 rounded-full blur-3xl animate-drift"></div>
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 sm:w-120 h-96 sm:h-120 bg-gradient-to-r from-primary/5 to-accent/5 rounded-full blur-3xl animate-pulse-slow opacity-30"></div>
+    <div className="hero-root">
+      {/* ── decorative blobs ── */}
+      <div className="hero-blob hero-blob-1" />
+      <div className="hero-blob hero-blob-2" />
+      <div className="hero-blob hero-blob-3" />
 
-      {/* Subtle geometric pattern overlay */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,hsl(var(--primary)/0.02)_25%,hsl(var(--primary)/0.02)_50%,transparent_50%,transparent_75%,hsl(var(--primary)/0.02)_75%,hsl(var(--primary)/0.02)_100%)]"></div>
-        <div className="absolute inset-0 bg-[linear-gradient(-45deg,transparent_25%,hsl(var(--accent)/0.02)_25%,hsl(var(--accent)/0.02)_50%,transparent_50%,transparent_75%,hsl(var(--accent)/0.02)_75%,hsl(var(--accent)/0.02)_100%)] opacity-50"></div>
-      </div>
+      {/* ── grid ── */}
+      <div className="hero-grid">
 
-      {/* Content */}
-      <div className="relative flex items-center justify-center h-full px-4 sm:px-6 py-16 sm:py-24 z-10">
-        <div className="max-w-5xl mx-auto text-center">
-          {/* Modern Badge with subtle glow and animation */}
-          <div className="inline-flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 mb-6 sm:mb-8 bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 dark:from-primary/20 dark:via-accent/20 dark:to-primary/20 text-primary rounded-full text-sm sm:text-base font-semibold shadow-lg ring-1 ring-inset ring-primary/20 dark:ring-primary/30 backdrop-blur-sm animate-glow-subtle">
-            <Sparkles className="h-5 w-5 animate-spin-slow" />
-            <span className="tracking-wide">{t('transformingAgriculture')}</span>
+        {/* ══ LEFT — text content ══ */}
+        <div className="hero-left">
+
+          {/* eyebrow badge */}
+          <div className="hero-badge hero-anim-1">
+            <Sparkles className="h-4 w-4 hero-badge-icon" />
+            <span>{t('transformingAgriculture')}</span>
           </div>
 
-          {/* Hero Title with advanced gradient and staggered animation */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-4 sm:mb-6 leading-tight bg-gradient-to-r from-foreground via-primary to-accent bg-clip-text text-transparent animate-fade-in-up-delayed">
-            {t('heroWelcome')}
+          {/* headline */}
+          <h1 className="hero-headline hero-anim-2">
+            {t('heroWelcome') || 'Empowering'}{' '}
+            <span className="hero-headline-accent">Farmers</span>
           </h1>
-          
-          <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground mb-6 sm:mb-10 max-w-3xl mx-auto leading-relaxed opacity-95 font-medium tracking-wide animate-fade-in-up-delayed-2">
-            {t('heroTagline')}
+
+          {/* tagline */}
+          <p className="hero-tagline hero-anim-3">
+            {t('heroTagline') || 'Access government schemes, market insights, and AI-powered resources to grow your agricultural success.'}
           </p>
 
-          {/* Centered Buttons with enhanced styling and stagger animation */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 sm:mb-16 animate-fade-in-up-delayed-3">
+          {/* feature pills */}
+          <div className="hero-pills hero-anim-3">
+            {featurePills.map((p) => (
+              <FeaturePill key={p.label} icon={p.icon} label={p.label} />
+            ))}
+          </div>
+
+          {/* CTA buttons */}
+          <div className="hero-ctas hero-anim-4">
             <Link href="/schemes">
-              <Button size="lg" className="px-8 sm:px-10 py-4 bg-gradient-to-r from-primary via-accent to-primary text-primary-foreground font-bold text-base sm:text-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 flex items-center justify-center space-x-3 min-w-[220px] sm:min-w-[240px] rounded-xl">
-                <span className="tracking-wide">{t('exploreSchemes')}</span>
-                <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+              <Button size="lg" className="hero-btn-primary" id="hero-cta-schemes">
+                <span>{t('exploreSchemes') || 'Explore Schemes'}</span>
+                <ChevronRight className="h-5 w-5" />
               </Button>
             </Link>
             <Link href="/voice-assistant">
-              <Button variant="outline" size="lg" className="px-8 sm:px-10 py-4 border-2 border-border text-foreground font-bold text-base sm:text-lg transition-all duration-300 shadow-md hover:shadow-xl hover:scale-105 active:scale-95 flex items-center justify-center space-x-3 min-w-[220px] sm:min-w-[240px] rounded-xl backdrop-blur-sm">
+              <Button variant="outline" size="lg" className="hero-btn-secondary" id="hero-cta-voice">
                 <Mic className="h-5 w-5" />
-                <span className="tracking-wide">{t('voiceAssistant')}</span>
+                <span>{t('voiceAssistant') || 'Voice Assistant'}</span>
               </Button>
             </Link>
           </div>
 
-          {/* Enhanced Stats with card-like design and hover effects */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 max-w-3xl mx-auto pt-8 sm:pt-10 border-t border-border/30 bg-card/30 dark:bg-card/50 rounded-2xl p-6 sm:p-8 backdrop-blur-sm">
-            <div className="group cursor-default hover:scale-105 transition-all duration-300 rounded-xl p-4 sm:p-6 border border-border/50">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-black mb-2 text-primary group-hover:text-accent tracking-tight">20+</div>
-              <div className="text-sm sm:text-base text-muted-foreground font-medium tracking-wide">{t('statsGovernmentSchemes')}</div>
-            </div>
-            <div className="group cursor-default hover:scale-105 transition-all duration-300 rounded-xl p-4 sm:p-6 border border-border/50">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-black mb-2 text-primary group-hover:text-accent tracking-tight">24/7</div>
-              <div className="text-sm sm:text-base text-muted-foreground font-medium tracking-wide">{t('statsSupportAvailable')}</div>
-            </div>
-            <div className="group cursor-default hover:scale-105 transition-all duration-300 rounded-xl p-4 sm:p-6 border border-border/50">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-black mb-2 text-primary group-hover:text-accent tracking-tight">1K+</div>
-              <div className="text-sm sm:text-base text-muted-foreground font-medium tracking-wide">{t('statsFarmersHelped')}</div>
+          {/* trust indicators */}
+          <div className="hero-trust hero-anim-4">
+            {trustItems.map((item) => (
+              <span key={item} className="hero-trust-item">
+                <Check className="h-3.5 w-3.5 text-primary flex-shrink-0" />
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* ══ RIGHT — illustrated metric panel ══ */}
+        <div className="hero-right hero-anim-right">
+          {/* decorative ring */}
+          <div className="hero-ring" />
+
+          {/* metric cards */}
+          <div className="hero-metrics">
+            <MetricCard value="50K+" label="Active Farmers"   icon="🧑‍🌾" delay={200} />
+            <MetricCard value="95%"  label="AI Accuracy"      icon="🤖" delay={350} />
+            <MetricCard value="200+" label="Govt. Schemes"    icon="📋" delay={500} />
+            <MetricCard value="24/7" label="Support Available" icon="⏰" delay={650} />
+          </div>
+
+          {/* floating accent card */}
+          <div className="hero-accent-card">
+            <span className="hero-accent-card-icon">🌾</span>
+            <div>
+              <div className="hero-accent-card-title">Crop Health Alert</div>
+              <div className="hero-accent-card-sub">AI detected early blight — act now</div>
             </div>
           </div>
         </div>
+
       </div>
 
+      {/* ── bottom stats bar ── */}
+      <div className="hero-stats-bar">
+        {[
+          { v: '20+',  l: t('statsGovernmentSchemes') || 'Government Schemes' },
+          { v: '24/7', l: t('statsSupportAvailable')  || 'Support Available'  },
+          { v: '1K+',  l: t('statsFarmersHelped')     || 'Farmers Helped'     },
+        ].map(({ v, l }) => (
+          <div key={l} className="hero-stat">
+            <div className="hero-stat-value">{v}</div>
+            <div className="hero-stat-label">{l}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* ── scoped styles ── */}
       <style jsx>{`
-        @keyframes fade-in-up {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+        /* ---- layout ---- */
+        .hero-root {
+          position: relative;
+          min-height: 680px;
+          overflow: hidden;
+          background-color: hsl(var(--background));
+          padding: 5rem 1.5rem 3rem;
         }
-        .animate-fade-in-up {
-          animation: fade-in-up 0.8s ease-out;
+        @media (min-width: 1024px) {
+          .hero-root { padding: 6rem 2rem 3rem; }
         }
-        @keyframes fade-in-up-delayed {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+
+        /* ---- blobs ---- */
+        .hero-blob {
+          position: absolute;
+          border-radius: 9999px;
+          filter: blur(80px);
+          pointer-events: none;
         }
-        .animate-fade-in-up-delayed {
-          animation: fade-in-up-delayed 0.9s ease-out 0.2s both;
+        .hero-blob-1 {
+          top: -4rem; right: -4rem;
+          width: 28rem; height: 28rem;
+          background: hsl(var(--primary) / 0.12);
+          animation: blobFloat 7s ease-in-out infinite;
         }
-        @keyframes fade-in-up-delayed-2 {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+        .hero-blob-2 {
+          bottom: -5rem; left: -5rem;
+          width: 34rem; height: 34rem;
+          background: hsl(var(--accent) / 0.09);
+          animation: blobFloat 9s ease-in-out infinite reverse;
         }
-        .animate-fade-in-up-delayed-2 {
-          animation: fade-in-up-delayed-2 0.9s ease-out 0.4s both;
+        .hero-blob-3 {
+          top: 50%; left: 50%;
+          transform: translate(-50%, -50%);
+          width: 40rem; height: 40rem;
+          background: hsl(var(--primary) / 0.04);
+          animation: blobPulse 5s ease-in-out infinite;
         }
-        @keyframes fade-in-up-delayed-3 {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+
+        /* ---- grid ---- */
+        .hero-grid {
+          position: relative;
+          z-index: 10;
+          max-width: 80rem;
+          margin: 0 auto;
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 3rem;
+          align-items: center;
         }
-        .animate-fade-in-up-delayed-3 {
-          animation: fade-in-up-delayed-3 0.9s ease-out 0.6s both;
+        @media (min-width: 1024px) {
+          .hero-grid { grid-template-columns: 1fr 1fr; gap: 4rem; }
         }
-        @keyframes gradient-shift {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
+
+        /* ---- left panel ---- */
+        .hero-left { display: flex; flex-direction: column; gap: 1.5rem; }
+
+        /* badge */
+        .hero-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.5rem 1.25rem;
+          background: linear-gradient(135deg, hsl(var(--primary) / 0.12), hsl(var(--accent) / 0.12));
+          color: hsl(var(--primary));
+          border-radius: 9999px;
+          font-size: 0.875rem;
+          font-weight: 600;
+          letter-spacing: 0.03em;
+          border: 1px solid hsl(var(--primary) / 0.2);
+          width: fit-content;
         }
-        .animate-gradient-shift {
-          background-size: 200% 200%;
-          animation: gradient-shift 15s ease infinite;
+        .hero-badge-icon { animation: spinSlow 20s linear infinite; }
+
+        /* headline */
+        .hero-headline {
+          font-size: clamp(2.5rem, 5vw, 4rem);
+          font-weight: 900;
+          line-height: 1.1;
+          letter-spacing: -0.03em;
+          color: hsl(var(--foreground));
+          margin: 0;
         }
-        @keyframes float-slow {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(180deg); }
+        .hero-headline-accent {
+          background: linear-gradient(135deg, hsl(142, 76%, 30%), hsl(142, 76%, 50%));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
         }
-        .animate-float-slow {
-          animation: float-slow 6s ease-in-out infinite;
+
+        /* tagline */
+        .hero-tagline {
+          font-size: clamp(1rem, 2vw, 1.2rem);
+          color: hsl(var(--muted-foreground));
+          line-height: 1.7;
+          max-width: 36rem;
+          margin: 0;
         }
-        @keyframes drift {
-          0%, 100% { transform: translateX(0px); }
-          50% { transform: translateX(10px); }
+
+        /* pills */
+        .hero-pills {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
         }
-        .animate-drift {
-          animation: drift 8s ease-in-out infinite;
+        .hero-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.375rem;
+          padding: 0.3rem 0.75rem;
+          background: hsl(var(--primary) / 0.08);
+          color: hsl(var(--primary));
+          border: 1px solid hsl(var(--primary) / 0.15);
+          border-radius: 9999px;
+          font-size: 0.75rem;
+          font-weight: 600;
         }
-        @keyframes pulse-slow {
-          0%, 100% { opacity: 0.4; transform: scale(1); }
-          50% { opacity: 0.8; transform: scale(1.05); }
+        .dark .hero-pill {
+          background: hsl(var(--primary) / 0.15);
+          border-color: hsl(var(--primary) / 0.3);
         }
-        .animate-pulse-slow {
-          animation: pulse-slow 4s ease-in-out infinite;
+
+        /* CTA row */
+        .hero-ctas {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 1rem;
         }
-        @keyframes glow-subtle {
-          0%, 100% { box-shadow: 0 0 20px hsl(var(--primary)/0.1); }
-          50% { box-shadow: 0 0 30px hsl(var(--primary)/0.2); }
+        .hero-btn-primary {
+          background: linear-gradient(135deg, hsl(var(--primary)), hsl(142, 76%, 28%));
+          color: hsl(var(--primary-foreground));
+          font-weight: 700;
+          font-size: 1rem;
+          padding: 0.875rem 2rem;
+          border-radius: 0.75rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          box-shadow: 0 8px 24px hsl(var(--primary) / 0.35);
+          transition: transform 0.2s, box-shadow 0.2s;
         }
-        .animate-glow-subtle {
-          animation: glow-subtle 3s ease-in-out infinite;
+        .hero-btn-primary:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 12px 32px hsl(var(--primary) / 0.45);
         }
-        @keyframes spin-slow {
+        .hero-btn-secondary {
+          border: 2px solid hsl(var(--border));
+          color: hsl(var(--foreground));
+          font-weight: 700;
+          font-size: 1rem;
+          padding: 0.875rem 2rem;
+          border-radius: 0.75rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          backdrop-filter: blur(4px);
+          transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+        }
+        .hero-btn-secondary:hover {
+          transform: translateY(-2px);
+          border-color: hsl(var(--primary) / 0.6);
+          box-shadow: 0 8px 24px hsl(var(--primary) / 0.12);
+        }
+
+        /* trust bar */
+        .hero-trust {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 1rem;
+        }
+        .hero-trust-item {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          font-size: 0.8rem;
+          color: hsl(var(--muted-foreground));
+          font-weight: 500;
+        }
+
+        /* ---- right panel ---- */
+        .hero-right {
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 360px;
+        }
+
+        /* decorative ring */
+        .hero-ring {
+          position: absolute;
+          inset: 0;
+          border-radius: 9999px;
+          border: 2px dashed hsl(var(--primary) / 0.15);
+          animation: ringRotate 30s linear infinite;
+        }
+
+        /* metric cards grid */
+        .hero-metrics {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1rem;
+          position: relative;
+          z-index: 2;
+        }
+        .hero-metric-card {
+          background: hsl(var(--card));
+          border: 1px solid hsl(var(--border));
+          border-radius: 1rem;
+          padding: 1.25rem 1rem;
+          text-align: center;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+          animation: metricPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+          transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .dark .hero-metric-card {
+          box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .hero-metric-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 12px 32px hsl(var(--primary) / 0.15);
+        }
+        .hero-metric-icon { font-size: 1.75rem; margin-bottom: 0.35rem; }
+        .hero-metric-value {
+          font-size: 1.5rem;
+          font-weight: 900;
+          background: linear-gradient(135deg, hsl(var(--primary)), hsl(142, 76%, 50%));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          line-height: 1.1;
+        }
+        .hero-metric-label {
+          font-size: 0.7rem;
+          color: hsl(var(--muted-foreground));
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          margin-top: 0.2rem;
+        }
+
+        /* floating accent card */
+        .hero-accent-card {
+          position: absolute;
+          bottom: -1rem;
+          left: -1.5rem;
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          background: hsl(var(--card));
+          border: 1px solid hsl(var(--primary) / 0.25);
+          border-radius: 0.875rem;
+          padding: 0.75rem 1rem;
+          box-shadow: 0 8px 28px hsl(var(--primary) / 0.15);
+          z-index: 3;
+          animation: accentSlide 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.7s both;
+          max-width: 240px;
+        }
+        .dark .hero-accent-card {
+          box-shadow: 0 8px 28px rgba(0,0,0,0.4);
+          border-color: hsl(var(--primary) / 0.4);
+        }
+        .hero-accent-card-icon { font-size: 1.5rem; flex-shrink: 0; }
+        .hero-accent-card-title {
+          font-size: 0.8rem;
+          font-weight: 700;
+          color: hsl(var(--foreground));
+        }
+        .hero-accent-card-sub {
+          font-size: 0.7rem;
+          color: hsl(var(--muted-foreground));
+        }
+
+        /* ---- stats bar ---- */
+        .hero-stats-bar {
+          position: relative;
+          z-index: 10;
+          max-width: 80rem;
+          margin: 3rem auto 0;
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1rem;
+          padding: 1.5rem;
+          background: hsl(var(--card) / 0.6);
+          border: 1px solid hsl(var(--border) / 0.5);
+          border-radius: 1.25rem;
+          backdrop-filter: blur(8px);
+        }
+        .hero-stat { text-align: center; }
+        .hero-stat-value {
+          font-size: clamp(1.5rem, 3vw, 2rem);
+          font-weight: 900;
+          color: hsl(var(--primary));
+          line-height: 1;
+        }
+        .hero-stat-label {
+          font-size: 0.8rem;
+          color: hsl(var(--muted-foreground));
+          font-weight: 500;
+          margin-top: 0.25rem;
+        }
+
+        /* ---- entrance animations ---- */
+        .hero-anim-1 { animation: fadeUp 0.7s ease-out 0.1s both; }
+        .hero-anim-2 { animation: fadeUp 0.7s ease-out 0.25s both; }
+        .hero-anim-3 { animation: fadeUp 0.7s ease-out 0.4s both; }
+        .hero-anim-4 { animation: fadeUp 0.7s ease-out 0.55s both; }
+        .hero-anim-right { animation: fadeLeft 0.8s ease-out 0.3s both; }
+
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(28px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeLeft {
+          from { opacity: 0; transform: translateX(40px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes blobFloat {
+          0%, 100% { transform: translateY(0) scale(1); }
+          50%       { transform: translateY(-20px) scale(1.04); }
+        }
+        @keyframes blobPulse {
+          0%, 100% { opacity: 0.3; transform: translate(-50%,-50%) scale(1); }
+          50%       { opacity: 0.6; transform: translate(-50%,-50%) scale(1.06); }
+        }
+        @keyframes ringRotate {
           from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
+          to   { transform: rotate(360deg); }
         }
-        .animate-spin-slow {
-          animation: spin-slow 20s linear infinite;
+        @keyframes metricPop {
+          from { opacity: 0; transform: scale(0.8) translateY(16px); }
+          to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes accentSlide {
+          from { opacity: 0; transform: translateX(-20px) translateY(10px); }
+          to   { opacity: 1; transform: translateX(0) translateY(0); }
+        }
+        @keyframes spinSlow {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
         }
       `}</style>
     </div>
