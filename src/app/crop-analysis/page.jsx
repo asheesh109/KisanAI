@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback } from 'react'
 import { Camera, Upload, FileImage as ImageIcon, CheckCircle, AlertTriangle, Leaf, Bug, Droplets, Sun, X, RotateCcw, Info } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { useNetwork } from '@/contexts/NetworkContext'
 
 // Import Gemini AI
 import { GoogleGenerativeAI } from '@google/generative-ai'
@@ -21,6 +22,7 @@ export default function CropAnalysis() {
   const [error, setError] = useState(null)
   const fileInputRef = useRef(null)
   const { language, t } = useLanguage()
+  const { isOnline } = useNetwork()
 
   // Mock data fallback in all languages
   const getMockAnalysisResult = useCallback(() => {
@@ -381,6 +383,12 @@ export default function CropAnalysis() {
     
     setIsAnalyzing(true)
     setError(null)
+
+    if (!isOnline) {
+      setUsingFallback(true)
+      setIsAnalyzing(false)
+      return getMockAnalysisResult()
+    }
     
     try {
       const imagePart = await fileToGenerativePart(imageFile)
@@ -422,7 +430,7 @@ export default function CropAnalysis() {
     } finally {
       setIsAnalyzing(false)
     }
-  }, [fileToGenerativePart, getPrompt, getMockAnalysisResult, language])
+  }, [fileToGenerativePart, getPrompt, getMockAnalysisResult, language, isOnline])
 
   const handleFileSelect = useCallback((file) => {
     if (file && file.type.startsWith('image/')) {

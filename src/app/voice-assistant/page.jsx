@@ -8,6 +8,8 @@ import { useSpeechRecognition } from '@/hooks/useSpeechRecognition'
 import { useSpeechSynthesis } from '@/hooks/useSpeechSynthesis'
 import { generateAIResponse, fallbackResponses } from '@/data/farmingKnowledge'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { useNetwork } from '@/contexts/NetworkContext'
+import { saveConversations, getConversations, saveOfflineAction, getOfflineQueue, removeOfflineAction } from '@/lib/idb'
 
 export default function VoiceAssistant() {
   const [conversations, setConversations] = useState([])
@@ -15,6 +17,68 @@ export default function VoiceAssistant() {
   const [textInput, setTextInput] = useState('')
   const [lastQueryTime, setLastQueryTime] = useState(0)
   const { language, t } = useLanguage()
+  const { isOnline } = useNetwork()
+
+  // Load conversations from IndexedDB on mount
+  useEffect(() => {
+    const loadConversations = async () => {
+      const saved = await getConversations();
+      if (saved && saved.length > 0) {
+        // IDB might not restore Date objects perfectly depending on version, so just ensure they are Date objects
+        const parsed = saved.map(msg => ({
+          ...msg,
+          timestamp: new Date(msg.timestamp)
+        }));
+        setConversations(parsed);
+      }
+    };
+    loadConversations();
+  }, []);
+
+  // Save conversations to IndexedDB whenever they change
+  useEffect(() => {
+    if (conversations.length > 0) {
+      saveConversations(conversations);
+    }
+  }, [conversations]);
+
+  const processOfflineQueue = useCallback(async () => {
+    const queue = await getOfflineQueue();
+    if (queue.length === 0) return;
+
+    for (const action of queue) {
+      try {
+        const response = await generateAIResponse(action.query, action.language);
+        setConversations(prev => prev.map(msg => {
+          if (msg.id === action.id && msg.isPending) {
+            return { ...msg, text: response, isPending: false, timestamp: new Date() };
+          }
+          return msg;
+        }));
+        await removeOfflineAction(action.id);
+      } catch (error) {
+        console.error('Error processing offline queue:', error);
+      }
+    }
+  }, []);
+
+  // Process offline queue when back online
+  useEffect(() => {
+    if (isOnline) {
+      processOfflineQueue();
+    }
+  }, [isOnline, processOfflineQueue]);
+
+  const getOfflinePendingMsg = (lang) => {
+    const msgs = {
+      en: "You are offline. Your query has been saved and will be processed when you are online.",
+      hi: "आप ऑफ़लाइन हैं। आपका प्रश्न सहेज लिया गया है और ऑनलाइन होने पर इसे संसाधित किया जाएगा।",
+      mr: "तुम्ही ऑफलाइन आहात. तुमचा प्रश्न सेव्ह केला आहे आणि ऑनलाइन झाल्यावर त्यावर प्रक्रिया केली जाईल.",
+      gu: "તમે ઑફલાઇન છો. તમારો પ્રશ્ન સાચવવામાં આવ્યો છે અને જ્યારે તમે ઑનલાઇન હશો ત્યારે તેના પર પ્રક્રિયા કરવામાં આવશે.",
+      ml: "നിങ്ങൾ ഓഫ്‌ലൈനിലാണ്. നിങ്ങളുടെ ചോദ്യം സംരക്ഷിച്ചു, നിങ്ങൾ ഓൺലൈനിലായിരിക്കുമ്പോൾ പ്രോസസ്സ് ചെയ്യും."
+    };
+    return msgs[lang] || msgs.en;
+  };
 
   const getTTSLang = (lang) => {
     const langMap = {
@@ -71,6 +135,21 @@ export default function VoiceAssistant() {
     }
 
     setConversations(prev => [...prev, userMessage])
+
+    if (!isOnline) {
+      const offlineId = (Date.now() + 1).toString();
+      const pendingMessage = {
+        id: offlineId,
+        type: 'ai',
+        text: getOfflinePendingMsg(language),
+        timestamp: new Date(),
+        isPending: true,
+      };
+      setConversations(prev => [...prev, pendingMessage]);
+      saveOfflineAction({ id: offlineId, query, language });
+      return;
+    }
+
     setIsProcessing(true)
 
     try {
@@ -100,7 +179,7 @@ export default function VoiceAssistant() {
       }
       setConversations(prev => [...prev, errorMessage])
     }
-  }, [ttsSupported, speak, lastQueryTime, language])
+  }, [ttsSupported, speak, lastQueryTime, language, isOnline])
 
   useEffect(() => {
     if (transcript && !isListening && transcript.trim().length > 0) {
@@ -126,6 +205,7 @@ export default function VoiceAssistant() {
 
   const clearConversation = () => {
     setConversations([])
+    saveConversations([])
     stopSpeaking()
   }
 
@@ -336,9 +416,12 @@ export default function VoiceAssistant() {
                           : 'bg-muted text-foreground'
                       }`}
                     >
-                      <p className="text-sm whitespace-pre-wrap break-words">{conversation.text}</p>
+                      <p className="text-sm whitespace-pre-wrap break-words">
+                        {conversation.isPending && <Loader2 className="inline h-3 w-3 animate-spin mr-1" />}
+                        {conversation.text}
+                      </p>
                       <p className="text-xs opacity-70 mt-1">
-                        {conversation.timestamp.toLocaleTimeString(ttsLang)}
+                        {conversation.timestamp instanceof Date ? conversation.timestamp.toLocaleTimeString(ttsLang) : new Date(conversation.timestamp).toLocaleTimeString(ttsLang)}
                       </p>
                     </div>
                   </div>
