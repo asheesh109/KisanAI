@@ -10,6 +10,7 @@ import {
 import { useLanguage } from '@/contexts/LanguageContext';
 import EligibilityDrawer from '@/components/EligibilityDrawer';
 import { useSchemeFilter } from '@/hooks/useSchemeFilter';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 // Import Gemini AI
 import { GoogleGenerativeAI } from '@google/generative-ai'
@@ -5086,7 +5087,8 @@ export default function SchemesApp() {
   }
 
   return (
-    <div className="min-h-screen bg-background py-4 sm:py-8">
+    <ErrorBoundary scopeName="Schemes page">
+      <div className="min-h-screen bg-background py-4 sm:py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-6 sm:mb-8">
@@ -5515,6 +5517,7 @@ export default function SchemesApp() {
           isDarkMode={false}
         />
       </div>
-    </div>
+      </div>
+    </ErrorBoundary>
   );
 }

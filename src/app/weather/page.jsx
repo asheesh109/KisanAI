@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Cloud, Sun, CloudRain, Wind, Droplets, Eye, MapPin, RefreshCw, AlertTriangle, Thermometer, Gauge, Sunrise, Sunset, Search, Navigation, Loader2, Info } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
+import ErrorBoundary from '@/components/ErrorBoundary'
 // Import Gemini AI for farming advice
 import { GoogleGenerativeAI } from '@google/generative-ai'
 const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY
@@ -759,7 +760,8 @@ ${forecastData.slice(0, 3).map(day =>
   }
 
   return (
-    <div className="min-h-screen bg-background py-4 sm:py-8">
+    <ErrorBoundary scopeName="Weather page">
+      <div className="min-h-screen bg-background py-4 sm:py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-6 sm:mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
@@ -1041,6 +1043,7 @@ ${forecastData.slice(0, 3).map(day =>
           </p>
         </div>
       </div>
-    </div>
+      </div>
+    </ErrorBoundary>
   )
 }
