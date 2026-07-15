@@ -60,6 +60,7 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({
         upvotes={experience.upvotes}
         downvotes={experience.downvotes}
         guestId={guestId}
+        voterIds={experience.voterIds}
         onVote={(upvotes, downvotes) => onVote(experience._id, upvotes, downvotes)}
       />
 
