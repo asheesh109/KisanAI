@@ -1,14 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+/**
+ * @file VoteButtons.tsx
+ * @description Upvote / downvote control for a single farmer experience.
+ *
+ * Prop types are imported from `@/types/experience` – the single source of
+ * truth shared with `ExperienceCard` and `FarmersExperienceFeed`.
+ */
 
-interface VoteButtonsProps {
-  experienceId: string;
-  upvotes: number;
-  downvotes: number;
-  guestId: string;
-  onVote: (upvotes: number, downvotes: number) => void;
-}
+import React, { useState } from 'react';
+import type { VoteButtonsProps } from '@/types/experience';
 
 export const VoteButtons: React.FC<VoteButtonsProps> = ({
   experienceId,

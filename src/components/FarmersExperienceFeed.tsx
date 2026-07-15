@@ -1,16 +1,17 @@
 'use client';
 
+/**
+ * @file FarmersExperienceFeed.tsx
+ * @description Full-page feed that allows farmers to share text experiences
+ *              and upvote / downvote each other's submissions.
+ *
+ * The `Experience` type is imported from `@/types/experience` – the single
+ * source of truth shared with `ExperienceCard` and `VoteButtons`.
+ */
+
 import React, { useState, useEffect } from 'react';
 import { ExperienceCard } from './ExperienceCard';
-
-interface Experience {
-  _id: string;
-  content: string;
-  upvotes: number;
-  downvotes: number;
-  createdAt: Date | string;
-  voterIds?: string[];
-}
+import type { Experience } from '@/types/experience';
 
 export const FarmersExperienceFeed: React.FC = () => {
   const [experiences, setExperiences] = useState<Experience[]>([]);
