@@ -525,13 +525,16 @@ const translations = {
     'requiredFieldsEmpty': 'Please fill all required fields',
     'filtering': 'Applying filters...',
     
-    // Offline & PWA
+   // Offline & PWA
     'offline': 'You are offline',
     'offline.message': 'You are offline. Showing saved data. Some features may be limited.',
     'offline.lastUpdated': 'Last updated',
     'offline.cachedData': 'This is cached data',
     'offline.refreshWhenOnline': 'Data will refresh when you go online',
-    'offline.limitedFeatures': 'Some features are not available offline'
+    'offline.limitedFeatures': 'Some features are not available offline',
+    'offline.retry': 'Retry',
+    'offline.retrying': 'Checking connection…',
+    'offline.retryFailed': 'Still offline. Please check your internet connection.'
 
   },
 
@@ -1029,7 +1032,10 @@ const translations = {
     'offline.lastUpdated': 'अंतिम अपडेट',
     'offline.cachedData': 'यह कैश किया गया डेटा है',
     'offline.refreshWhenOnline': 'जब आप ऑनलाइन हों तो डेटा रिफ्रेश होगा',
-    'offline.limitedFeatures': 'कुछ सुविधाएं ऑफलाइन उपलब्ध नहीं हैं'
+    'offline.limitedFeatures': 'कुछ सुविधाएं ऑफलाइन उपलब्ध नहीं हैं',
+    'offline.retry': 'पुनः प्रयास करें',
+    'offline.retrying': 'कनेक्शन जाँचा जा रहा है…',
+    'offline.retryFailed': 'अभी भी ऑफलाइन हैं। कृपया अपना इंटरनेट कनेक्शन जांचें।'
   },
   
 
@@ -1528,7 +1534,10 @@ const translations = {
     'offline.lastUpdated': 'शेवटचा अपडेट',
     'offline.cachedData': 'हा कॅश केलेला डेटा आहे',
     'offline.refreshWhenOnline': 'जेव्हा आप ऑनलाइन होतील तेव्हा डेटा रीफ्रेश होईल',
-    'offline.limitedFeatures': 'काही वैशिष्ट्ये ऑफलाइन उपलब्ध नाहीत'
+    'offline.limitedFeatures': 'काही वैशिष्ट्ये ऑफलाइन उपलब्ध नाहीत',
+    'offline.retry': 'पुन्हा प्रयत्न करा',
+    'offline.retrying': 'कनेक्शन तपासले जात आहे…',
+    'offline.retryFailed': 'अजूनही ऑफलाइन आहात. कृपया तुमचे इंटरनेट कनेक्शन तपासा.'  
   },
   
   
@@ -2019,13 +2028,16 @@ const translations = {
     'requiredFieldsEmpty': 'કૃપા કરીને તમામ આવશ્યક ક્ષેત્રો ભરો',
     'filtering': 'ફિલ્ટર્સ લાગુ કરવામાં આવે છે...',
     
-    // Offline & PWA
+   // Offline & PWA
     'offline': 'તમે ઓફલાઇન છો',
     'offline.message': 'તમે ઓફલાઇન છો. સંરક્ષિત ડેટા દર્શાવવામાં આવે છે. કેટલીક વૈશિષ્ટ્યો મર્યાદિત હોઈ શકે છે.',
     'offline.lastUpdated': 'છેલ્લો અપડેટ',
     'offline.cachedData': 'આ કેશ કરેલ ડેટા છે',
     'offline.refreshWhenOnline': 'જ્યારે તમે ઓનલાઇન હોશો ત્યારે ડેટા રીફ્રેશ થશે',
-    'offline.limitedFeatures': 'કેટલીક વૈશિષ્ટ્યો ઓફલાઇન ઉપલબ્ધ નથી'
+    'offline.limitedFeatures': 'કેટલીક વૈશિષ્ટ્યો ઓફલાઇન ઉપલબ્ધ નથી',
+    'offline.retry': 'ફરી પ્રયાસ કરો',
+    'offline.retrying': 'કનેક્શન ચકાસાઈ રહ્યું છે…',
+    'offline.retryFailed': 'હજુ પણ ઓફલાઇન છો. કૃપા કરી તમારું ઇન્ટરનેટ કનેક્શન તપાસો.'
   },
   
   
@@ -2522,6 +2534,9 @@ const translations = {
     'offline.lastUpdated': 'അവസാന അപ്ഡേറ്റ്',
     'offline.cachedData': 'ഇത് കാഷ് ചെയ്ത ഡാറ്റയാണ്',
     'offline.refreshWhenOnline': 'നിങ്ങൾ ഓൺലൈനായ്‌ക്കാൾ ഡാറ്റ റിഫ്രെഷ് ചെയ്യപ്പെടും',
-    'offline.limitedFeatures': 'ചില ഫീച്ചറുകൾ ഓഫ്‌ലൈനിൽ ലഭ്യമല്ല'
+    'offline.limitedFeatures': 'ചില ഫീച്ചറുകൾ ഓഫ്‌ലൈനിൽ ലഭ്യമല്ല',
+    'offline.retry': 'വീണ്ടും ശ്രമിക്കുക',
+    'offline.retrying': 'കണക്ഷൻ പരിശോധിക്കുന്നു…',
+    'offline.retryFailed': 'ഇപ്പോഴും ഓഫ്‌ലൈനിലാണ്. ദയവായി നിങ്ങളുടെ ഇന്റർനെറ്റ് കണക്ഷൻ പരിശോധിക്കുക.'
   }
 };
