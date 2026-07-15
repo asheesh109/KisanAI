@@ -1,0 +1,398 @@
+name: 🔍 Lighthouse Performance Audit
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Trigger conditions
+# ─────────────────────────────────────────────────────────────────────────────
+on:
+  pull_request:
+    branches: [main, develop]
+    # Only run when code that can affect performance changes
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/pull_request_template.md'
+  # Allow manual triggering from Actions tab
+  workflow_dispatch:
+    inputs:
+      target_url:
+        description: 'URL to audit (overrides default staging URL)'
+        required: false
+        default: ''
+      fail_on_regression:
+        description: 'Fail the workflow on performance regression?'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Concurrency – cancel stale runs for the same PR
+# ─────────────────────────────────────────────────────────────────────────────
+concurrency:
+  group: lighthouse-${{ github.ref }}
+  cancel-in-progress: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Environment variables
+# ─────────────────────────────────────────────────────────────────────────────
+env:
+  NODE_VERSION: '20'
+  # Default staging URL – override via STAGING_URL repo secret or workflow_dispatch input
+  DEFAULT_STAGING_URL: 'https://kisan-ai.vercel.app'
+  # Lighthouse CI server (optional – leave empty to skip upload)
+  LHCI_SERVER_URL: ${{ secrets.LHCI_SERVER_URL || '' }}
+  LHCI_BUILD_TOKEN: ${{ secrets.LHCI_BUILD_TOKEN || '' }}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Jobs
+# ─────────────────────────────────────────────────────────────────────────────
+jobs:
+  # ---------------------------------------------------------------------------
+  # Job 1 – Build the Next.js app so LHCI can serve it locally (no staging URL)
+  # ---------------------------------------------------------------------------
+  build:
+    name: 🏗️ Build Application
+    runs-on: ubuntu-latest
+    # Skip on draft PRs unless explicitly requested
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      !github.event.pull_request.draft
+
+    outputs:
+      build-cache-key: ${{ steps.cache-key.outputs.key }}
+
+    steps:
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history needed for LHCI assertions
+
+      - name: 🔧 Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Generate cache key
+        id: cache-key
+        run: echo "key=${{ runner.os }}-next-${{ hashFiles('**/package-lock.json') }}-${{ github.sha }}" >> "$GITHUB_OUTPUT"
+
+      - name: 📥 Install dependencies
+        run: npm ci
+
+      - name: 🏗️ Build Next.js application
+        run: npm run build
+        env:
+          NEXT_PUBLIC_GEMINI_API_KEY: ${{ secrets.NEXT_PUBLIC_GEMINI_API_KEY }}
+          # Disable telemetry in CI
+          NEXT_TELEMETRY_DISABLED: 1
+
+      - name: 💾 Cache build output
+        uses: actions/cache@v4
+        with:
+          path: |
+            .next
+            public
+          key: ${{ steps.cache-key.outputs.key }}
+
+  # ---------------------------------------------------------------------------
+  # Job 2 – Run Lighthouse CI against the built app or a staging URL
+  # ---------------------------------------------------------------------------
+  lighthouse:
+    name: 🔦 Lighthouse Audit
+    runs-on: ubuntu-latest
+    needs: build
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      !github.event.pull_request.draft
+
+    strategy:
+      # Audit multiple routes in parallel
+      matrix:
+        route:
+          - path: '/'
+            label: 'Home'
+          - path: '/crop-analysis'
+            label: 'Crop Analysis'
+          - path: '/weather'
+            label: 'Weather'
+          - path: '/schemes'
+            label: 'Government Schemes'
+          - path: '/market-prices'
+            label: 'Market Prices'
+      fail-fast: false  # Report results for all routes even if one fails
+
+    steps:
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📥 Install dependencies
+        run: npm ci
+
+      - name: 📥 Install @lhci/cli globally
+        run: npm install -g @lhci/cli@0.14.x
+
+      - name: 🗂️ Restore build cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .next
+            public
+          key: ${{ needs.build.outputs.build-cache-key }}
+
+      - name: 🌐 Resolve target URL
+        id: target
+        run: |
+          MANUAL_URL="${{ github.event.inputs.target_url }}"
+          STAGING_URL="${{ secrets.STAGING_URL }}"
+          DEFAULT="${{ env.DEFAULT_STAGING_URL }}"
+
+          if [ -n "$MANUAL_URL" ]; then
+            BASE_URL="$MANUAL_URL"
+          elif [ -n "$STAGING_URL" ]; then
+            BASE_URL="$STAGING_URL"
+          else
+            BASE_URL="$DEFAULT"
+          fi
+
+          FULL_URL="${BASE_URL}${{ matrix.route.path }}"
+          echo "url=$FULL_URL" >> "$GITHUB_OUTPUT"
+          echo "base_url=$BASE_URL" >> "$GITHUB_OUTPUT"
+          echo "📍 Auditing: $FULL_URL"
+
+      - name: 🔍 Run Lighthouse CI
+        id: lighthouse
+        run: |
+          lhci autorun \
+            --config=lighthouserc.js \
+            --collect.url="${{ steps.target.outputs.url }}" \
+            --collect.numberOfRuns=3 \
+            --upload.target=filesystem \
+            --upload.outputDir=./lhci-reports/${{ matrix.route.label }}
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN || '' }}
+          LHCI_TOKEN: ${{ env.LHCI_BUILD_TOKEN }}
+        # Don't fail immediately – we post the results as PR comment first
+        continue-on-error: true
+
+      - name: 📊 Parse Lighthouse results
+        id: parse
+        if: always()
+        run: |
+          REPORT_DIR="./lhci-reports/${{ matrix.route.label }}"
+          MANIFEST="$REPORT_DIR/manifest.json"
+
+          if [ ! -f "$MANIFEST" ]; then
+            echo "::warning::No Lighthouse manifest found for ${{ matrix.route.label }}"
+            echo "perf=N/A" >> "$GITHUB_OUTPUT"
+            echo "a11y=N/A" >> "$GITHUB_OUTPUT"
+            echo "bp=N/A" >> "$GITHUB_OUTPUT"
+            echo "seo=N/A" >> "$GITHUB_OUTPUT"
+            echo "pwa=N/A" >> "$GITHUB_OUTPUT"
+            echo "status=unknown" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Average scores across runs
+          PERF=$(node -e "
+            const m = require('$MANIFEST');
+            const scores = m.map(r => {
+              const data = require(r.jsonPath);
+              return Math.round(data.categories.performance.score * 100);
+            });
+            console.log(Math.round(scores.reduce((a,b)=>a+b,0)/scores.length));
+          ")
+          A11Y=$(node -e "
+            const m = require('$MANIFEST');
+            const scores = m.map(r => {
+              const data = require(r.jsonPath);
+              return Math.round(data.categories.accessibility.score * 100);
+            });
+            console.log(Math.round(scores.reduce((a,b)=>a+b,0)/scores.length));
+          ")
+          BP=$(node -e "
+            const m = require('$MANIFEST');
+            const scores = m.map(r => {
+              const data = require(r.jsonPath);
+              return Math.round(data.categories['best-practices'].score * 100);
+            });
+            console.log(Math.round(scores.reduce((a,b)=>a+b,0)/scores.length));
+          ")
+          SEO=$(node -e "
+            const m = require('$MANIFEST');
+            const scores = m.map(r => {
+              const data = require(r.jsonPath);
+              return Math.round(data.categories.seo.score * 100);
+            });
+            console.log(Math.round(scores.reduce((a,b)=>a+b,0)/scores.length));
+          ")
+
+          echo "perf=$PERF" >> "$GITHUB_OUTPUT"
+          echo "a11y=$A11Y" >> "$GITHUB_OUTPUT"
+          echo "bp=$BP" >> "$GITHUB_OUTPUT"
+          echo "seo=$SEO" >> "$GITHUB_OUTPUT"
+
+          # Determine status based on thresholds (from lighthouserc.js)
+          FAIL_THRESHOLD=70
+          if [ "$PERF" -lt "$FAIL_THRESHOLD" ]; then
+            echo "status=fail" >> "$GITHUB_OUTPUT"
+          else
+            echo "status=pass" >> "$GITHUB_OUTPUT"
+          fi
+
+          echo "📊 Scores for ${{ matrix.route.label }}: Performance=$PERF, A11y=$A11Y, Best Practices=$BP, SEO=$SEO"
+
+      - name: 📤 Upload Lighthouse report artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report-${{ matrix.route.label }}
+          path: ./lhci-reports/${{ matrix.route.label }}
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: ❌ Fail if performance budget exceeded
+        if: |
+          steps.parse.outputs.status == 'fail' &&
+          (github.event.inputs.fail_on_regression != 'false')
+        run: |
+          echo "::error::🚨 Performance regression detected on '${{ matrix.route.label }}'!"
+          echo "::error::Performance score (${{ steps.parse.outputs.perf }}) is below the minimum threshold of 70."
+          echo "Please review the Lighthouse report in the artifacts."
+          exit 1
+
+  # ---------------------------------------------------------------------------
+  # Job 3 – Aggregate results and post a single PR comment
+  # ---------------------------------------------------------------------------
+  comment:
+    name: 💬 Post Results to PR
+    runs-on: ubuntu-latest
+    needs: lighthouse
+    if: |
+      always() &&
+      github.event_name == 'pull_request' &&
+      !github.event.pull_request.draft
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: ⬇️ Download all Lighthouse artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: lighthouse-report-*
+          path: ./all-reports
+
+      - name: 📊 Build PR comment
+        id: build-comment
+        run: |
+          COMMENT="## 🔦 Lighthouse Performance Report\n\n"
+          COMMENT+="_Audited on commit \`${{ github.sha }}\` — $(date -u '+%Y-%m-%d %H:%M UTC')_\n\n"
+
+          # Score-to-emoji helper
+          score_emoji() {
+            local score=$1
+            if [ "$score" = "N/A" ]; then echo "⚪"; elif [ "$score" -ge 90 ]; then echo "🟢"; elif [ "$score" -ge 70 ]; then echo "🟡"; else echo "🔴"; fi
+          }
+
+          COMMENT+="| Page | 🚀 Performance | ♿ Accessibility | ✅ Best Practices | 🔍 SEO |\n"
+          COMMENT+="|------|:---:|:---:|:---:|:---:|\n"
+
+          OVERALL_STATUS="pass"
+
+          for REPORT_DIR in ./all-reports/lighthouse-report-*/; do
+            PAGE_LABEL=$(basename "$REPORT_DIR" | sed 's/lighthouse-report-//')
+            MANIFEST="$REPORT_DIR/manifest.json"
+
+            if [ ! -f "$MANIFEST" ]; then
+              COMMENT+="| $PAGE_LABEL | ⚪ N/A | ⚪ N/A | ⚪ N/A | ⚪ N/A |\n"
+              continue
+            fi
+
+            PERF=$(node -e "
+              const m = require('$MANIFEST');
+              const s = m.map(r => Math.round(require(r.jsonPath).categories.performance.score * 100));
+              console.log(Math.round(s.reduce((a,b)=>a+b,0)/s.length));
+            ")
+            A11Y=$(node -e "
+              const m = require('$MANIFEST');
+              const s = m.map(r => Math.round(require(r.jsonPath).categories.accessibility.score * 100));
+              console.log(Math.round(s.reduce((a,b)=>a+b,0)/s.length));
+            ")
+            BP=$(node -e "
+              const m = require('$MANIFEST');
+              const s = m.map(r => Math.round(require(r.jsonPath).categories['best-practices'].score * 100));
+              console.log(Math.round(s.reduce((a,b)=>a+b,0)/s.length));
+            ")
+            SEO=$(node -e "
+              const m = require('$MANIFEST');
+              const s = m.map(r => Math.round(require(r.jsonPath).categories.seo.score * 100));
+              console.log(Math.round(s.reduce((a,b)=>a+b,0)/s.length));
+            ")
+
+            PERF_EMOJI=$(score_emoji "$PERF")
+            A11Y_EMOJI=$(score_emoji "$A11Y")
+            BP_EMOJI=$(score_emoji "$BP")
+            SEO_EMOJI=$(score_emoji "$SEO")
+
+            COMMENT+="| **$PAGE_LABEL** | $PERF_EMOJI $PERF | $A11Y_EMOJI $A11Y | $BP_EMOJI $BP | $SEO_EMOJI $SEO |\n"
+
+            if [ "$PERF" != "N/A" ] && [ "$PERF" -lt 70 ]; then
+              OVERALL_STATUS="fail"
+            fi
+          done
+
+          COMMENT+="\n\n**Score Legend:** 🟢 ≥ 90 (Good) · 🟡 70–89 (Needs Improvement) · 🔴 < 70 (Poor — blocks merge)\n"
+          COMMENT+="\n**Performance Budgets:** See [docs/PERFORMANCE_BUDGETS.md](./docs/PERFORMANCE_BUDGETS.md) for thresholds.\n"
+          COMMENT+="\n📁 Full HTML reports available in the **Actions → Artifacts** section of this workflow run.\n"
+
+          if [ "$OVERALL_STATUS" = "fail" ]; then
+            COMMENT+="\n> ⚠️ **One or more pages failed the performance budget.** Please review and fix before merging.\n"
+          else
+            COMMENT+="\n> ✅ All pages meet the performance budget thresholds.\n"
+          fi
+
+          # Write to file to avoid shell quoting issues
+          printf "%b" "$COMMENT" > /tmp/pr_comment.md
+          echo "overall_status=$OVERALL_STATUS" >> "$GITHUB_OUTPUT"
+
+      - name: 💬 Create or update PR comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const comment = fs.readFileSync('/tmp/pr_comment.md', 'utf8');
+            const marker = '<!-- LIGHTHOUSE_CI_REPORT -->';
+            const body = `${marker}\n${comment}`;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c => c.body.includes(marker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
