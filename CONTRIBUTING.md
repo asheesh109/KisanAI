@@ -586,6 +586,78 @@ Browser & Responsiveness
 - [ ] Tested on mobile (768px)
 - [ ] Tested offline (if applicable)
 - [ ] No console errors/warnings
+
+Performance
+- [ ] No large bundle size regressions (check with `npm run build`)
+- [ ] Images use next/image with explicit width/height
+- [ ] Heavy components are lazy-loaded with next/dynamic
+- [ ] Lighthouse audit passes locally (optional but encouraged)
+```
+
+---
+
+## ⚡ Performance Guidelines
+
+KisanAI targets **farmers in rural India** who often use low-end devices on slow 4G connections.
+Every PR that touches code (not just docs) is automatically audited by **Lighthouse CI**.
+
+### CI Audit
+
+A GitHub Actions workflow ([`.github/workflows/lighthouse.yml`](./.github/workflows/lighthouse.yml)) runs on every PR and:
+- Audits 5 core pages (Home, Crop Analysis, Weather, Schemes, Market Prices)
+- Averages results over 3 Lighthouse runs to reduce variance
+- Posts a score table as a PR comment
+- **Fails the check** if the Performance score drops below 70 or total page weight exceeds 2 MB
+
+### Performance Budgets Quick Reference
+
+| Metric | Budget | Severity |
+|--------|--------|----------|
+| Performance score | ≥ 70 | ❌ Blocks merge |
+| LCP (Largest Contentful Paint) | ≤ 4 s | ❌ Blocks merge |
+| CLS (Cumulative Layout Shift) | ≤ 0.1 | ❌ Blocks merge |
+| Total page weight | ≤ 2 MB | ❌ Blocks merge |
+| Accessibility score | ≥ 85 | ❌ Blocks merge |
+| TBT / TTI | ≤ 600 ms / 5 s | ⚠️ Warning |
+| Unused JS | ≤ 100 KB | ⚠️ Warning |
+
+Full details: **[docs/PERFORMANCE_BUDGETS.md](./docs/PERFORMANCE_BUDGETS.md)**
+
+### Run Lighthouse Locally
+
+```bash
+# Install LHCI
+npm install -g @lhci/cli
+
+# Build first
+npm run build
+
+# Audit against staging
+lhci autorun --collect.url="https://kisan-ai.vercel.app"
+
+# OR audit locally
+npm start &
+lhci autorun --collect.url="http://localhost:3000"
+```
+
+### Performance Best Practices
+
+```tsx
+// ✅ Use next/image for all images
+import Image from 'next/image';
+<Image src="/farm.webp" width={800} height={450} alt="Farm" priority />
+
+// ✅ Lazy-load heavy components
+import dynamic from 'next/dynamic';
+const HeavyChart = dynamic(() => import('@/components/HeavyChart'), {
+  ssr: false,
+  loading: () => <Spinner />,
+});
+
+// ✅ Add explicit dimensions to avoid CLS
+<div style={{ minHeight: '200px' }}>
+  {isLoaded ? <Widget /> : <Skeleton />}
+</div>
 ```
 
 ---
