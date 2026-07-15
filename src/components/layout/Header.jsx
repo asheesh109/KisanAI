@@ -1,51 +1,51 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { useState, useEffect } from 'react'
-import { usePathname } from 'next/navigation'
-import { Menu, X, Sprout, Globe, Sun, Moon } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { useTheme } from '@/components/theme-provider'
-import { useLanguage } from '@/contexts/LanguageContext'
+import Link from "next/link";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { Menu, X, Sprout, Globe, Sun, Moon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useTheme } from "@/components/theme-provider";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const navigation = [
-  { name: 'home', href: '/' },
-  { name: 'calendar', href: '/calendar' },
-  { name: 'voiceAssistant', href: '/voice-assistant' },
-  { name: 'cropAnalysis', href: '/crop-analysis' },
-  { name: 'weather', href: '/weather' },
-  { name: 'marketPrices', href: '/market-prices' },
-  { name: 'governmentSchemes', href: '/schemes' },
-  { name: 'kccApplication', href: '/kcc-application' },
-]
+  { name: "home", href: "/" },
+  { name: "calendar", href: "/calendar" },
+  { name: "voiceAssistant", href: "/voice-assistant" },
+  { name: "cropAnalysis", href: "/crop-analysis" },
+  { name: "weather", href: "/weather" },
+  { name: "marketPrices", href: "/market-prices" },
+  { name: "governmentSchemes", href: "/schemes" },
+  { name: "kccApplication", href: "/kcc-application" },
+];
 
 export default function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [showLangMenu, setShowLangMenu] = useState(false)
-  const [mounted, setMounted] = useState(false)
-  const { theme, setTheme } = useTheme()
-  const { language, languages, t, changeLanguage } = useLanguage()
-  const pathname = usePathname()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showLangMenu, setShowLangMenu] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const { language, languages, t, changeLanguage } = useLanguage();
+  const pathname = usePathname();
 
   // ✅ Prevent hydration mismatch
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
   // Close language menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (showLangMenu && !event.target.closest('.language-menu-container')) {
-        setShowLangMenu(false)
+      if (showLangMenu && !event.target.closest(".language-menu-container")) {
+        setShowLangMenu(false);
       }
-    }
+    };
 
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [showLangMenu])
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showLangMenu]);
 
   // Render nothing until mounted to avoid SSR mismatch
-  if (!mounted) return null
+  if (!mounted) return null;
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-md bg-white/90 dark:bg-gray-900/90 border-b border-gray-200/50 dark:border-gray-800/50 shadow-sm">
@@ -62,36 +62,37 @@ export default function Header() {
             </span>
           </Link>
 
-         {/* Desktop Navigation - Hidden on mobile */}
-<nav className="hidden lg:flex items-center space-x-2 xl:space-x-3">
-  {navigation.map((link) => (
-    <Link
-      key={link.name}
-      href={link.href}
-      className={`px-3 py-2 text-sm font-semibold rounded-lg transition-all duration-200 ${
-        pathname === link.href
-          ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400'
-          : 'text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-gray-100 dark:hover:bg-gray-800'
-      }`}
-    >
-      {t(link.name)}
-    </Link>
-  ))}
-</nav>
+          {/* Desktop Navigation - Hidden on mobile */}
+          <nav className="hidden lg:flex items-center space-x-2 xl:space-x-3 ml-8">
+            {navigation.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                aria-current={pathname === link.href ? "page" : undefined}
+                className={`px-3 py-2 text-sm font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 ${
+                  pathname === link.href
+                    ? "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400"
+                    : "text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+                }`}
+              >
+                {t(link.name)}
+              </Link>
+            ))}
+          </nav>
 
           {/* Right Side Controls - Optimized spacing for mobile */}
           <div className="flex items-center space-x-1.5 sm:space-x-2 md:space-x-3">
             {/* Theme Toggle - Smaller on mobile */}
             <button
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               className={`p-2 rounded-lg ${
-                theme === 'dark'
-                  ? 'bg-gray-800 text-yellow-400 hover:bg-gray-700'
-                  : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                theme === "dark"
+                  ? "bg-gray-800 text-yellow-400 hover:bg-gray-700"
+                  : "bg-gray-100 text-gray-900 hover:bg-gray-200"
               } hover:scale-105 transition-all duration-200 flex-shrink-0`}
               aria-label="Toggle theme"
             >
-              {theme === 'dark' ? (
+              {theme === "dark" ? (
                 <Sun className="h-4 w-4 sm:h-5 sm:w-5" />
               ) : (
                 <Moon className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -103,9 +104,9 @@ export default function Header() {
               <button
                 onClick={() => setShowLangMenu(!showLangMenu)}
                 className={`flex items-center space-x-1.5 sm:space-x-2 px-2.5 sm:px-4 py-2 rounded-lg ${
-                  theme === 'dark' 
-                    ? 'bg-gray-800 hover:bg-gray-700' 
-                    : 'bg-gray-100 hover:bg-gray-200'
+                  theme === "dark"
+                    ? "bg-gray-800 hover:bg-gray-700"
+                    : "bg-gray-100 hover:bg-gray-200"
                 } hover:scale-105 transition-all duration-200`}
                 aria-label="Change language"
               >
@@ -119,37 +120,37 @@ export default function Header() {
               {showLangMenu && (
                 <div
                   className={`absolute right-0 mt-2 w-44 sm:w-48 rounded-xl shadow-2xl ${
-                    theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+                    theme === "dark" ? "bg-gray-800" : "bg-white"
                   } border ${
-                    theme === 'dark'
-                      ? 'border-gray-700'
-                      : 'border-gray-200'
+                    theme === "dark" ? "border-gray-700" : "border-gray-200"
                   } overflow-hidden animate-fade-in z-50`}
                 >
                   {Object.values(languages).map((lang) => (
                     <button
                       key={lang.code}
                       onClick={() => {
-                        changeLanguage(lang.code)
-                        setShowLangMenu(false)
+                        changeLanguage(lang.code);
+                        setShowLangMenu(false);
                       }}
                       className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 text-left flex items-center space-x-2 sm:space-x-3 ${
-                        theme === 'dark'
-                          ? 'hover:bg-gray-700'
-                          : 'hover:bg-gray-50'
+                        theme === "dark"
+                          ? "hover:bg-gray-700"
+                          : "hover:bg-gray-50"
                       } transition-colors ${
                         language === lang.code
-                          ? theme === 'dark'
-                            ? 'bg-gray-700 border-l-4 border-emerald-500'
-                            : 'bg-emerald-50 border-l-4 border-emerald-600'
-                          : ''
+                          ? theme === "dark"
+                            ? "bg-gray-700 border-l-4 border-emerald-500"
+                            : "bg-emerald-50 border-l-4 border-emerald-600"
+                          : ""
                       }`}
                     >
                       <span className="text-xl sm:text-2xl">{lang.flag}</span>
                       {/* FIX: Using theme-aware text colors */}
-                      <span className={`font-medium text-sm sm:text-base ${
-                        theme === 'dark' ? 'text-white' : 'text-gray-900'
-                      }`}>
+                      <span
+                        className={`font-medium text-sm sm:text-base ${
+                          theme === "dark" ? "text-white" : "text-gray-900"
+                        }`}
+                      >
                         {lang.name}
                       </span>
                     </button>
@@ -182,11 +183,12 @@ export default function Header() {
               <Link
                 key={link.name}
                 href={link.href}
-                className={`block rounded-lg px-4 py-3 text-base font-semibold transition-all duration-200 ${
-  pathname === link.href
-    ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400'
-    : 'text-gray-900 dark:text-white hover:bg-emerald-50 dark:hover:bg-gray-700 hover:text-emerald-600 dark:hover:text-emerald-400'
-}`}
+                aria-current={pathname === link.href ? "page" : undefined}
+                className={`block rounded-lg px-4 py-3 text-base font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 ${
+                  pathname === link.href
+                    ? "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400"
+                    : "text-gray-900 dark:text-white hover:bg-emerald-50 dark:hover:bg-gray-700 hover:text-emerald-600 dark:hover:text-emerald-400"
+                }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t(link.name)}
@@ -228,5 +230,5 @@ export default function Header() {
         }
       `}</style>
     </header>
-  )
+  );
 }
