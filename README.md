@@ -138,7 +138,7 @@ Discover issue -> Claim -> Create branch -> Implement -> Open PR -> Review -> Me
 ```
 
 - Beginner-friendly: look for `good first issue` or `beginner` labels.
-- For program-specific guidance see `docs/GSSOC_GUIDE.md` and `docs/HACKTOBERFEST_GUIDE.md`.
+- For program-specific guidance see [docs/CONTRIBUTING_EVENTS.md](./docs/CONTRIBUTING_EVENTS.md) — the comprehensive GSSoC & Hacktoberfest guide.
 
 ## Community & Maintainer Support
 
@@ -519,12 +519,14 @@ Complete documentation is available in the [`docs/`](./docs) directory:
 | Document | Purpose |
 |----------|---------|
 | [**CONTRIBUTING.md**](./CONTRIBUTING.md) | How to contribute to the project |
+| [**docs/CONTRIBUTING_EVENTS.md**](./docs/CONTRIBUTING_EVENTS.md) | 🎯 GSSoC & Hacktoberfest contributor guide |
 | [**CODE_OF_CONDUCT.md**](./CODE_OF_CONDUCT.md) | Community guidelines |
 | [**ROADMAP.md**](./ROADMAP.md) | Development timeline and features |
 | [**docs/ARCHITECTURE.md**](./docs/ARCHITECTURE.md) | Technical architecture |
 | [**docs/API.md**](./docs/API.md) | API documentation |
 | [**docs/SETUP.md**](./docs/SETUP.md) | Detailed setup guide |
 | [**docs/CODING_STANDARDS.md**](./docs/CODING_STANDARDS.md) | Code style guide |
+| [**docs/LABELS.md**](./docs/LABELS.md) | GitHub label system & workflow |
 
 ---
 
@@ -551,16 +553,18 @@ Complete documentation is available in the [`docs/`](./docs) directory:
 
 ---
 
-## 🔗 GSSoC 2025 & Hacktoberfest
+## 🔗 GSSoC 2026 & Hacktoberfest
 
-### GSSoC 2025 Support ✨
-KisanAI is an official GSSoC 2025 project! 
+### GSSoC'26 Support ✨
+KisanAI is an official GSSoC'26 project!
 
 - 📝 **110+ Issues** specifically curated for different skill levels
 - 🏆 **Regular Milestones** with achievable goals
 - 👥 **Active Mentorship** from core team
 - 🎯 **Clear Learning Path** for beginners
 - 🚀 **Real-world Impact** helping Indian farmers
+
+**[📋 Full GSSoC & Hacktoberfest Contributor Guide →](./docs/CONTRIBUTING_EVENTS.md)**
 
 **[Start Contributing](./CONTRIBUTING.md)** to make a difference!
 
@@ -571,7 +575,7 @@ Perfect for Hacktoberfest participation:
 - ✅ Quick-win tasks perfect for month-long challenge
 - ✅ Supportive community for first-time contributors
 
-**[Find Hacktoberfest Issues](https://github.com/asheesh109/KisanAI/labels/hacktoberfest)**
+**[Find Hacktoberfest Issues](https://github.com/asheesh109/KisanAI/labels/hacktoberfest)** | **[📋 Event Contributor Guide](./docs/CONTRIBUTING_EVENTS.md)**
 
 ---
 

@@ -4,6 +4,9 @@ Thank you for your interest in contributing to KisanAI! We're excited to have yo
 
 This guide will help you understand our contribution process and get you started making your first contribution.
 
+> 🎯 **GSSoC'26 or Hacktoberfest participant?**
+> Read the dedicated **[Event Contributor Guide (docs/CONTRIBUTING_EVENTS.md)](./docs/CONTRIBUTING_EVENTS.md)** for checklists, issue selection tips, PR standards, label mapping, and mentor pairing templates specific to your program.
+
 ---
 
 ## 📋 Table of Contents
