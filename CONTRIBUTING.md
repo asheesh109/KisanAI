@@ -8,16 +8,48 @@ This guide will help you understand our contribution process and get you started
 
 ## 📋 Table of Contents
 
-1. [Code of Conduct](#code-of-conduct)
-2. [Getting Started](#getting-started)
-3. [Development Setup](#development-setup)
-4. [Making Changes](#making-changes)
-5. [Submitting Changes](#submitting-changes)
-6. [Commit Guidelines](#commit-guidelines)
-7. [Pull Request Process](#pull-request-process)
-8. [Coding Standards](#coding-standards)
-9. [Testing Guidelines](#testing-guidelines)
-10. [Getting Help](#getting-help)
+1. [Quickstart](#quickstart)
+2. [Code of Conduct](#code-of-conduct)
+3. [Getting Started](#getting-started)
+4. [Development Setup](#development-setup)
+5. [Making Changes](#making-changes)
+6. [Submitting Changes](#submitting-changes)
+7. [Commit Guidelines](#commit-guidelines)
+8. [Pull Request Process](#pull-request-process)
+9. [Coding Standards](#coding-standards)
+10. [Testing Guidelines](#testing-guidelines)
+11. [Getting Help](#getting-help)
+
+---
+
+## Quickstart
+
+Fork the repository on GitHub, then run:
+
+```bash
+git clone https://github.com/<your-username>/KisanAI.git
+cd KisanAI
+
+# Install dependencies and start the development server
+npm install
+npm run dev
+```
+
+When ready, stop the server and run the checks:
+
+```bash
+npm test
+npm run lint
+npm run build
+
+# Create a branch, make your changes, then commit and push
+git checkout -b feature/your-feature-name
+git add .
+git commit -m "docs: update setup guide"
+git push origin feature/your-feature-name
+```
+
+Open a Pull Request from your branch to `main` on the [KisanAI repository](https://github.com/asheesh109/KisanAI).
 
 ---
 
