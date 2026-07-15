@@ -35,11 +35,11 @@ export default function HeroBanner() {
           </div>
 
           {/* Hero Title with advanced gradient and staggered animation */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-4 sm:mb-6 leading-tight bg-gradient-to-r from-foreground via-primary to-accent bg-clip-text text-transparent animate-fade-in-up-delayed">
+          <h1 className="mx-auto max-w-[18ch] text-4xl font-bold leading-[1.08] text-foreground sm:text-5xl md:text-6xl md:leading-[1.06] lg:text-7xl bg-gradient-to-r from-foreground via-primary to-accent bg-clip-text text-transparent mb-4 sm:mb-6 animate-fade-in-up-delayed">
             {t('heroWelcome')}
           </h1>
           
-          <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground mb-6 sm:mb-10 max-w-3xl mx-auto leading-relaxed opacity-95 font-medium tracking-wide animate-fade-in-up-delayed-2">
+          <p className="mx-auto max-w-[62ch] text-lg font-medium leading-7 text-muted-foreground sm:text-xl sm:leading-8 md:text-2xl md:leading-9 mb-6 sm:mb-10 opacity-95 tracking-wide animate-fade-in-up-delayed-2">
             {t('heroTagline')}
           </p>
 
