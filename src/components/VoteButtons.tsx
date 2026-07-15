@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 
 interface VoteButtonsProps {
   experienceId: string;
   upvotes: number;
   downvotes: number;
   guestId: string;
+  voterIds?: string[];
   onVote: (upvotes: number, downvotes: number) => void;
 }
 
@@ -15,12 +16,22 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
   upvotes,
   downvotes,
   guestId,
+  voterIds = [],
   onVote,
 }) => {
   const [localUpvotes, setLocalUpvotes] = useState(upvotes);
   const [localDownvotes, setLocalDownvotes] = useState(downvotes);
   const [loading, setLoading] = useState(false);
-  const [userVote, setUserVote] = useState<'upvote' | 'downvote' | null>(null);
+
+  // Derive initial vote state from persisted voterIds so the button stays
+  // highlighted after a page reload (guestId is stable in localStorage).
+  const initialVote = useMemo<'upvote' | 'downvote' | null>(() => {
+    if (guestId && voterIds.includes(`upvote-${guestId}`)) return 'upvote';
+    if (guestId && voterIds.includes(`downvote-${guestId}`)) return 'downvote';
+    return null;
+  }, [guestId, voterIds]);
+
+  const [userVote, setUserVote] = useState<'upvote' | 'downvote' | null>(initialVote);
 
   const handleUpvote = async () => {
     if (loading || userVote === 'upvote') return;

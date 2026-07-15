@@ -19,6 +19,7 @@ interface ExperienceCarouselCardProps {
     upvotes: number;
     downvotes: number;
     createdAt: Date | string;
+    voterIds?: string[];
   };
   guestId: string;
   isDarkMode: boolean;
@@ -162,6 +163,7 @@ export const ExperienceCarouselCard: React.FC<ExperienceCarouselCardProps> = ({
           upvotes={experience.upvotes}
           downvotes={experience.downvotes}
           guestId={guestId}
+          voterIds={experience.voterIds}
           isDarkMode={isDarkMode}
           onVote={onVote}
         />

@@ -8,6 +8,7 @@ interface VoteButtonsCarouselProps {
   upvotes: number;
   downvotes: number;
   guestId: string;
+  voterIds?: string[];
   isDarkMode: boolean;
   onVote: (upvotes: number, downvotes: number) => void;
 }
@@ -17,13 +18,23 @@ export const VoteButtonsCarousel: React.FC<VoteButtonsCarouselProps> = ({
   upvotes,
   downvotes,
   guestId,
+  voterIds = [],
   isDarkMode,
   onVote,
 }) => {
   const [localUpvotes, setLocalUpvotes] = React.useState(upvotes);
   const [localDownvotes, setLocalDownvotes] = React.useState(downvotes);
   const [loading, setLoading] = React.useState(false);
-  const [userVote, setUserVote] = React.useState<'upvote' | 'downvote' | null>(null);
+
+  // Derive initial vote state from persisted voterIds so the button stays
+  // highlighted after a page reload (guestId is stable in localStorage).
+  const initialVote = React.useMemo<'upvote' | 'downvote' | null>(() => {
+    if (guestId && voterIds.includes(`upvote-${guestId}`)) return 'upvote';
+    if (guestId && voterIds.includes(`downvote-${guestId}`)) return 'downvote';
+    return null;
+  }, [guestId, voterIds]);
+
+  const [userVote, setUserVote] = React.useState<'upvote' | 'downvote' | null>(initialVote);
 
   const handleUpvote = async () => {
     if (loading || userVote === 'upvote') return;
