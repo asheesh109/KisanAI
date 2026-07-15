@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import { connectToDatabase } from '@/lib/mongodb';
+import { sanitizeError } from '@/lib/errors';
 
 interface Reply {
   _id: ObjectId;
@@ -72,9 +73,10 @@ export async function POST(
     return NextResponse.json(formattedReply, { status: 201 });
   } catch (error) {
     console.error('POST /api/messages/[id]/reply error:', error);
+    const appError = sanitizeError(error);
     return NextResponse.json(
-      { error: 'Failed to add reply' },
-      { status: 500 }
+      { error: appError.message, code: appError.code },
+      { status: appError.statusCode }
     );
   }
 }

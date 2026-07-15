@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import { connectToDatabase } from '@/lib/mongodb';
+import { sanitizeError } from '@/lib/errors';
 import { translateExperienceToAllLanguages } from '@/lib/geminiTranslate';
 
 interface ExperienceDocument {
@@ -48,12 +49,10 @@ export async function GET() {
     return NextResponse.json(formattedExperiences, { status: 200 });
   } catch (error) {
     console.error('❌ GET /api/experiences error:', error);
+    const appError = sanitizeError(error);
     return NextResponse.json(
-      {
-        error: 'Failed to fetch experiences',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
+      { error: appError.message, code: appError.code },
+      { status: appError.statusCode }
     );
   }
 }
@@ -127,13 +126,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(insertedExperience, { status: 201 });
   } catch (error) {
     console.error('❌ POST /api/experiences error:', error);
-
+    const appError = sanitizeError(error);
     return NextResponse.json(
-      {
-        error: 'Failed to create experience',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
+      { error: appError.message, code: appError.code },
+      { status: appError.statusCode }
     );
   }
 }

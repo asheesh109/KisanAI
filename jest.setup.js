@@ -1,5 +1,18 @@
 import '@testing-library/jest-dom'
 
+if (!global.Request) {
+  global.Request = require('node-fetch').Request;
+}
+if (!global.Response) {
+  global.Response = require('node-fetch').Response;
+}
+if (!global.Headers) {
+  global.Headers = require('node-fetch').Headers;
+}
+if (!global.fetch) {
+  global.fetch = require('node-fetch').default;
+}
+
 // Mock Web APIs that are not available in jsdom
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
