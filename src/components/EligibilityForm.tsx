@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { EligibilityFilters } from '@/hooks/useSchemeFilter';
+import { EligibilityFilters, isValidAge, MIN_AGE, MAX_AGE } from '@/hooks/useSchemeFilter';
 
 interface EligibilityFormProps {
   filters: EligibilityFilters;
@@ -54,7 +54,51 @@ export const EligibilityForm: React.FC<EligibilityFormProps> = ({
   const { translations } = useLanguage();
   const [validationError, setValidationError] = useState<string>('');
 
+  const [ageInput, setAgeInput] = useState<string>(
+    filters.age !== undefined ? String(filters.age) : ''
+  );
+  const [ageError, setAgeError] = useState<string>('');
+
+  const handleAgeChange = useCallback(
+    (rawValue: string) => {
+      setAgeInput(rawValue);
+
+      if (rawValue.trim() === '') {
+        setAgeError('');
+        onFilterChange('age', undefined);
+        return;
+      }
+
+      const parsedAge = Number(rawValue);
+
+      if (!Number.isFinite(parsedAge) || rawValue.includes('.')) {
+        setAgeError(translations?.invalidAge || 'Please enter a valid whole number for age.');
+        onFilterChange('age', undefined);
+        return;
+      }
+
+      if (!isValidAge(parsedAge)) {
+        setAgeError(
+          translations?.ageOutOfRange ||
+            `Age must be between ${MIN_AGE} and ${MAX_AGE}.`
+        );
+        onFilterChange('age', undefined);
+        return;
+      }
+
+      setAgeError('');
+      onFilterChange('age', parsedAge);
+    },
+    [onFilterChange, translations]
+  );
+
   const handleApply = useCallback(() => {
+    // Block submission until the Age field (if filled in) is valid
+    if (ageError) {
+      setValidationError(ageError);
+      return;
+    }
+
     // Basic validation: at least one filter should be selected
     if (Object.keys(filters).length === 0) {
       setValidationError(translations?.requiredFieldsEmpty || 'Please select at least one filter');
@@ -62,10 +106,12 @@ export const EligibilityForm: React.FC<EligibilityFormProps> = ({
     }
     setValidationError('');
     onApply();
-  }, [filters, onApply, translations]);
+  }, [ageError, filters, onApply, translations]);
 
   const handleReset = useCallback(() => {
     setValidationError('');
+    setAgeInput('');
+    setAgeError('');
     onReset();
   }, [onReset]);
 
@@ -95,15 +141,24 @@ export const EligibilityForm: React.FC<EligibilityFormProps> = ({
           <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
             {translations?.age || 'Age'}
           </label>
-          <input
+         <input
             type="number"
-            min="0"
-            max="120"
-            value={filters.age || ''}
-            onChange={(e) => onFilterChange('age', e.target.value ? parseInt(e.target.value) : undefined)}
+            min={MIN_AGE}
+            max={MAX_AGE}
+            value={ageInput}
+            onChange={(e) => handleAgeChange(e.target.value)}
             placeholder="25"
-            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 ${inputBgClass}`}
+            aria-invalid={!!ageError}
+            aria-describedby={ageError ? 'age-error' : undefined}
+            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+              ageError ? 'border-red-500 focus:ring-red-500' : 'focus:ring-green-500'
+            } ${inputBgClass}`}
           />
+          {ageError && (
+            <p id="age-error" className="mt-1 text-sm text-red-600 dark:text-red-400">
+              {ageError}
+            </p>
+          )}
         </div>
 
         {/* Gender */}
@@ -350,9 +405,14 @@ export const EligibilityForm: React.FC<EligibilityFormProps> = ({
 
       {/* Action Buttons */}
       <div className="flex gap-3 pt-4">
-        <button
+       <button
           onClick={handleApply}
-          className="flex-1 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
+          disabled={!!ageError}
+          className={`flex-1 px-6 py-3 text-white font-medium rounded-lg transition-colors ${
+            ageError
+              ? 'bg-green-600/50 cursor-not-allowed'
+              : 'bg-green-600 hover:bg-green-700'
+          }`}
         >
           {translations?.applyFilters || 'Apply Filters'}
         </button>
