@@ -320,10 +320,10 @@ export function SmartReschedulePanel({
           res.status === 404
             ? 'Reschedule API route not found. File should be at: app/api/calendar/events/reschedule/route.ts'
             : res.status === 405
-            ? 'Method not allowed. Check that the API route exists and accepts POST requests.'
-            : res.status === 503
-            ? 'AI service not configured. Please set OPENROUTER_API_KEY in .env.local'
-            : `Server error (${res.status}): ${text.slice(0, 100)}`
+              ? 'Method not allowed. Check that the API route exists and accepts POST requests.'
+              : res.status === 503
+                ? 'AI service not configured. Please set OPENROUTER_API_KEY in .env.local'
+                : `Server error (${res.status}): ${text.slice(0, 100)}`
         );
       }
 
@@ -355,7 +355,7 @@ export function SmartReschedulePanel({
     setMode('applying');
     try {
       await onConfirmReschedule(result.rescheduledEvents);
-      
+
       telemetry.track('reschedule_confirmed', {
         source: 'calendar',
         success: true
