@@ -451,7 +451,7 @@ const PREDEFINED_SCHEMES = [
         ml: ['ഐഡന്റിറ്റി പ്രൂഫ് (ആധാർ/വോട്ടർ ഐഡി/ഡ്രൈവിങ് ലൈസൻസ്)', 'അഡ്രസ് പ്രൂഫ്', 'ഭൂമി രേഖകൾ', '2 പാസ്പോർട്ട് ഫോട്ടോകൾ', 'ഇൻകം സർട്ടിഫിക്കറ്റ്']
       },
       helplineNumber: '1800-180-1551',
-      schemeUrl: 'https://www.nabard.org/kcc.aspx',
+      schemeUrl: 'https://fasalrin.gov.in/',
       category: 'credit',
       sponsorMinistry: {
         en: 'Ministry of Agriculture & Farmers Welfare',
@@ -1205,7 +1205,7 @@ const PREDEFINED_SCHEMES = [
         ml: ['സംസ്ഥാന കൃഷി പ്ലാൻ ഡോക്യുമെന്റ്', 'ജില്ലാ ലെവൽ പ്രൊപ്പോസലുകൾ', 'ബജറ്റ് എസ്റ്റിമേറ്റുകൾ', 'ബേസ്‌ലൈൻ ഡാറ്റ', 'ഇംപ്ലിമെന്റേഷൻ സ്ട്രാറ്റജി']
       },
       helplineNumber: '1800-180-1551',
-      schemeUrl: 'https://rkvy.nic.in',
+      schemeUrl: 'https://rkvy.da.gov.in/',
       category: 'subsidy',
       sponsorMinistry: {
         en: 'Ministry of Agriculture & Farmers Welfare',
@@ -1356,7 +1356,7 @@ const PREDEFINED_SCHEMES = [
         ml: ['വിദ്യാഭ്യാസ സർട്ടിഫിക്കറ്റുകൾ', 'പ്രോജക്ട് റിപ്പോർട്ട്', 'ആധാർ, പാൻ', 'ബാങ്ക് ലോൺ അപേക്ഷ', 'ട്രെയിനിങ് കംപ്ലീഷൻ സർട്ടിഫിക്കറ്റ്']
       },
       helplineNumber: '1800-425-44480',
-      schemeUrl: 'https://agriclinics.dac.gov.in',
+      schemeUrl: 'https://www.agriclinics.net/',
       category: 'training',
       sponsorMinistry: {
         en: 'Ministry of Agriculture & Farmers Welfare',
@@ -1961,7 +1961,7 @@ const PREDEFINED_SCHEMES = [
         ml: ['ആധാർ കാർഡ്', 'ഭൂമി രേഖകൾ', 'ഉപകരണ ക്വോട്ടേഷൻ', 'ബാങ്ക് പാസ്ബുക്ക്', 'ബാധകമെങ്കിൽ ജിഎസ്ടി റജിസ്ട്രേഷൻ']
       },
       helplineNumber: '1800-180-1551',
-      schemeUrl: 'https://smam.dac.gov.in',
+      schemeUrl: 'https://www.myscheme.gov.in/schemes/smamchcbfuk',
       category: 'subsidy',
       sponsorMinistry: {
         en: 'Ministry of Agriculture & Farmers Welfare',
@@ -2112,7 +2112,7 @@ const PREDEFINED_SCHEMES = [
         ml: ['ആധാർ കാർഡ്', 'ഭൂമി രേഖകൾ', 'സീഡ് പർച്ചേസ് റസീറ്റ്', 'ബാങ്ക് വിശദാംശങ്ങൾ', 'കൾട്ടിവേഷൻ പ്ലാൻ']
       },
       helplineNumber: '1800-180-1551',
-      schemeUrl: 'https://nmoop.dac.gov.in',
+      schemeUrl: 'https://nmeo.dac.gov.in/',
       category: 'subsidy',
       sponsorMinistry: {
         en: 'Ministry of Agriculture & Farmers Welfare',
@@ -2263,7 +2263,7 @@ const PREDEFINED_SCHEMES = [
         ml: ['ആധാർ കാർഡ്', 'ലൈവ്സ്റ്റോക്ക് ഉടമസ്ഥാവകാശ പ്രൂഫ്', 'പ്രോജക്ട് റിപ്പോർട്ട്', 'ബാങ്ക് വിശദാംശങ്ങൾ', 'ട്രെയിനിങ് സർട്ടിഫിക്കറ്റ്']
       },
       helplineNumber: '1800-180-2108',
-      schemeUrl: 'https://nlm.nic.in',
+      schemeUrl: 'https://www.dahd.gov.in/en/schemes/programmes/national_livestock_mission',
       category: 'subsidy',
       sponsorMinistry: {
         en: 'Ministry of Fisheries, Animal Husbandry & Dairying',
@@ -2414,7 +2414,7 @@ const PREDEFINED_SCHEMES = [
         ml: ['പ്രോജക്ട് റിപ്പോർട്ട്', 'ബാങ്ക് ലോൺ സാങ്ക്‌ഷൻ ലെറ്റർ', 'ആധാർ, പാൻ', 'ബാധകമെങ്കിൽ ലാൻഡ് ലീസ്', 'ജിഎസ്ടി റജിസ്ട്രേഷൻ']
       },
       helplineNumber: '011-23381049',
-      schemeUrl: 'https://aif.agriinfra.dac.gov.in',
+      schemeUrl: 'https://agriinfra.dac.gov.in/',
       category: 'credit',
       sponsorMinistry: {
         en: 'Ministry of Agriculture & Farmers Welfare',
@@ -2565,7 +2565,7 @@ const PREDEFINED_SCHEMES = [
         ml: ['ആധാർ കാർഡ്', 'ആധാറുമായി ലിങ്ക് ചെയ്ത ബാങ്ക് അക്കൗണ്ട്', 'കർഷക റജിസ്ട്രേഷൻ ഐഡി', 'കോമോഡിറ്റി ക്വാളിറ്റി സർട്ടിഫിക്കറ്റ്', 'എപിഎംസി ലൈസൻസ്']
       },
       helplineNumber: '1800-270-0222',
-      schemeUrl: 'https://enam.gov.in',
+      schemeUrl: 'https://agri.enam.gov.in/',
       category: 'training',
       sponsorMinistry: {
         en: 'Ministry of Agriculture & Farmers Welfare',
@@ -2866,7 +2866,7 @@ const PREDEFINED_SCHEMES = [
         ml: ['ആധാർ കാർഡ്', 'ഭൂമി രേഖകൾ', 'ഇലക്ട്രിസിറ്റി ബിൽ', 'പ്രോജക്ട് പ്രൊപ്പോസൽ', 'ബാങ്ക് വിശദാംശങ്ങൾ']
       },
       helplineNumber: '1800-180-3333',
-      schemeUrl: 'https://mnre.gov.in/kusum',
+      schemeUrl: 'https://pmkusum.mnre.gov.in/#/landing',
       category: 'subsidy',
       sponsorMinistry: {
         en: 'Ministry of New and Renewable Energy',
@@ -3167,7 +3167,7 @@ const PREDEFINED_SCHEMES = [
         ml: ['ഡിപിആർ', 'ലോൺ സാങ്ക്‌ഷൻ ലെറ്റർ', 'ആധാർ/പാൻ', 'ഭൂമി രേഖകൾ', 'ജിഎസ്ടി റജിസ്ട്രേഷൻ']
       },
       helplineNumber: '1800-180-2108',
-      schemeUrl: 'https://dahd.nic.in',
+      schemeUrl: 'https://dahd.gov.in/en/schemes/programmes/ahidf',
       category: 'credit',
       sponsorMinistry: {
         en: 'Ministry of Fisheries, Animal Husbandry & Dairying',
@@ -3439,7 +3439,7 @@ const PREDEFINED_SCHEMES = [
         ml: ['ആധാർ കാർഡ്', 'ഭൂമി രേഖകൾ', 'ഗ്രൂപ്പ് മെമ്പർഷിപ് പ്രൂഫ്', 'ട്രെയിനിങ് അപേക്ഷ ഫോം', 'ഫീഡ്ബാക്ക് ഫോം']
       },
       helplineNumber: '1800-180-1551',
-      schemeUrl: 'https://atma.dac.gov.in',
+      schemeUrl: 'https://agriwelfare.gov.in/',
       category: 'training',
       sponsorMinistry: {
         en: 'Ministry of Agriculture & Farmers Welfare',
@@ -3891,7 +3891,7 @@ const PREDEFINED_SCHEMES = [
         ml: ['ആധാർ കാർഡ്', 'ഭൂമി രേഖകൾ', 'റജിസ്ട്രേഷൻ ഫോം', 'ഫോട്ടോ', 'നോ സ്പെസിഫിക് ഡോക്യുമെന്റുകൾ']
       },
       helplineNumber: '0120-2617465',
-      schemeUrl: 'https://kvk.icar.gov.in',
+      schemeUrl: 'https://icar.org.in/en/krishi-vigyan-kendras',
       category: 'training',
       sponsorMinistry: {
         en: 'Ministry of Agriculture & Farmers Welfare',
@@ -4041,7 +4041,7 @@ const PREDEFINED_SCHEMES = [
         ml: ['ആധാർ കാർഡ്', 'മൊബൈൽ നമ്പർ', 'ബാങ്ക് അക്കൗണ്ട്', 'കർഷക റജിസ്ട്രേഷൻ', 'സ്മാർട്ട്‌ഫോൺ']
       },
       helplineNumber: '1800-180-1551',
-      schemeUrl: 'https://digitalagriculture.gov.in',
+      schemeUrl: 'https://agriwelfare.gov.in/en/DigiAgriDiv',
       category: 'training',
       sponsorMinistry: {
         en: 'Ministry of Agriculture & Farmers Welfare',
@@ -4192,7 +4192,7 @@ const PREDEFINED_SCHEMES = [
         ml: ['മൊബൈൽ നമ്പർ', 'ഒടിപി വെരിഫിക്കേഷൻ', 'മറ്റ് ഡോക്യുമെന്റുകൾ ഇല്ല']
       },
       helplineNumber: '1800-1551',
-      schemeUrl: 'https://agrik Mitra.in',
+      schemeUrl: 'https://kisanemitra.gov.in/Home/Index',
       category: 'training',
       sponsorMinistry: {
         en: 'Ministry of Agriculture & Farmers Welfare',
@@ -4494,7 +4494,7 @@ const PREDEFINED_SCHEMES = [
         ml: ['ആധാർ കാർഡ്', 'ഭൂമി രേഖകൾ', 'ബാങ്ക് വിശദാംശങ്ങൾ', 'ക്രോപ്പ് പ്ലാൻ', 'ഫോട്ടോ']
       },
       helplineNumber: '155261',
-      schemeUrl: 'https://pmddky.gov.in',
+      schemeUrl: 'https://pmddky.niti.gov.in/aboutTheScheme',
       category: 'income-support',
       sponsorMinistry: {
         en: 'Ministry of Agriculture & Farmers Welfare',
