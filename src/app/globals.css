@@ -440,8 +440,10 @@ button {
   color: hsl(var(--foreground));
 }
 
-.dark p {
-  color: hsl(var(--muted-foreground));
+.dark .feature-card p,
+.dark .stats-card p,
+.dark .about-card p {
+    color: hsl(var(--muted-foreground));
 }
 
 /* Mobile touch optimization */
