@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import type { CalendarEvent } from './ProfessionalCalendar';
 import type { RescheduleResponse, RescheduledEvent } from '@/types/calendar';
+import { telemetry } from '@/lib/telemetry';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -354,6 +355,12 @@ export function SmartReschedulePanel({
     setMode('applying');
     try {
       await onConfirmReschedule(result.rescheduledEvents);
+      
+      telemetry.track('reschedule_confirmed', {
+        source: 'calendar',
+        success: true
+      });
+
       setMode('success');
       setTimeout(() => {
         setMode('idle');
