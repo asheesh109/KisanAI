@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import HeroBanner from "@/components/HeroBanner";
 import FeatureCards from "@/components/FeatureCards";
