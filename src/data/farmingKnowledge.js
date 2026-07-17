@@ -1,5 +1,12 @@
 const OPENROUTER_API_KEY = process.env.NEXT_PUBLIC_OPENROUTER_API_KEY;
-const OPENROUTER_MODEL = 'openai/gpt-oss-120b:free';
+console.log("API Key:", OPENROUTER_API_KEY);
+// const OPENROUTER_MODEL = "google/gemma-4-31b-it:free";
+const MODELS = [
+  "google/gemma-4-31b-it:free",
+  "google/gemma-4-26b-a4b-it:free",
+  "meta-llama/llama-3.2-3b-instruct:free",
+  "google/gemma-4-26b-a4b-it:free"
+];
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 if (!OPENROUTER_API_KEY) {
@@ -457,7 +464,7 @@ export const defaultResponse = {
 // Enhanced markdown cleaning function
 export const cleanMarkdown = (text) => {
   if (!text) return '';
-  
+
   return text
     .replace(/\*\*(.*?)\*\*/g, '$1')
     .replace(/\*(.*?)\*/g, '$1')
@@ -475,7 +482,7 @@ export const cleanMarkdown = (text) => {
 const withTimeout = (promise, timeoutMs = 25000) => {
   return Promise.race([
     promise,
-    new Promise((_, reject) => 
+    new Promise((_, reject) =>
       setTimeout(() => reject(new Error('Request timeout')), timeoutMs)
     )
   ]);
@@ -494,13 +501,13 @@ export async function generateAIResponse(query, language = 'en') {
 
   const prompts = {
     en: `You are an agricultural expert assistant for Indian farmers. Provide helpful, practical advice in English.\n\nQuestion: ${query}\n\nGive clear, actionable advice in simple language. Keep response under 180 words.`,
-    
+
     hi: `आप भारतीय किसानों के लिए कृषि विशेषज्ञ सहायक हैं। निम्नलिखित प्रश्न का हिंदी में व्यावहारिक उत्तर दें:\n\nप्रश्न: ${query}\n\nसरल भाषा में स्पष्ट सलाह दें। उत्तर 180 शब्दों से कम रखें।`,
-    
+
     mr: `तुम भारतीय शेतकऱ्यांसाठी कृषी तज्ञ आहात. खालील प्रश्नाचे मराठीत सोपे उत्तर द्या:\n\nप्रश्न: ${query}\n\nव्यावहारिक सल्ला द्या. उत्तर १८० शब्दांपेक्षा कमी ठेवा.`,
-    
+
     gu: `તમે ભારતીય ખેડૂતો માટે કૃષિ નિષ્ણાત સહાયક છો. નીચેના પ્રશ્નનો ગુજરાતીમાં વ્યવહારુ જવાબ આપો:\n\nપ્રશ્ન: ${query}\n\nસરળ ભાષામાં સ્પષ્ટ સલાહ આપો. જવાબ 180 શબ્દોથી ઓછો રાખો.`,
-    
+
     ml: `നിങ്ങൾ ഇന്ത്യൻ കർഷകർക്കായുള്ള കൃഷി വിദഗ്ധ സഹായിയാണ്. ചോദ്യത്തിന് മലയാളത്തിൽ പ്രായോഗിക ഉത്തരം നൽകുക:\n\nചോദ്യം: ${query}\n\nലളിതമായ ഭാഷയിൽ ഉപയോഗപ്രദമായ ഉപദേശം നൽകുക. 180 വാക്കുകൾക്കുള്ളിൽ നിർത്തുക.`
   };
 
@@ -509,88 +516,122 @@ export async function generateAIResponse(query, language = 'en') {
   // Try OpenRouter API
   try {
     if (!OPENROUTER_API_KEY) {
-      throw new Error('OpenRouter API key not configured');
+      throw new Error("OpenRouter API key not configured");
     }
 
-    const response = await withTimeout(
-      fetch(OPENROUTER_API_URL, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-          'HTTP-Referer': process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-          'X-Title': 'Farming AI Assistant',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          model: OPENROUTER_MODEL,
-          messages: [
-            { role: 'user', content: prompt }
-          ],
-          temperature: 0.7,
-          max_tokens: 600,
-        }),
-      }),
-      30000 // 30 second timeout
-    );
+    for (const model of MODELS) {
+      try {
+        console.log("Trying:", model);
 
-    if (!response.ok) {
-      throw new Error(`OpenRouter API error: ${response.status}`);
-    }
+        const response = await withTimeout(
+          fetch(OPENROUTER_API_URL, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+              "HTTP-Referer":
+                process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+              "X-Title": "Farming AI Assistant",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              model,
+              messages: [
+                {
+                  role: "user",
+                  content: prompt,
+                },
+              ],
+              temperature: 0.7,
+              max_tokens: 600,
+            }),
+          }),
+          30000
+        );
 
-    const data = await response.json();
-    const aiText = data.choices?.[0]?.message?.content;
+        if (!response.ok) {
+          const error = await response.text();
+          console.log(`${model} failed`, error);
+          continue;
+        }
 
-    if (aiText && aiText.trim()) {
-      return cleanMarkdown(aiText);
+        const data = await response.json();
+
+        const aiText = data.choices?.[0]?.message?.content;
+
+        if (aiText) {
+          console.log(`Using ${model}`);
+          return cleanMarkdown(aiText);
+        }
+      } catch (err) {
+        console.log(`${model} error`, err.message);
+      }
     }
   } catch (error) {
-    console.error('OpenRouter API Error:', error.message);
-    // Fall through to knowledge base
+    console.error(error);
   }
+
 
   // Fallback to knowledge base
   try {
-    const match = findBestMatch(query, language);
-    if (match?.response) {
-      return match.response;
-    }
-  } catch (fbError) {
-    console.error('Knowledge base error:', fbError);
+  const match = findBestMatch(query, language);
+
+  if (match?.response) {
+    console.log("Knowledge Base Match:", match.query);
+    return match.response;
   }
 
-  // Final fallback
-  return defaultResponse[language] || defaultResponse['en'];
+  console.log("No suitable knowledge base match found.");
+
+} catch (fbError) {
+  console.error("Knowledge base error:", fbError);
 }
 
+// Final fallback
+return defaultResponse[language] || defaultResponse.en;
+}
+
+// ===============================
 // Find best match from knowledge base
-export function findBestMatch(userQuery, language = 'en') {
-  const base = farmingKnowledgeBase[language] || farmingKnowledgeBase['hi'];
-  const query = userQuery.toLowerCase().trim();
+// ===============================
+export function findBestMatch(userQuery, language = "en") {
+  const base =
+    farmingKnowledgeBase[language] ||
+    farmingKnowledgeBase["en"];
+
+  const query = userQuery
+    .toLowerCase()
+    .replace(/[^\w\s]/g, "")
+    .trim();
 
   let bestMatch = null;
   let highestScore = 0;
 
   for (const item of base) {
     let score = 0;
+
     for (const keyword of item.keywords) {
       const k = keyword.toLowerCase();
-      if (query.includes(k)) score += 3;
-      if (k.includes(query)) score += 2;
+
+      if (query === k) {
+        score += 10;
+      } else if (query.includes(k)) {
+        score += 4;
+      } else if (k.includes(query)) {
+        score += 2;
+      }
     }
+
     if (score > highestScore) {
       highestScore = score;
       bestMatch = item;
     }
   }
 
-  if (highestScore >= 2) return bestMatch;
+  if (highestScore >= 6) {
+    return bestMatch;
+  }
 
-  // Partial match fallback
-  return base.find(item =>
-    item.keywords.some(kw => 
-      query.includes(kw.toLowerCase()) || kw.toLowerCase().includes(query)
-    )
-  ) || null;
+  return null;
 }
 
-export { fallbackResponses_old as fallbackResponses };
+// export { fallbackResponses_old as fallbackResponses };

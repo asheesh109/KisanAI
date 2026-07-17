@@ -4,8 +4,7 @@ import HeroBanner from "@/components/HeroBanner";
 import FeatureCards from "@/components/FeatureCards";
 import StatsSection from "@/components/StatsSection";
 import AboutSection from "@/components/AboutSection";
-import { FarmersExperienceCarousel } from "@/components/FarmersExperienceCarousel";
-
+import { generateAIResponse } from '@/data/farmingKnowledge';
 export default function Home() {
   return (
     <div className="min-h-screen">
@@ -13,7 +12,7 @@ export default function Home() {
       <StatsSection />
       <FeatureCards />
       <AboutSection />
-      <FarmersExperienceCarousel />
+      {/* <FarmersExperienceCarousel /> */}
     </div>
   );
 }

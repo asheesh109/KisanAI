@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { useSpeechRecognition } from '@/hooks/useSpeechRecognition'
 import { useSpeechSynthesis } from '@/hooks/useSpeechSynthesis'
-import { generateAIResponse, fallbackResponses } from '@/data/farmingKnowledge'
+import { generateAIResponse, defaultResponse } from '@/data/farmingKnowledge'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function VoiceAssistant() {
@@ -75,7 +75,7 @@ export default function VoiceAssistant() {
 
     try {
       const response = await generateAIResponse(query, language)
-      
+
       const aiMessage = {
         id: (Date.now() + 1).toString(),
         type: 'ai',
@@ -95,7 +95,7 @@ export default function VoiceAssistant() {
       const errorMessage = {
         id: (Date.now() + 2).toString(),
         type: 'ai',
-        text: fallbackResponses[language] || fallbackResponses['en'],
+        text: defaultResponse[language] || defaultResponse.en,
         timestamp: new Date(),
       }
       setConversations(prev => [...prev, errorMessage])
@@ -103,11 +103,15 @@ export default function VoiceAssistant() {
   }, [ttsSupported, speak, lastQueryTime, language])
 
   useEffect(() => {
-    if (transcript && !isListening && transcript.trim().length > 0) {
-      handleUserQuery(transcript)
-      resetTranscript()
+    if (transcript && transcript.trim().length > 0) {
+      setTextInput(transcript);
     }
-  }, [transcript, isListening, resetTranscript, handleUserQuery])
+
+    if (transcript && !isListening && transcript.trim().length > 0) {
+      handleUserQuery(transcript);
+      resetTranscript();
+    }
+  }, [transcript, isListening, resetTranscript, handleUserQuery]);
 
   const handleTextSubmit = () => {
     if (textInput.trim()) {
@@ -193,16 +197,15 @@ export default function VoiceAssistant() {
             <CardTitle className="text-xl sm:text-2xl font-semibold text-foreground">{t('talkToAIAssistant')}</CardTitle>
           </CardHeader>
           <CardContent className="text-center space-y-4 sm:space-y-6">
-            <div className={`w-24 sm:w-32 h-24 sm:h-32 rounded-full flex items-center justify-center mx-auto transition-all duration-300 border-2 border-border ${
-              isListening ? 'border-destructive bg-destructive/10 dark:bg-destructive/20' : 'border-primary bg-primary/10 dark:bg-primary/20'
-            }`}>
+            <div className={`w-24 sm:w-32 h-24 sm:h-32 rounded-full flex items-center justify-center mx-auto transition-all duration-300 border-2 border-border ${isListening ? 'border-destructive bg-destructive/10 dark:bg-destructive/20' : 'border-primary bg-primary/10 dark:bg-primary/20'
+              }`}>
               {isListening ? (
                 <MicOff className="h-12 sm:h-16 w-12 sm:w-16 text-destructive" />
               ) : (
                 <Mic className="h-12 sm:h-16 w-12 sm:w-16 text-primary" />
               )}
             </div>
-            
+
             {transcript && (
               <div className="p-3 sm:p-4 bg-muted rounded-lg">
                 <p className="text-foreground text-sm sm:text-base break-words">
@@ -213,8 +216,8 @@ export default function VoiceAssistant() {
 
             <div className="space-y-4">
               <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   onClick={handleVoiceToggle}
                   disabled={!speechSupported || isProcessing}
                   className={`w-full sm:w-auto min-h-[44px] text-sm sm:text-base px-4 sm:px-6 whitespace-normal ${isListening ? 'bg-destructive hover:bg-destructive/90 dark:bg-destructive dark:hover:bg-destructive/90' : 'bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/90'}`}
@@ -231,10 +234,10 @@ export default function VoiceAssistant() {
                     </>
                   )}
                 </Button>
-                
-                <Button 
-                  variant="outline" 
-                  onClick={isSpeaking ? stopSpeaking : () => {}}
+
+                <Button
+                  variant="outline"
+                  onClick={isSpeaking ? stopSpeaking : () => { }}
                   disabled={!ttsSupported}
                   className="w-full sm:w-auto min-h-[44px] text-sm sm:text-base px-4 sm:px-6 border-border text-foreground hover:bg-muted whitespace-normal"
                 >
@@ -262,8 +265,8 @@ export default function VoiceAssistant() {
                   disabled={isProcessing}
                   className="flex-1 px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-md focus:ring-2 focus:ring-primary focus:border-transparent text-foreground placeholder:text-muted-foreground disabled:bg-muted bg-card text-sm sm:text-base"
                 />
-                <Button 
-                  onClick={handleTextSubmit} 
+                <Button
+                  onClick={handleTextSubmit}
                   disabled={!textInput.trim() || isProcessing}
                   className="w-full sm:w-auto bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/90 min-h-[44px]"
                 >
@@ -287,12 +290,12 @@ export default function VoiceAssistant() {
                   </Button>
                 ))}
               </div>
-              
+
               {speechError && (
                 <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg flex items-start">
                   <AlertCircle className="h-5 w-5 text-destructive mr-2 flex-shrink-0 mt-0.5" />
                   <span className="text-destructive text-sm">
-                    {t('micProblem')}: {speechError === 'not-allowed' ? t('allowMicPermission') : speechError}
+                    {speechError}
                   </span>
                 </div>
               )}
@@ -312,10 +315,10 @@ export default function VoiceAssistant() {
           <Card className="mb-6 sm:mb-8 bg-card border border-border">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
               <CardTitle className="text-base sm:text-lg text-foreground">{t('conversationHistory')}</CardTitle>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={clearConversation} 
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={clearConversation}
                 disabled={isProcessing}
                 className="border-border text-foreground hover:bg-muted text-xs sm:text-sm"
               >
@@ -323,27 +326,31 @@ export default function VoiceAssistant() {
               </Button>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4 max-h-80 sm:max-h-96 overflow-y-auto">
+              <div className="space-y-4 max-h-96 overflow-y-auto bg-background rounded-lg p-2">
                 {conversations.map((conversation) => (
                   <div
                     key={conversation.id}
                     className={`flex ${conversation.type === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
-                      className={`max-w-[85%] sm:max-w-xs md:max-w-md px-3 sm:px-4 py-2 rounded-lg ${
-                        conversation.type === 'user'
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-muted text-foreground'
-                      }`}
+                      className={`max-w-[85%] sm:max-w-xs md:max-w-md px-3 sm:px-4 py-2 rounded-lg ${conversation.type === 'user'
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-card text-card-foreground border border-border'
+                        }`}
                     >
-                      <p className="text-sm whitespace-pre-wrap break-words">{conversation.text}</p>
-                      <p className="text-xs opacity-70 mt-1">
+                      <p className="text-sm whitespace-pre-wrap break-words text-inherit">{conversation.text}</p>
+                      <p
+                        className={`text-xs mt-1 ${conversation.type === 'user'
+                          ? 'text-primary-foreground/80'
+                          : 'text-muted-foreground'
+                          }`}
+                      >
                         {conversation.timestamp.toLocaleTimeString(ttsLang)}
                       </p>
                     </div>
                   </div>
                 ))}
-                
+
                 {isProcessing && (
                   <div className="flex justify-start">
                     <div className="bg-muted text-foreground px-4 py-2 rounded-lg flex items-center">
@@ -368,7 +375,7 @@ export default function VoiceAssistant() {
             <CardContent>
               <ul className="space-y-2">
                 {currentQuickQuestions.map((question, index) => (
-                  <li 
+                  <li
                     key={index}
                     className="text-muted-foreground text-sm cursor-pointer hover:text-primary p-2 rounded hover:bg-muted transition-colors break-words"
                     onClick={() => !isProcessing && handleUserQuery(question)}
@@ -389,7 +396,7 @@ export default function VoiceAssistant() {
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
-               
+
                 <li className="text-muted-foreground text-sm break-words">
                   {ttsSupported ? '✅' : '❌'} {t('voiceResponse')}
                 </li>
