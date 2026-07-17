@@ -553,6 +553,21 @@ Complete documentation is available in the [`docs/`](./docs) directory:
 
 ## 🔗 GSSoC 2025 & Hacktoberfest
 
+### Event Contribution Guide
+
+If you're contributing through **GirlScript Summer of Code (GSSoC)** or **Hacktoberfest**, we recommend reviewing the event-specific contribution guide before claiming issues or opening a Pull Request.
+
+📖 **Guide:** [CONTRIBUTING_EVENTS.md](./docs/CONTRIBUTING_EVENTS.md)
+
+The guide includes:
+
+- ✅ Contributor checklist
+- 🎯 Issue selection guidelines
+- 📌 Pull Request standards
+- 🏷️ Label overview
+- 🤝 Mentor pairing template
+- 📚 References to detailed contribution resources
+
 ### GSSoC 2025 Support ✨
 KisanAI is an official GSSoC 2025 project! 
 
