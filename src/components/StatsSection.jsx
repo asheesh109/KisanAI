@@ -77,7 +77,7 @@ export default function StatsSection() {
         </div>
         
         {/* Stats grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {stats.map((stat, idx) => {
             const Icon = stat.icon;
             const translatedLabel = getStatTranslation(language, stat.label);
@@ -93,9 +93,9 @@ export default function StatsSection() {
                 {/* Shimmer effect */}
                 <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
                 
-                <div className="relative text-center p-6 sm:p-8 z-10">
+                <div className="relative flex flex-col items-center justify-center text-center p-6 sm:p-8 z-10 h-full">
                   {/* Icon container */}
-                  <div className="relative inline-block mb-5">
+                  <div className="relative flex justify-center mb-5">
                     <div className="w-16 sm:w-20 h-16 sm:h-20 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-xl group-hover:shadow-2xl group-hover:shadow-primary/30 dark:group-hover:shadow-primary/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
                       <Icon className="h-8 sm:h-10 w-8 sm:w-10 text-primary-foreground" />
                     </div>
