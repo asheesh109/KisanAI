@@ -1,8 +1,10 @@
 'use client';
 
-import { ProfessionalCalendar } from '@/components/ProfessionalCalendar';
+import dynamic from 'next/dynamic';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useState, useEffect } from 'react';
+
+const ProfessionalCalendar = dynamic(() => import('@/components/ProfessionalCalendar').then(mod => mod.ProfessionalCalendar), { ssr: false });
 
 export default function CalendarPage() {
   const { language } = useLanguage();
