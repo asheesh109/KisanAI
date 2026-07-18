@@ -6,6 +6,8 @@ import { Menu, X, Sprout, Globe, Sun, Moon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useTheme } from '@/components/theme-provider'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { useSession, signOut } from 'next-auth/react'
+import { User as UserIcon, LogOut } from 'lucide-react'
 
 const navigation = [
   { name: 'home', href: '/' },
@@ -24,6 +26,7 @@ export default function Header() {
   const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
   const { language, languages, t, changeLanguage } = useLanguage()
+  const { data: session } = useSession()
 
   // ✅ Prevent hydration mismatch
   useEffect(() => {
@@ -152,6 +155,47 @@ export default function Header() {
               )}
             </div>
 
+            {/* User Auth Controls */}
+            {session ? (
+              <div className="hidden sm:flex items-center space-x-2">
+                <Link
+                  href="/dashboard"
+                  className={`flex items-center space-x-1.5 px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                    theme === 'dark' 
+                      ? 'bg-gray-800 text-emerald-400 hover:bg-gray-700' 
+                      : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+                  }`}
+                >
+                  <UserIcon className="h-4 w-4" />
+                  <span>Dashboard</span>
+                </Link>
+                <button
+                  onClick={() => signOut({ callbackUrl: '/' })}
+                  className={`p-2 rounded-lg text-sm font-semibold transition-colors ${
+                    theme === 'dark' 
+                      ? 'text-red-400 hover:bg-gray-800' 
+                      : 'text-red-600 hover:bg-red-50'
+                  }`}
+                  aria-label="Logout"
+                >
+                  <LogOut className="h-5 w-5" />
+                </button>
+              </div>
+            ) : (
+              <div className="hidden sm:flex items-center space-x-2">
+                <Link
+                  href="/login"
+                  className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                    theme === 'dark' 
+                      ? 'bg-emerald-600 text-white hover:bg-emerald-500' 
+                      : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                  }`}
+                >
+                  Login / Register
+                </Link>
+              </div>
+            )}
+
             {/* Mobile Menu Toggle - Only visible on mobile */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -182,6 +226,40 @@ export default function Header() {
                 {t(link.name)}
               </Link>
             ))}
+            
+            {/* Mobile Auth Links */}
+            <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
+              {session ? (
+                <>
+                  <Link
+                    href="/dashboard"
+                    className="flex items-center space-x-2 rounded-lg px-4 py-3 text-base font-semibold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-gray-700 transition-all duration-200"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <UserIcon className="h-5 w-5" />
+                    <span>Dashboard</span>
+                  </Link>
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      signOut({ callbackUrl: '/' });
+                    }}
+                    className="flex items-center space-x-2 w-full text-left rounded-lg px-4 py-3 text-base font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-gray-700 transition-all duration-200"
+                  >
+                    <LogOut className="h-5 w-5" />
+                    <span>Logout</span>
+                  </button>
+                </>
+              ) : (
+                <Link
+                  href="/login"
+                  className="block rounded-lg px-4 py-3 text-base font-semibold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-gray-700 transition-all duration-200"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Login / Register
+                </Link>
+              )}
+            </div>
           </nav>
         </div>
       )}

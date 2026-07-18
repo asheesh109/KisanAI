@@ -4,6 +4,7 @@ import Footer from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import OfflineBanner from "@/components/OfflineBanner";
+import AuthProvider from "@/components/AuthProvider";
 
 export const metadata = {
   title: "KisanAI - AI-Powered Farming Assistant | किसान AI सहायक",
@@ -35,15 +36,17 @@ export default function RootLayout({ children }) {
           defaultTheme="system"
           storageKey="kisanai-theme"
         >
-          <LanguageProvider>
-            <OfflineBanner />
-            
-            <Header />
-            <main className="flex-1">
-              {children}
-            </main>
-            <Footer />
-          </LanguageProvider>
+          <AuthProvider>
+            <LanguageProvider>
+              <OfflineBanner />
+              
+              <Header />
+              <main className="flex-1">
+                {children}
+              </main>
+              <Footer />
+            </LanguageProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
