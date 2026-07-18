@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Cloud, Sun, CloudRain, Wind, Droplets, Eye, MapPin, RefreshCw, AlertTriangle, Thermometer, Gauge, Sunrise, Sunset, Search, Navigation, Loader2, Info } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { cachedFetch } from '@/lib/cachedFetch'
 // Import Gemini AI for farming advice
 import { GoogleGenerativeAI } from '@google/generative-ai'
 const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY
@@ -199,8 +200,8 @@ export default function Weather() {
   // Search for city coordinates
   const searchCity = useCallback(async (cityName) => {
     try {
-      const response = await fetch(
-        `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(cityName)}&limit=1&appid=${OPENWEATHER_API_KEY}`
+      const response = await cachedFetch(
+        `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(cityName)}&limit=5&appid=${OPENWEATHER_API_KEY}`
       )
       const data = await response.json()
      
@@ -405,7 +406,7 @@ export default function Weather() {
   // Fetch current weather data
   const fetchCurrentWeather = useCallback(async (lat, lon) => {
     try {
-      const response = await fetch(
+      const response = await cachedFetch(
         `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${OPENWEATHER_API_KEY}&units=metric&lang=${language === 'hi' ? 'hi' : 'en'}`
       )
       const data = await response.json()
@@ -451,7 +452,7 @@ export default function Weather() {
   // Fetch 5-day forecast
   const fetchForecast = useCallback(async (lat, lon) => {
     try {
-      const response = await fetch(
+      const response = await cachedFetch(
         `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${OPENWEATHER_API_KEY}&units=metric&lang=${language === 'hi' ? 'hi' : 'en'}`
       )
       const data = await response.json()

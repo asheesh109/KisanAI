@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback } from 'react'
 import { Camera, Upload, FileImage as ImageIcon, CheckCircle, AlertTriangle, Leaf, Bug, Droplets, Sun, X, RotateCcw, Info } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
-
+import Image from 'next/image'
 // Import Gemini AI
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
@@ -692,11 +692,13 @@ export default function CropAnalysis() {
               <div className="p-4 sm:p-6">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                   <div className="space-y-4">
-                    <div className="border border-border rounded-lg overflow-hidden">
-                      <img 
+                    <div className="border border-border rounded-lg overflow-hidden relative h-48 sm:h-64 w-full">
+                      <Image 
                         src={selectedImage.url} 
                         alt="Selected crop" 
-                        className="w-full h-48 sm:h-64 object-cover"
+                        fill
+                        unoptimized
+                        className="object-cover"
                       />
                     </div>
                     {!analysisResult && !isAnalyzing && (

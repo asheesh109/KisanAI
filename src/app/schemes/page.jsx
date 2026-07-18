@@ -8,9 +8,10 @@ import {
   Bot, MessageSquare, Send, RefreshCw, Globe, MapPin, Database, UserCheck, ArrowLeft
 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import EligibilityDrawer from '@/components/EligibilityDrawer';
+import dynamic from 'next/dynamic';
 import { useSchemeFilter } from '@/hooks/useSchemeFilter';
 
+const EligibilityDrawer = dynamic(() => import('@/components/EligibilityDrawer'), { ssr: false });
 // Import Gemini AI
 import { GoogleGenerativeAI } from '@google/generative-ai'
 

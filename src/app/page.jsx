@@ -1,10 +1,13 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import HeroBanner from "@/components/HeroBanner";
-import FeatureCards from "@/components/FeatureCards";
-import StatsSection from "@/components/StatsSection";
-import AboutSection from "@/components/AboutSection";
-import { FarmersExperienceCarousel } from "@/components/FarmersExperienceCarousel";
+
+// Lazy loaded components (below the fold)
+const StatsSection = dynamic(() => import('@/components/StatsSection'), { ssr: true });
+const FeatureCards = dynamic(() => import('@/components/FeatureCards'), { ssr: true });
+const AboutSection = dynamic(() => import('@/components/AboutSection'), { ssr: true });
+const FarmersExperienceCarousel = dynamic(() => import('@/components/FarmersExperienceCarousel').then(mod => mod.FarmersExperienceCarousel), { ssr: true });
 
 export default function Home() {
   return (

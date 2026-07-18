@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { TrendingUp, TrendingDown, Search, RefreshCw, AlertCircle, Calendar, IndianRupee, Loader, Filter, ChevronDown, ChevronUp, Star, Target, BarChart3, Lightbulb, MapPin, Award, Clock, Rocket, Leaf, Flame, Wheat, Nut, Sun, Apple, DollarSign, Sparkles, Database, Shield, Globe, Info } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { cachedFetch } from '@/lib/cachedFetch'
 
 
 // Move static data outside the component to maintain reference stability
@@ -774,7 +775,7 @@ export default function EnhancedMarketPrices() {
           batch.map(async (commodity) => {
             try {
               const url = `${API_URL}?api-key=${API_KEY}&format=json&limit=20&filters[commodity]=${encodeURIComponent(commodity)}`
-              const response = await fetch(url)
+              const response = await cachedFetch(url)
            
               if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
            
@@ -1002,7 +1003,7 @@ export default function EnhancedMarketPrices() {
   const fetchAvailableCommodities = useCallback(async () => {
     try {
       const url = `${API_URL}?api-key=${API_KEY}&format=json&limit=1000`
-      const response = await fetch(url)
+      const response = await cachedFetch(url)
    
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
@@ -1055,7 +1056,7 @@ export default function EnhancedMarketPrices() {
             for (const commodity of sampleCrops) {
               try {
                 const url = `${API_URL}?api-key=${API_KEY}&format=json&limit=50&filters[commodity]=${encodeURIComponent(commodity)}`
-                const response = await fetch(url)
+                const response = await cachedFetch(url)
              
                 if (response.ok) {
                   let data;
