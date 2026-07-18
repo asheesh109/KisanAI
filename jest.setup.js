@@ -54,3 +54,44 @@ global.FileReader = class {
   onload = null
   result = null
 }
+
+// Mock next-auth
+jest.mock('next-auth/react', () => ({
+  useSession: jest.fn(() => ({ data: null, status: 'unauthenticated' })),
+  SessionProvider: ({ children }) => children,
+  signOut: jest.fn()
+}))
+
+// Mock Language Context
+jest.mock('@/contexts/LanguageContext', () => ({
+  useLanguage: jest.fn(() => ({
+    language: 'hi',
+    languages: {
+      en: { name: 'English', code: 'en', flag: '🇺🇸' },
+      hi: { name: 'हिंदी', code: 'hi', flag: '🇮🇳' }
+    },
+    t: (key) => {
+      const texts = {
+        'home': 'Home',
+        'voiceAssistant': 'आवाज सहायक',
+        'cropAnalysis': 'फसल विश्लेषण',
+        'weather': 'मौसम',
+        'marketPrices': 'मंडी भाव',
+        'governmentSchemes': 'सरकारी योजनाएं',
+        'kccApplication': 'KCC आवेदन'
+      };
+      return texts[key] || key;
+    },
+    changeLanguage: jest.fn()
+  })),
+  LanguageProvider: ({ children }) => children
+}))
+
+// Mock Theme Provider
+jest.mock('@/components/theme-provider', () => ({
+  useTheme: jest.fn(() => ({
+    theme: 'light',
+    setTheme: jest.fn()
+  })),
+  ThemeProvider: ({ children }) => children
+}))
