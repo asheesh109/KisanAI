@@ -78,6 +78,8 @@ const getTip = (language, key) => {
 export default function Weather() {
   const [currentWeather, setCurrentWeather] = useState(null)
   const [forecast, setForecast] = useState([])
+  const [historicalData, setHistoricalData] = useState(null)
+  const [weatherAlerts, setWeatherAlerts] = useState([])
   const [farmingAdvice, setFarmingAdvice] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [location, setLocation] = useState('')
@@ -535,8 +537,15 @@ export default function Weather() {
   }, [language, t, getWeatherCondition])
 
   // Get farming advice from Gemini AI based on weather data
-  const getFarmingAdviceFromAI = useCallback(async (weatherData, forecastData, locationName) => {
+  const getFarmingAdviceFromAI = useCallback(async (weatherData, forecastData, locationName, historyData) => {
     try {
+      let historyText = '';
+      if (historyData && historyData.length > 0) {
+        const avgMaxTemp = Math.round(historyData.reduce((acc, curr) => acc + curr.maxTemp, 0) / historyData.length);
+        const totalRain = historyData.reduce((acc, curr) => acc + curr.rain, 0).toFixed(1);
+        historyText = `\nPast 7 days summary:\n- Average Max Temp: ${avgMaxTemp}°C\n- Total Rainfall: ${totalRain} mm`;
+      }
+
       const prompts = {
         en: `You are an agricultural expert. Provide practical advice for farmers based on the following weather conditions:
 Location: ${locationName}
@@ -545,7 +554,7 @@ Current Weather:
 - Condition: ${weatherData.condition}
 - Humidity: ${weatherData.humidity}%
 - Wind Speed: ${weatherData.windSpeed} km/h
-- Rain Chance: ${forecastData[0]?.rainChance || 0}%
+- Rain Chance: ${forecastData[0]?.rainChance || 0}%${historyText}
 Next 3 days forecast:
 ${forecastData.slice(0, 3).map(day =>
   `- ${day.day}: ${day.condition}, High: ${day.high}°C, Low: ${day.low}°C, Rain: ${day.rainChance}%`
@@ -562,7 +571,7 @@ Respond only in English, no markdown.`,
 - स्थिति: ${weatherData.condition}
 - नमी: ${weatherData.humidity}%
 - हवा की गति: ${weatherData.windSpeed} km/h
-- बारिश की संभावना: ${forecastData[0]?.rainChance || 0}%
+- बारिश की संभावना: ${forecastData[0]?.rainChance || 0}%${historyText}
 अगले 3 दिनों का पूर्वानुमान:
 ${forecastData.slice(0, 3).map(day =>
   `- ${day.day}: ${day.condition}, उच्च: ${day.high}°C, निम्न: ${day.low}°C, बारिश: ${day.rainChance}%`
@@ -579,7 +588,7 @@ ${forecastData.slice(0, 3).map(day =>
 - स्थिती: ${weatherData.condition}
 - आर्द्रता: ${weatherData.humidity}%
 - वाऱ्याची गती: ${weatherData.windSpeed} km/h
-- पावसाची शक्यता: ${forecastData[0]?.rainChance || 0}%
+- पावसाची शक्यता: ${forecastData[0]?.rainChance || 0}%${historyText}
 पुढील 3 दिवसांचा अंदाज:
 ${forecastData.slice(0, 3).map(day =>
   `- ${day.day}: ${day.condition}, कमाल: ${day.high}°C, किमान: ${day.low}°C, पाऊस: ${day.rainChance}%`
@@ -596,7 +605,7 @@ ${forecastData.slice(0, 3).map(day =>
 - સ્થિતિ: ${weatherData.condition}
 - ભેજ: ${weatherData.humidity}%
 - પવનની ગતિ: ${weatherData.windSpeed} km/h
-- વરસાદની સંભાવના: ${forecastData[0]?.rainChance || 0}%
+- વરસાદની સંભાવના: ${forecastData[0]?.rainChance || 0}%${historyText}
 આગામી 3 દિવસની આગાહી:
 ${forecastData.slice(0, 3).map(day =>
   `- ${day.day}: ${day.condition}, મહત્તમ: ${day.high}°C, ન્યૂનતમ: ${day.low}°C, વરસાદ: ${day.rainChance}%`
@@ -613,7 +622,7 @@ ${forecastData.slice(0, 3).map(day =>
 - അവസ്ഥ: ${weatherData.condition}
 - ഈർപ്പം: ${weatherData.humidity}%
 - കാറ്റിൻ്റെ വേഗത: ${weatherData.windSpeed} km/h
-- മഴയുടെ സാധ്യത: ${forecastData[0]?.rainChance || 0}%
+- മഴയുടെ സാധ്യത: ${forecastData[0]?.rainChance || 0}%${historyText}
 അടുത്ത 3 ദിവസത്തെ പ്രവചനം:
 ${forecastData.slice(0, 3).map(day =>
   `- ${day.day}: ${day.condition}, ഉയർന്ന: ${day.high}°C, താഴ്ന്ന: ${day.low}°C, മഴ: ${day.rainChance}%`
@@ -642,6 +651,59 @@ ${forecastData.slice(0, 3).map(day =>
     }
   }, [language])
 
+  // Generate Weather Alerts based on current conditions
+  const generateWeatherAlerts = useCallback((current) => {
+    const alerts = [];
+    if (current.temperature > 35) {
+      alerts.push({ type: 'heat', title: language === 'en' ? 'Heat Wave Alert' : 'हीट वेव अलर्ट', message: language === 'en' ? 'High temperatures detected. Ensure adequate irrigation.' : 'उच्च तापमान का पता चला। पर्याप्त सिंचाई सुनिश्चित करें।' });
+    } else if (current.temperature < 5) {
+      alerts.push({ type: 'frost', title: language === 'en' ? 'Frost Alert' : 'पाला अलर्ट', message: language === 'en' ? 'Low temperatures may cause frost. Protect sensitive crops.' : 'कम तापमान से पाला पड़ सकता है। संवेदनशील फसलों की रक्षा करें।' });
+    }
+
+    if (current.windSpeed > 30) {
+      alerts.push({ type: 'wind', title: language === 'en' ? 'High Wind Warning' : 'तेज हवा की चेतावनी', message: language === 'en' ? 'Strong winds detected. Secure tall crops and structures.' : 'तेज हवाएं। लंबी फसलों और संरचनाओं को सुरक्षित करें।' });
+    }
+
+    const extremeConditions = ['Thunderstorm', 'Squall', 'Tornado'];
+    if (extremeConditions.includes(current.condition) || (current.condition === 'Rain' && current.rainChance > 80)) {
+      alerts.push({ type: 'storm', title: language === 'en' ? 'Severe Weather Alert' : 'गंभीर मौसम अलर्ट', message: language === 'en' ? 'Severe weather conditions approaching. Take immediate protective measures.' : 'गंभीर मौसम की स्थिति। तत्काल सुरक्षात्मक उपाय करें।' });
+    }
+    
+    return alerts;
+  }, [language]);
+
+  // Fetch 7-day Historical Weather Data from Open-Meteo
+  const fetchHistoricalWeather = useCallback(async (lat, lon) => {
+    try {
+      const endDate = new Date().toISOString().split('T')[0];
+      const startDate = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+      
+      const response = await fetch(
+        `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}&start_date=${startDate}&end_date=${endDate}&daily=temperature_2m_max,temperature_2m_min,rain_sum&timezone=auto`
+      );
+      
+      if (!response.ok) {
+        throw new Error('Historical data fetch failed');
+      }
+      
+      const data = await response.json();
+      
+      if (data && data.daily) {
+        const historical = data.daily.time.map((time, index) => ({
+          date: new Date(time).toLocaleDateString(language === 'hi' ? 'hi-IN' : 'en-IN', { weekday: 'short', month: 'short', day: 'numeric' }),
+          maxTemp: data.daily.temperature_2m_max[index],
+          minTemp: data.daily.temperature_2m_min[index],
+          rain: data.daily.rain_sum[index]
+        }));
+        return historical;
+      }
+      return null;
+    } catch (error) {
+      console.error('Failed to fetch historical weather:', error);
+      return null;
+    }
+  }, [language]);
+
   // Main function to load weather data by coordinates
   const loadWeatherDataByCoords = useCallback(async (lat, lon, locationName = '') => {
     setIsLoading(true)
@@ -657,19 +719,24 @@ ${forecastData.slice(0, 3).map(day =>
       setLocation(finalLocationName)
       setUserLocation({ latitude: lat, longitude: lon })
      
-      const [current, forecastData] = await Promise.all([
+      const [current, forecastData, historyData] = await Promise.all([
         fetchCurrentWeather(lat, lon),
-        fetchForecast(lat, lon)
+        fetchForecast(lat, lon),
+        fetchHistoricalWeather(lat, lon)
       ])
      
       setCurrentWeather(current)
       setForecast(forecastData)
+      setHistoricalData(historyData)
+      
+      const alerts = generateWeatherAlerts(current)
+      setWeatherAlerts(alerts)
      
-      const advice = await getFarmingAdviceFromAI(current, forecastData, finalLocationName)
+      const advice = await getFarmingAdviceFromAI(current, forecastData, finalLocationName, historyData)
       setFarmingAdvice([{
         titleKey: 'aiFarmingAdvice',
         description: advice,
-        urgent: current.temperature > 35 || current.humidity > 80 || current.windSpeed > 25,
+        urgent: current.temperature > 35 || current.humidity > 80 || current.windSpeed > 25 || alerts.length > 0,
         icon: '🤖',
         action: t('verifyWithLocalDept')
       }])
@@ -682,7 +749,7 @@ ${forecastData.slice(0, 3).map(day =>
       setIsLoading(false)
       setIsSearching(false)
     }
-  }, [reverseGeocode, fetchCurrentWeather, fetchForecast, getFarmingAdviceFromAI, t])
+  }, [reverseGeocode, fetchCurrentWeather, fetchForecast, fetchHistoricalWeather, generateWeatherAlerts, getFarmingAdviceFromAI, t])
 
   // Load current location weather data
   const loadCurrentLocationWeather = useCallback(async () => {
@@ -833,6 +900,26 @@ ${forecastData.slice(0, 3).map(day =>
           </div>
         )}
 
+        {/* Weather Alerts */}
+        {weatherAlerts && weatherAlerts.length > 0 && (
+          <div className="mb-6 space-y-4">
+            {weatherAlerts.map((alert, index) => (
+              <div key={index} className={`p-4 rounded-lg flex items-start gap-4 border ${
+                alert.type === 'heat' ? 'bg-orange-50 border-orange-200 text-orange-800 dark:bg-orange-950/30 dark:border-orange-800/50 dark:text-orange-200' :
+                alert.type === 'frost' ? 'bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-950/30 dark:border-blue-800/50 dark:text-blue-200' :
+                alert.type === 'storm' ? 'bg-red-50 border-red-200 text-red-800 dark:bg-red-950/30 dark:border-red-800/50 dark:text-red-200' :
+                'bg-yellow-50 border-yellow-200 text-yellow-800 dark:bg-yellow-950/30 dark:border-yellow-800/50 dark:text-yellow-200'
+              }`}>
+                <AlertTriangle className="h-6 w-6 mt-0.5 flex-shrink-0" />
+                <div>
+                  <h3 className="font-bold text-lg">{alert.title}</h3>
+                  <p className="mt-1 font-medium">{alert.message}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* Current Weather */}
         {currentWeather && (
           <div className="bg-card rounded-lg mb-6 sm:mb-8 p-4 sm:p-6 border border-border shadow-sm">
@@ -925,6 +1012,32 @@ ${forecastData.slice(0, 3).map(day =>
                     <div className="truncate">{t('rainChance')}: {day.rainChance}%</div>
                     <div className="truncate">{t('humidity')}: {day.humidity}%</div>
                     <div className="truncate">{t('wind')}: {day.windSpeed} km/h</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Historical Trends */}
+        {historicalData && historicalData.length > 0 && (
+          <div className="bg-card rounded-lg mb-6 sm:mb-8 p-4 sm:p-6 border border-border shadow-sm">
+            <h2 className="text-lg sm:text-xl font-bold text-foreground mb-4">
+              <span className="break-words">{displayLocation}</span> - {language === 'en' ? 'Historical Trends (Past 7 Days)' : 'ऐतिहासिक रुझान (पिछले 7 दिन)'}
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-7 gap-2 sm:gap-4">
+              {historicalData.map((day, index) => (
+                <div key={index} className="text-center p-2 sm:p-3 rounded-lg bg-muted border border-border">
+                  <p className="font-semibold text-foreground mb-1 text-xs break-words">{day.date}</p>
+                  <p className="text-xs mb-1">
+                    <span className="font-medium text-foreground">{Math.round(day.maxTemp)}°</span>
+                    <span className="text-muted-foreground ml-1">{Math.round(day.minTemp)}°</span>
+                  </p>
+                  <div className="text-xs text-muted-foreground">
+                    <div className="flex items-center justify-center gap-1">
+                      <Droplets className="h-3 w-3 text-blue-500" />
+                      <span>{day.rain.toFixed(1)}mm</span>
+                    </div>
                   </div>
                 </div>
               ))}
