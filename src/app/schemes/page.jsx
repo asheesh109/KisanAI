@@ -4643,7 +4643,7 @@ export default function SchemesApp() {
               // Save to cache
               saveSchemesToCache(validSchemes);
               setSchemes(validSchemes);
-              setFilteredSchemes(validSchemes);
+              // setFilteredSchemes(validSchemes);
             }
           }
         } catch (err) {
@@ -5038,6 +5038,14 @@ export default function SchemesApp() {
       });
     }
 
+    //debugging purpose 
+    console.log("Filtering effect:", {
+  searchTerm,
+  selectedCategory,
+  selectedState,
+  count: filtered.length,
+});
+
     setFilteredSchemes(filtered);
   }, [searchTerm, selectedCategory, selectedState, schemes, language, getSchemeText]);
 
@@ -5206,12 +5214,19 @@ export default function SchemesApp() {
                 {t('checkEligibility') || 'Check Eligibility'}
               </button>
               <button
-                onClick={() => fetchSchemesFromGemini(true)}
-                className="px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg text-sm flex items-center"
-              >
-                <RefreshCw className="h-4 w-4 mr-2" />
-                {t('refresh')}
-              </button>
+  onClick={() => {
+    setSearchTerm('');
+    setSelectedCategory('all');
+    setSelectedState('all');
+    resetFilters();
+    setShowEligibilityFiltered(false);
+    fetchSchemesFromGemini(true);
+  }}
+  className="px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg text-sm flex items-center"
+>
+  <RefreshCw className="h-4 w-4 mr-2" />
+  {t('refresh')}
+</button>
               <button
                 onClick={() => {
                   setSearchTerm('');
