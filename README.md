@@ -666,6 +666,7 @@ By contributing, you agree that your contributions will be licensed under its MI
 - **[Coding Standards](./docs/CODING_STANDARDS.md)** - Code style guide
 - **[Testing Guide](./docs/TESTING.md)** - Testing practices
 - **[Security Policy](./SECURITY.md)** - Reporting vulnerabilities
+| **[Troubleshooting Guide](./docs/Troubleshooting.md)** | Common setup issues and solutions |
 
 ---
 
