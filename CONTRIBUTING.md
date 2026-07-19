@@ -66,6 +66,8 @@ Before you start, ensure you have:
    git checkout -b feature/your-feature-name
    ```
 
+> If you encounter setup or development issues, refer to the [Troubleshooting Guide](./docs/Troubleshooting.md).
+
 ---
 
 ## 🛠️ Development Setup
