@@ -88,14 +88,12 @@ export const VoteButtonsCarousel: React.FC<VoteButtonsCarouselProps> = ({
       <button
         onClick={handleUpvote}
         disabled={loading}
-        className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+        className={`flex items-center gap-2 px-4 py-2 rounded-lg outline outline-1 -outline-offset-1 transition-all  ${
           userVote === 'upvote'
-            ? isDarkMode
-              ? 'bg-green-600 text-white'
-              : 'bg-green-600 text-white'
+              ? 'bg-green-600 text-white outline-gray-200'
             : isDarkMode
-            ? 'bg-gray-700 text-gray-200 hover:bg-gray-600 border border-gray-600'
-            : 'bg-white text-green-600 hover:bg-green-100 border border-green-300'
+            ? 'bg-gray-700 text-gray-200 hover:bg-gray-600  outline-gray-600'
+            : 'bg-white text-green-600 hover:bg-green-100  outline-gray-200'
         } disabled:opacity-50`}
       >
         <ThumbsUp size={16} />
@@ -123,12 +121,12 @@ export const VoteButtonsCarousel: React.FC<VoteButtonsCarouselProps> = ({
       <button
         onClick={handleDownvote}
         disabled={loading}
-        className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+        className={`flex items-center gap-2 px-4 py-2 rounded-lg outline outline-1 -outline-offset-1 transition-all  ${
           userVote === 'downvote'
-            ? 'bg-red-600 text-white'
+            ? 'bg-red-600 text-white outline-gray-200'
             : isDarkMode
-            ? 'bg-gray-700 text-gray-200 hover:bg-gray-600 border border-gray-600'
-            : 'bg-white text-red-600 hover:bg-red-100 border border-red-300'
+            ? 'bg-gray-700 text-gray-200 hover:bg-gray-600  outline-gray-600'
+            : 'bg-white text-red-600 hover:bg-red-100  outline-gray-200'
         } disabled:opacity-50`}
       >
         <ThumbsDown size={16} />
