@@ -199,6 +199,14 @@ const T: Record<Language, Record<TKey, string>> = {
   },
 };
 
+const localeMap: Record<Language, string> = {
+  en: 'en-US',
+  hi: 'hi-IN',
+  mr: 'mr-IN',
+  gu: 'gu-IN',
+  ml: 'ml-IN',
+};
+
 // ─── Urgency config ───────────────────────────────────────────────────────────
 
 const URGENCY_CONFIG = {
@@ -270,7 +278,7 @@ export function SmartReschedulePanel({
   const getEventOriginalDate = (id: string): string => {
     const ev = events.find((e) => e._id === id);
     if (!ev) return '';
-    return new Date(ev.date).toLocaleDateString();
+    return new Date(ev.date).toLocaleDateString(localeMap[language] || 'en-US');
   };
 
   // ── Core analyze call ──────────────────────────────────────────────────────
@@ -620,7 +628,7 @@ export function SmartReschedulePanel({
                           </span>
                           <ArrowRight className="w-3 h-3 text-emerald-500 shrink-0" />
                           <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400">
-                            {new Date(ev.newDate).toLocaleDateString()} · {ev.newStartTime}
+                            {new Date(ev.newDate).toLocaleDateString(localeMap[language] || 'en-US')} · {ev.newStartTime}
                           </span>
                         </div>
                       </div>
