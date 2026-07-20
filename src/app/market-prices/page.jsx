@@ -3,6 +3,48 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { TrendingUp, TrendingDown, Search, RefreshCw, AlertCircle, Calendar, IndianRupee, Loader, Filter, ChevronDown, ChevronUp, Star, Target, BarChart3, Lightbulb, MapPin, Award, Clock, Rocket, Leaf, Flame, Wheat, Nut, Sun, Apple, DollarSign, Sparkles, Database, Shield, Globe, Info } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 
+// Simple client-side cache wrapper
+export const fetchCache = {
+  data: {},
+  async get(url, fetcher) {
+    const now = Date.now();
+    const cached = this.data[url];
+    const ttl = MARKET_CACHE_CONFIG.ttl;
+
+    if (cached && (now - cached.timestamp < ttl)) {
+      console.log(`[Cache Hit] returning cached data for URL: ${url}`);
+      return cached.payload;
+    }
+
+    console.log(`[Cache Miss] fetching from network for URL: ${url}`);
+    const payload = await fetcher();
+    this.data[url] = {
+      timestamp: now,
+      payload
+    };
+    return payload;
+  },
+  clear() {
+    this.data = {};
+  }
+};
+
+export const MARKET_CACHE_CONFIG = {
+  // Configurable TTL in milliseconds. Default to 5 minutes (300,000 ms).
+  ttl: typeof window !== 'undefined' && window.MARKET_CACHE_TTL 
+    ? window.MARKET_CACHE_TTL 
+    : parseInt(process.env.NEXT_PUBLIC_MARKET_CACHE_TTL || '300000', 10),
+};
+
+const fetchWithCache = async (url) => {
+  return fetchCache.get(url, async () => {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+  });
+};
 
 // Move static data outside the component to maintain reference stability
 const translations = {
@@ -774,18 +816,7 @@ export default function EnhancedMarketPrices() {
           batch.map(async (commodity) => {
             try {
               const url = `${API_URL}?api-key=${API_KEY}&format=json&limit=20&filters[commodity]=${encodeURIComponent(commodity)}`
-              const response = await fetch(url)
-           
-              if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
-           
-              let data;
-              try {
-                data = await response.json()
-              } catch (parseError) {
-                console.warn(`JSON parse error for ${commodity}:`, parseError)
-                return { commodity, records: [] }
-              }
-           
+              const data = await fetchWithCache(url)
               return { commodity, records: data.records || [] }
             } catch (error) {
               console.warn(`Failed to fetch ${commodity}:`, error)
@@ -1002,22 +1033,7 @@ export default function EnhancedMarketPrices() {
   const fetchAvailableCommodities = useCallback(async () => {
     try {
       const url = `${API_URL}?api-key=${API_KEY}&format=json&limit=1000`
-      const response = await fetch(url)
-   
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-   
-      let data;
-      try {
-        data = await response.json()
-      } catch (parseError) {
-        console.error('JSON parse error in commodities:', parseError)
-        const fallback = fallbackCommodities.sort()
-        setAvailableCommodities(fallback)
-        setUsingFallback(true)
-        return fallback
-      }
+      const data = await fetchWithCache(url)
    
       const uniqueCommodities = [...new Set(
         (data.records || [])
@@ -1055,80 +1071,51 @@ export default function EnhancedMarketPrices() {
             for (const commodity of sampleCrops) {
               try {
                 const url = `${API_URL}?api-key=${API_KEY}&format=json&limit=50&filters[commodity]=${encodeURIComponent(commodity)}`
-                const response = await fetch(url)
-             
-                if (response.ok) {
-                  let data;
-                  try {
-                    data = await response.json()
-                  } catch (parseError) {
-                    console.warn(`JSON parse error for ${commodity}:`, parseError)
-                    // Fallback to static data
-                    const staticData = staticMarketData.filter(item => item.englishName === commodity);
-                    if (staticData.length > 0) {
-                      initialPrices.push(...translateFallbackData(staticData));
-                    } else {
-                      const mockData = generateMockPrices(commodity, categoryKey, 3)
-                      initialPrices.push(...translateFallbackData(mockData))
-                    }
-                    setUsingFallback(true)
-                    continue;
-                  }
+                const data = await fetchWithCache(url)
                
-                  const records = data.records || []
+                const records = data.records || []
                
-                  // Get unique markets for this commodity
-                  const marketGroups = {}
-                  records.forEach(record => {
-                    if (record.modal_price && parseFloat(record.modal_price) > 0) {
-                      const marketKey = `${record.state}-${record.district}-${record.market}`
-                      if (!marketGroups[marketKey] ||
-                          new Date(record.arrival_date) > new Date(marketGroups[marketKey].arrival_date)) {
-                        marketGroups[marketKey] = record
-                      }
+                // Get unique markets for this commodity
+                const marketGroups = {}
+                records.forEach(record => {
+                  if (record.modal_price && parseFloat(record.modal_price) > 0) {
+                    const marketKey = `${record.state}-${record.district}-${record.market}`
+                    if (!marketGroups[marketKey] ||
+                        new Date(record.arrival_date) > new Date(marketGroups[marketKey].arrival_date)) {
+                      marketGroups[marketKey] = record
                     }
-                  })
-                  Object.values(marketGroups).forEach(record => {
-                    const price = parseFloat(record.modal_price) || 0
-                    const minPrice = parseFloat(record.min_price) || price
-                    const maxPrice = parseFloat(record.max_price) || price
-                 
-                    if (price > 0) {
-                      const change = price - minPrice
-                      const changePercent = minPrice > 0 ? ((change / minPrice) * 100) : 0
-                      initialPrices.push({
-                        crop: currentCommodityNames[commodity] || commodity,
-                        englishName: commodity,
-                        category: categoryKey,
-                        price: Math.round(price),
-                        minPrice: Math.round(minPrice),
-                        maxPrice: Math.round(maxPrice),
-                        change: change > 0 ? `+${Math.round(change)}` : `${Math.round(change)}`,
-                        changePercent: changePercent > 0 ? `+${changePercent.toFixed(1)}%` : `${changePercent.toFixed(1)}%`,
-                        market: `${record.market}, ${record.district}`,
-                        state: record.state,
-                        district: record.district,
-                        unit: currentT.unit,
-                        trending: changePercent >= 0 ? 'up' : 'down',
-                        variety: record.variety || currentT.generalVariety,
-                        grade: record.grade || currentT.mediumGrade,
-                        arrivalDate: record.arrival_date,
-                        quantity: record.arrivals_in_qtl || 0,
-                        goodProfit: price > 3000
-                      })
-                    }
-                  })
-                } else {
-                  // Fallback to static data
-                  const staticData = staticMarketData.filter(item => item.englishName === commodity);
-                  if (staticData.length > 0) {
-                    initialPrices.push(...translateFallbackData(staticData));
-                  } else {
-                    const mockData = generateMockPrices(commodity, categoryKey, 3)
-                    initialPrices.push(...translateFallbackData(mockData))
                   }
-                  setUsingFallback(true)
-                }
+                })
+                Object.values(marketGroups).forEach(record => {
+                  const price = parseFloat(record.modal_price) || 0
+                  const minPrice = parseFloat(record.min_price) || price
+                  const maxPrice = parseFloat(record.max_price) || price
+               
+                  if (price > 0) {
+                    const change = price - minPrice
+                    const changePercent = minPrice > 0 ? ((change / minPrice) * 100) : 0
+                    initialPrices.push({
+                      crop: currentCommodityNames[commodity] || commodity,
+                      englishName: commodity,
+                      category: categoryKey,
+                      price: Math.round(price),
+                      minPrice: Math.round(minPrice),
+                      maxPrice: Math.round(maxPrice),
+                      change: change > 0 ? `+${Math.round(change)}` : `${Math.round(change)}`,
+                      changePercent: changePercent > 0 ? `+${changePercent.toFixed(1)}%` : `${changePercent.toFixed(1)}%`,
+                      market: `${record.market}, ${record.district}`,
+                      state: record.state,
+                      district: record.district,
+                      unit: currentT.unit,
+                      trending: changePercent >= 0 ? 'up' : 'down',
+                      variety: record.variety || currentT.generalVariety,
+                      grade: record.grade || currentT.mediumGrade,
+                      arrivalDate: record.arrival_date,
+                      quantity: record.arrivals_in_qtl || 0,
+                      goodProfit: price > 3000
+                    })
+                  }
+                })
               } catch (error) {
                 console.warn(`Failed to load ${commodity}:`, error)
                 // Fallback to static data

@@ -54,3 +54,37 @@ global.FileReader = class {
   onload = null
   result = null
 }
+
+// Mock useLanguage context globally for all tests
+jest.mock('@/contexts/LanguageContext', () => {
+  const { getTranslations } = require('@/lib/i18n');
+  const translations = getTranslations('hi');
+  
+  return {
+    useLanguage: () => ({
+      language: 'hi', // default to 'hi' so tests looking for Hindi strings pass
+      languages: {
+        en: { code: 'en', name: 'English', flag: '🇬🇧', dir: 'ltr' },
+        hi: { code: 'hi', name: 'हिंदी', flag: '🇮🇳', dir: 'ltr' },
+        mr: { code: 'mr', name: 'मराठी', flag: '🇮🇳', dir: 'ltr' },
+        gu: { code: 'gu', name: 'ગુજરાતી', flag: '🇮🇳', dir: 'ltr' },
+        ml: { code: 'ml', name: 'മലയാളം', flag: '🇮🇳', dir: 'ltr' },
+      },
+      translations,
+      t: (key, params = {}) => {
+        let translation = translations[key] || key;
+        if (params.returnObjects) return translation;
+        translation = String(translation);
+        Object.keys(params).forEach((param) => {
+          if (param !== 'returnObjects') {
+            const placeholder = new RegExp(`{{${param}}}`, 'g');
+            translation = translation.replace(placeholder, String(params[param]));
+          }
+        });
+        return translation;
+      },
+      changeLanguage: jest.fn(),
+    }),
+    LanguageProvider: ({ children }) => <>{children}</>,
+  };
+});
