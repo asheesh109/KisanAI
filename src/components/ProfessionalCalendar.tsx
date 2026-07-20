@@ -24,6 +24,7 @@ import {
   isSameDay,
   isToday,
   getMonthName,
+  getDayName,
   getFullDayName,
 } from '@/lib/calendarUtils';
 import { SmartReschedulePanel } from './SmartReschedulePanel';
@@ -264,6 +265,14 @@ const DEFAULT_FORM: EventFormData = {
 
 const DAY_NAMES_SHORT = ['S', 'M', 'T', 'W', 'T', 'F', 'S'] as const;
 const DAY_NAMES_FULL = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
+
+const localeMap: Record<Language, string> = {
+  en: 'en-US',
+  hi: 'hi-IN',
+  mr: 'mr-IN',
+  gu: 'gu-IN',
+  ml: 'ml-IN',
+};
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -596,15 +605,22 @@ export function ProfessionalCalendar({
 
           {/* Day headers */}
           <div className="grid grid-cols-7 border-b border-border">
-            {DAY_NAMES_FULL.map((day, i) => (
-              <div
-                key={day}
-                className="py-2 sm:py-3 text-center text-xs font-semibold text-muted-foreground bg-emerald-50 dark:bg-emerald-950/20 select-none"
-              >
-                <span className="sm:hidden">{DAY_NAMES_SHORT[i]}</span>
-                <span className="hidden sm:inline">{day}</span>
-              </div>
-            ))}
+            {[0, 1, 2, 3, 4, 5, 6].map((i) => {
+              const dummyDate = new Date(2026, 0, 4 + i); // Jan 4, 2026 is a Sunday
+              const dayFull = getDayName(dummyDate, language);
+              const dayShort = language === 'en'
+                ? DAY_NAMES_SHORT[i]
+                : dayFull.slice(0, 2);
+              return (
+                <div
+                  key={i}
+                  className="py-2 sm:py-3 text-center text-xs font-semibold text-muted-foreground bg-emerald-50 dark:bg-emerald-950/20 select-none"
+                >
+                  <span className="sm:hidden">{dayShort}</span>
+                  <span className="hidden sm:inline">{dayFull}</span>
+                </div>
+              );
+            })}
           </div>
 
           {/* Day cells */}
@@ -733,7 +749,7 @@ export function ProfessionalCalendar({
                   </p>
                   <h3 className="text-lg font-bold text-foreground">
                     {daySheetDate.toLocaleDateString(
-                      language === 'en' ? 'en-US' : 'hi-IN',
+                      localeMap[language] || 'en-US',
                       {
                         day: 'numeric',
                         month: 'long',
@@ -836,7 +852,7 @@ export function ProfessionalCalendar({
                   <p className="text-sm font-semibold text-foreground">
                     {selectedDate && getFullDayName(selectedDate, language)},{' '}
                     {selectedDate?.toLocaleDateString(
-                      language === 'en' ? 'en-US' : 'hi-IN'
+                      localeMap[language] || 'en-US'
                     )}
                   </p>
                 </div>
