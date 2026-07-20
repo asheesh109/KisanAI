@@ -79,10 +79,10 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
       <button
         onClick={handleUpvote}
         disabled={loading}
-        className={`flex items-center gap-1 px-3 py-1 rounded transition-colors ${
+        className={`flex items-center gap-1 px-3 py-1 rounded outline outline-1 -outline-offset-1 transition-colors transition-transform duration-150 hover:scale-105 ${
           userVote === 'upvote'
-            ? 'bg-green-600 text-white'
-            : 'bg-white text-green-600 hover:bg-green-100 border border-green-300'
+            ? 'bg-green-600 text-white outline-green-600'
+            : 'bg-white text-green-600 hover:bg-green-100  outline-green-600'
         } disabled:opacity-50`}
       >
         <span>👍</span>
@@ -96,10 +96,10 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
       <button
         onClick={handleDownvote}
         disabled={loading}
-        className={`flex items-center gap-1 px-3 py-1 rounded transition-colors ${
+        className={`flex items-center gap-1 px-3 py-1 rounded outline outline-1 -outline-offset-1 transition-colors transition-transform duration-150 hover:scale-105 ${
           userVote === 'downvote'
-            ? 'bg-red-600 text-white'
-            : 'bg-white text-red-600 hover:bg-red-100 border border-red-300'
+            ? 'bg-red-600 text-white outline-red-600'
+            : 'bg-white text-red-600 hover:bg-red-100 outline-red-600'
         } disabled:opacity-50`}
       >
         <span>👎</span>
