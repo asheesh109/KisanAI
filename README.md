@@ -512,6 +512,24 @@ src/__tests__/
 
 ---
 
+## 🚫 ESLint Restrictions
+
+### Server Route Imports in Client Modules
+Importing types, exports, or functions directly from server route handler files (`src/app/api/**/route`) into client components, hooks, or common modules is prohibited.
+
+* **Why:** Importing directly from server route handlers causes case-sensitive path resolution and build compilation issues on case-sensitive production environments/operating systems (such as Linux and macOS used in CI/CD pipelines).
+* **How to Share Types:**
+  1. Define shared data interfaces, response types, or common utilities in a dedicated types/library folder (e.g. under `src/types/` or `src/lib/`).
+  2. Import these types into both the server route handler (`route.ts`) and client-side components.
+  3. Avoid importing anything directly from `/route.ts` files.
+
+An ESLint rule (`no-restricted-imports`) is configured to enforce this. Any violations will flag an error during linting:
+```bash
+npm run lint
+```
+
+---
+
 ## 📖 Documentation
 
 Complete documentation is available in the [`docs/`](./docs) directory:
