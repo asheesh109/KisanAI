@@ -669,7 +669,9 @@ export function ProfessionalCalendar({
                         }}
                       >
                         {getCategoryIcon(ev.category)}
-                        <span className="truncate font-medium">{ev.title}</span>
+                        <span className="truncate font-medium">
+                          {ev.startTime && `${ev.startTime} - `}{ev.title}
+                        </span>
                       </div>
                     ))}
                     {dayEvts.length > 2 && (
