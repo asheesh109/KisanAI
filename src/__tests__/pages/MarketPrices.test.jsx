@@ -1,107 +1,96 @@
-import { render, screen, fireEvent } from '@testing-library/react'
-import '@testing-library/jest-dom'
-import MarketPrices from '@/app/market-prices/page'
+import React from 'react';
+import { render, screen, cleanup, act } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import MarketPrices, { MARKET_CACHE_CONFIG, fetchCache } from '@/app/market-prices/page';
 
-describe('Market Prices Page', () => {
-  it('renders market prices interface', () => {
-    render(<MarketPrices />)
-    
-    expect(screen.getByText('बाजार भाव')).toBeInTheDocument()
-    expect(screen.getByText(/आज के ताजे मंडी भाव/)).toBeInTheDocument()
-  })
+// Mock fetch
+const mockFetch = jest.fn();
+global.fetch = mockFetch;
 
-  it('displays quick statistics', () => {
-    render(<MarketPrices />)
-    
-    expect(screen.getByText('बढ़ती कीमतें')).toBeInTheDocument()
-    expect(screen.getByText('गिरती कीमतें')).toBeInTheDocument()
-    expect(screen.getByText('कुल मंडियां')).toBeInTheDocument()
-    expect(screen.getByText('कुल फसलें')).toBeInTheDocument()
-  })
+beforeEach(() => {
+  mockFetch.mockReset();
+  fetchCache.clear();
+  
+  // Mock standard response for available commodities
+  mockFetch.mockImplementation((url) => {
+    if (url.includes('limit=1000')) {
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ records: [{ commodity: 'Wheat' }, { commodity: 'Onion' }] })
+      });
+    }
+    // Mock response for individual crops
+    return Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve({ records: [] })
+    });
+  });
+});
 
-  it('shows search and filter options', () => {
-    render(<MarketPrices />)
-    
-    expect(screen.getByPlaceholderText('फसल का नाम खोजें...')).toBeInTheDocument()
-    expect(screen.getByPlaceholderText('मंडी का नाम खोजें...')).toBeInTheDocument()
-    expect(screen.getByText('फिल्टर')).toBeInTheDocument()
-  })
+afterEach(() => {
+  cleanup();
+});
 
-  it('displays crop price cards', () => {
-    render(<MarketPrices />)
+describe('Market Prices Page & Cache Verification', () => {
+  it('renders market prices interface with translated headers', async () => {
+    await act(async () => {
+      render(<MarketPrices />);
+    });
     
-    // Look for the section title that contains the number of crops
-    expect(screen.getByText(/आज के मंडी भाव/)).toBeInTheDocument()
-    expect(screen.getAllByText('गेहूं')[0]).toBeInTheDocument()
-    expect(screen.getAllByText('चावल')[0]).toBeInTheDocument()
-    expect(screen.getAllByText('सोयाबीन')[0]).toBeInTheDocument()
-  })
+    // Check for correct translated headers (Hindi translations loaded via global mock)
+    expect(screen.getByText('स्मार्ट मार्केट विश्लेषण')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('फसल, किस्म, या मंडी का नाम खोजें...')).toBeInTheDocument();
+  });
 
-  it('shows market trends with price changes', () => {
-    render(<MarketPrices />)
-    
-    // Check for price change indicators
-    expect(screen.getByText('+2.4%')).toBeInTheDocument()
-    expect(screen.getByText('-2.4%')).toBeInTheDocument()
-    expect(screen.getByText('+2.7%')).toBeInTheDocument()
-  })
+  it('implements client-side caching to prevent repeated network calls within TTL', async () => {
+    // Set TTL to 10 seconds
+    MARKET_CACHE_CONFIG.ttl = 10000;
 
-  it('displays market insights section', () => {
-    render(<MarketPrices />)
-    
-    expect(screen.getByText('बाजार अंतर्दृष्टि')).toBeInTheDocument()
-    expect(screen.getByText('प्याज की कीमतों में तेजी')).toBeInTheDocument()
-  })
+    // First render (cold cache)
+    await act(async () => {
+      render(<MarketPrices />);
+    });
 
-  it('shows nearby markets section', () => {
-    render(<MarketPrices />)
-    
-    expect(screen.getByText('नजदीकी मंडियां')).toBeInTheDocument()
-    expect(screen.getAllByText('दिल्ली मंडी')[0]).toBeInTheDocument()
-  })
+    const initialFetchCount = mockFetch.mock.calls.length;
+    expect(initialFetchCount).toBeGreaterThan(0);
 
-  it('displays price alerts section', () => {
-    render(<MarketPrices />)
-    
-    expect(screen.getByText('मूल्य अलर्ट')).toBeInTheDocument()
-    expect(screen.getByText('नया अलर्ट')).toBeInTheDocument()
-  })
+    // Unmount first render
+    cleanup();
 
-  it('handles search functionality', () => {
-    render(<MarketPrices />)
-    
-    const searchInput = screen.getByPlaceholderText('फसल का नाम खोजें...')
-    fireEvent.change(searchInput, { target: { value: 'गेहूं' } })
-    expect(searchInput).toHaveValue('गेहूं')
-  })
+    // Reset mock call history
+    mockFetch.mockClear();
 
-  it('handles view mode switching', () => {
-    render(<MarketPrices />)
-    
-    const gridButton = screen.getByText('ग्रिड')
-    const listButton = screen.getByText('लिस्ट')
-    
-    expect(gridButton).toBeInTheDocument()
-    expect(listButton).toBeInTheDocument()
-    
-    fireEvent.click(listButton)
-    // Should switch to list view mode
-  })
+    // Second render within TTL (warm cache)
+    await act(async () => {
+      render(<MarketPrices />);
+    });
 
-  it('displays refresh functionality', () => {
-    render(<MarketPrices />)
-    
-    const refreshButton = screen.getByText('रिफ्रेश करें')
-    expect(refreshButton).toBeInTheDocument()
-    
-    fireEvent.click(refreshButton)
-    // Should trigger data refresh
-  })
+    // Fetch should NOT be called again because results are cached
+    const secondFetchCount = mockFetch.mock.calls.length;
+    expect(secondFetchCount).toBe(0);
+  });
 
-  it('shows disclaimer information', () => {
-    render(<MarketPrices />)
-    
-    expect(screen.getByText('महत्वपूर्ण जानकारी')).toBeInTheDocument()
-    expect(screen.getByText(/APMC और अन्य स्रोतों से प्राप्त/)).toBeInTheDocument()
-  })
-})
+  it('refetches from network if TTL expires', async () => {
+    // Set TTL to 0 (always expire)
+    MARKET_CACHE_CONFIG.ttl = 0;
+
+    // First render
+    await act(async () => {
+      render(<MarketPrices />);
+    });
+
+    const initialFetchCount = mockFetch.mock.calls.length;
+    expect(initialFetchCount).toBeGreaterThan(0);
+
+    mockFetch.mockClear();
+
+    // Unmount and render again
+    cleanup();
+    await act(async () => {
+      render(<MarketPrices />);
+    });
+
+    // Fetch SHOULD be called because cache is expired
+    expect(mockFetch.mock.calls.length).toBeGreaterThan(0);
+  });
+});
