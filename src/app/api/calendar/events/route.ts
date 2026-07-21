@@ -6,14 +6,20 @@ import type { NextRequest } from 'next/server';
 const MONGODB_URI = process.env.MONGODB_URI as string;
 
 async function connectDB(): Promise<void> {
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    // Throw a clear error if the environment variable is missing
+    throw new Error('Database configuration missing. Please check environment variables.');
+  }
+  
   if (mongoose.connections[0].readyState) return;
-  await mongoose.connect(MONGODB_URI);
+  await mongoose.connect(uri);
 }
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     await connectDB();
-
+    
     const searchParams = new URL(request.url).searchParams;
     const userId = searchParams.get('userId');
     const startDate = searchParams.get('startDate');
@@ -37,7 +43,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json(events, { status: 200 });
   } catch (error) {
     console.error('GET /api/calendar/events error:', error);
-    return NextResponse.json({ error: 'Failed to fetch events' }, { status: 500 });
+    // Return the specific error message if it exists
+    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch events';
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
 
@@ -69,6 +77,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json(event, { status: 201 });
   } catch (error) {
     console.error('POST /api/calendar/events error:', error);
-    return NextResponse.json({ error: 'Failed to create event' }, { status: 500 });
+    // Return the specific error message if it exists
+    const errorMessage = error instanceof Error ? error.message : 'Failed to create event';
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
