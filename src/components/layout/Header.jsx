@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import { Menu, X, Sprout, Globe, Sun, Moon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useTheme } from '@/components/theme-provider'
@@ -24,6 +25,7 @@ export default function Header() {
   const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
   const { language, languages, t, changeLanguage } = useLanguage()
+  const pathname = usePathname()
 
   // ✅ Prevent hydration mismatch
   useEffect(() => {
@@ -66,7 +68,11 @@ export default function Header() {
               <Link
                 key={link.name}
                 href={link.href}
-                className="px-3 py-2 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-all duration-200"
+                className={`px-3 py-2 text-sm font-semibold rounded-lg transition-all duration-200 ${
+                pathname === link.href
+                ? "text-emerald-600 dark:text-emerald-400 border-b-2 border-emerald-600 bg-emerald-50 dark:bg-gray-800"
+                : "text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+            }`}
               >
                 {t(link.name)}
               </Link>
@@ -176,7 +182,11 @@ export default function Header() {
               <Link
                 key={link.name}
                 href={link.href}
-                className="block rounded-lg px-4 py-3 text-base font-semibold text-gray-900 dark:text-white hover:bg-emerald-50 dark:hover:bg-gray-700 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all duration-200"
+                className={`block rounded-lg px-4 py-3 text-base font-semibold transition-all duration-200 ${
+                pathname === link.href
+                  ? "bg-emerald-100 dark:bg-gray-700 text-emerald-700 dark:text-emerald-400"
+                  : "text-gray-900 dark:text-white hover:bg-emerald-50 dark:hover:bg-gray-700 hover:text-emerald-600 dark:hover:text-emerald-400"
+              }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t(link.name)}
