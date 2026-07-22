@@ -60,8 +60,9 @@ export function AddTaskModal({ isOpen, onClose, onAdd }: AddTaskModalProps) {
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition"
+            aria-label="Close modal"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5" aria-hidden="true" />
           </button>
         </div>
 
@@ -139,7 +140,7 @@ export function AddTaskModal({ isOpen, onClose, onAdd }: AddTaskModalProps) {
               disabled={isSubmitting || !title.trim()}
               className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white rounded-lg transition flex items-center justify-center gap-2"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-4 h-4" aria-hidden="true" />
               {language === 'en' ? 'Add Task' : language === 'hi' ? 'कार्य जोड़ें' : 'કાર્ય ઉમેરો'}
             </button>
           </div>

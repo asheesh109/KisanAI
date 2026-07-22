@@ -146,11 +146,12 @@ export default function TasksPage() {
                         <button
                           onClick={() => handleCompleteTask(task.id)}
                           className="transition hover:scale-110"
+                          aria-label={task.status === 'completed' ? `Mark task ${task.title} as incomplete` : `Mark task ${task.title} as completed`}
                         >
                           {task.status === 'completed' ? (
-                            <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400" />
+                            <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400" aria-hidden="true" />
                           ) : (
-                            <Circle className="w-6 h-6 text-gray-400 dark:text-gray-600" />
+                            <Circle className="w-6 h-6 text-gray-400 dark:text-gray-600" aria-hidden="true" />
                           )}
                         </button>
                         <h3 className={`text-lg font-semibold ${
@@ -200,8 +201,9 @@ export default function TasksPage() {
                     <button
                       onClick={() => handleDeleteTask(task.id)}
                       className="text-red-500 hover:text-red-700 dark:hover:text-red-400 transition ml-4"
+                      aria-label={`Delete task ${task.title}`}
                     >
-                      <Trash2 className="w-5 h-5" />
+                      <Trash2 className="w-5 h-5" aria-hidden="true" />
                     </button>
                   </div>
                 </div>
@@ -223,6 +225,7 @@ export default function TasksPage() {
               <button
                 onClick={() => setIsModalOpen(false)}
                 className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition"
+                aria-label="Close modal"
               >
                 ✕
               </button>
