@@ -955,8 +955,9 @@ export default function KCCApplication() {
               onClick={handleSendMessage}
               disabled={chatLoading || !currentMessage.trim()}
               className="bg-primary hover:bg-accent disabled:bg-muted text-primary-foreground px-4 py-2 rounded-lg transition-colors flex items-center disabled:text-muted-foreground"
+              aria-label="Send message"
             >
-              <Send className="h-4 w-4" />
+              <Send className="h-4 w-4" aria-hidden="true" />
             </button>
           </div>
           <p className="text-xs text-muted-foreground mt-2 text-center">
