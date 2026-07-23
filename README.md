@@ -626,7 +626,7 @@ We ❤️ our contributors!
 ### Connect With Us
 - 🐙 [GitHub](https://github.com/asheesh109/KisanAI)
 - 🐦 [Twitter/X](https://x.com/ParabAshis49319)
-- 💼 [LinkedIn](https://www.linkedin.com/in/ashish-parab-dev/)
+- 💼 [LinkedIn](https://linkedin.com/in/ashish-parab-dev/)
 
 
 ### Code of Conduct
