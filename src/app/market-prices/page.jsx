@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { TrendingUp, TrendingDown, Search, RefreshCw, AlertCircle, Calendar, IndianRupee, Loader, Filter, ChevronDown, ChevronUp, Star, Target, BarChart3, Lightbulb, MapPin, Award, Clock, Rocket, Leaf, Flame, Wheat, Nut, Sun, Apple, DollarSign, Sparkles, Database, Shield, Globe, Info } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
-
+import MarketPriceSkeleton from "@/components/MarketPriceSkeleton";
 
 // Move static data outside the component to maintain reference stability
 const translations = {
@@ -1001,12 +1001,15 @@ export default function EnhancedMarketPrices() {
   // Fetch available commodities from API
   const fetchAvailableCommodities = useCallback(async () => {
     try {
-      const url = `${API_URL}?api-key=${API_KEY}&format=json&limit=1000`
-      const response = await fetch(url)
-   
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
+      const url = `${API_URL}?api-key=${API_KEY}&format=json&limit=1000`;
+
+
+      const response = await fetch(url);
+
+if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+}
+
    
       let data;
       try {
@@ -1454,15 +1457,7 @@ export default function EnhancedMarketPrices() {
           </div>
         )}
         {/* Loading State */}
-        {loading && (
-          <div className="text-center py-16">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4 mx-auto">
-              <Loader className="h-8 w-8 text-primary animate-spin" />
-            </div>
-            <p className="text-muted-foreground mb-2 text-lg">{currentT.loadingInitial}</p>
-            <p className="text-sm text-muted-foreground">{currentT.loadingOther}</p>
-          </div>
-        )}
+        {loading && <MarketPriceSkeleton />}
         {/* Categorized Prices Display - Only show when not in recommendations view */}
         {!loading && !showRecommendations && (
           <div className="space-y-6">
