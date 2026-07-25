@@ -65,9 +65,16 @@ const features = [
   },
   {
     title: 'kccQueries',
-   description: 'kccQueriesDesc',
+    description: 'kccQueriesDesc',
     icon: CreditCard,
     href: '/kcc-application',
+    color: 'from-primary to-accent',
+  },
+  {
+    title: 'cropAssistant',
+    description: 'cropAssistantDesc',
+    icon: Brain,
+    href: '/crop-assistant',
     color: 'from-primary to-accent',
   }
 ]

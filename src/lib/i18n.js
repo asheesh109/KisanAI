@@ -88,6 +88,8 @@ const translations = {
     'kccApplicationDesc': 'Easy application for Kisan Credit Card',
     'kccQueries': 'KCC Queries',
     'kccQueriesDesc': 'Solve all queries related to KCC',
+    'cropAssistant': 'AI Crop Assistant',
+    'cropAssistantDesc': 'Ask farming questions and get verified answers using RAG & FAISS',
     
     // Stats
     'activeFarmers': 'Active Farmers',
@@ -586,6 +588,8 @@ const translations = {
     'kccApplicationDesc': 'किसान क्रेडिट कार्ड के लिए आसान आवेदन',
     'kccQueries': 'KCC प्रश्न',
     'kccQueriesDesc': 'KCC से संबंधित सभी प्रश्नों का समाधान',
+    'cropAssistant': 'AI फसल सहायक',
+    'cropAssistantDesc': 'RAG और FAISS तकनीक की मदद से खेती संबंधी सटीक सवाल पूछें और जवाब पाएं',
 
     // Stats
     'activeFarmers': 'सक्रिय किसान',
