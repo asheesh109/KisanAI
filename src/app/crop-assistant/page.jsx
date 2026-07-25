@@ -152,6 +152,8 @@ export default function CropAssistantPage() {
     setInputMessage('');
     setLoading(true);
 
+    const botMsgId = (Date.now() + 1).toString();
+
     try {
       const response = await fetch('/api/crop-assistant', {
         method: 'POST',
@@ -163,26 +165,71 @@ export default function CropAssistantPage() {
       });
 
       if (!response.ok) throw new Error('API server error');
-      const data = await response.json();
 
-      // Add bot message
+      // Initialize the bot message placeholder bubble in the UI
       setMessages(prev => [...prev, {
-        id: (Date.now() + 1).toString(),
+        id: botMsgId,
         sender: 'bot',
-        text: data.answer,
-        sources: data.sources || [],
-        createdAt: new Date()
-      }]);
-
-    } catch (err) {
-      console.error('Failed to get RAG response:', err);
-      setMessages(prev => [...prev, {
-        id: (Date.now() + 1).toString(),
-        sender: 'bot',
-        text: language === 'hi' ? 'क्षमा करें, आपके प्रश्न का उत्तर प्राप्त करने में समस्या आ रही है। कृपया पुनः प्रयास करें।' : 'Sorry, there was an issue processing your request. Please try again.',
+        text: '',
         sources: [],
         createdAt: new Date()
       }]);
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let botText = '';
+      let buffer = '';
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        
+        // Keep the last partial line in the buffer
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          const cleanLine = line.trim();
+          if (cleanLine.startsWith('data: ')) {
+            try {
+              const parsed = JSON.parse(cleanLine.slice(6));
+              
+              if (parsed.text) {
+                botText += parsed.text;
+                // Update the bot's response bubble incrementally
+                setMessages(prev => 
+                  prev.map(m => m.id === botMsgId ? { ...m, text: botText } : m)
+                );
+              }
+              
+              if (parsed.done && parsed.sources) {
+                // Attach the matched citations to the completed message bubble
+                setMessages(prev => 
+                  prev.map(m => m.id === botMsgId ? { ...m, sources: parsed.sources } : m)
+                );
+              }
+            } catch (e) {
+              console.error('Error parsing SSE line:', e);
+            }
+          }
+        }
+      }
+
+    } catch (err) {
+      console.error('Failed to get RAG response:', err);
+      // Remove placeholder bubble if it was added, and add error message bubble
+      setMessages(prev => {
+        const filtered = prev.filter(m => m.id !== botMsgId);
+        return [...filtered, {
+          id: botMsgId,
+          sender: 'bot',
+          text: language === 'hi' ? 'क्षमा करें, आपके प्रश्न का उत्तर प्राप्त करने में समस्या आ रही है। कृपया पुनः प्रयास करें।' : 'Sorry, there was an issue processing your request. Please try again.',
+          sources: [],
+          createdAt: new Date()
+        }];
+      });
     } finally {
       setLoading(false);
     }

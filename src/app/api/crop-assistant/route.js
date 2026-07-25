@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import embeddedDocs from '../../../data/embeddedCropKnowledge.json';
 
 // Helper: Vector Dot Product
@@ -26,6 +27,28 @@ function cosineSimilarity(a, b) {
   const magB = magnitude(b);
   if (magA === 0 || magB === 0) return 0;
   return dot / (magA * magB);
+}
+
+// Helper: Keyword matching score with Devanagari script support (for Hindi)
+function keywordMatchScore(queryText, docText) {
+  if (!queryText || !docText) return 0;
+  
+  // Clean special characters but preserve Devanagari Unicode block (Hindi) and standard alphanumeric
+  const cleanQuery = queryText.toLowerCase().replace(/[^\w\s\u0900-\u097F]/g, " ");
+  const queryWords = cleanQuery.split(/\s+/).filter(w => w.length > 2);
+  
+  if (queryWords.length === 0) return 0;
+  
+  const docLower = docText.toLowerCase();
+  let matches = 0;
+  
+  for (const word of queryWords) {
+    if (docLower.includes(word)) {
+      matches++;
+    }
+  }
+  
+  return matches / queryWords.length;
 }
 
 export async function POST(request) {
@@ -65,23 +88,30 @@ export async function POST(request) {
       throw new Error('Invalid response format from Embeddings API');
     }
 
-    // Step 2: Perform Cosine Similarity against embedded crop database
+    // Step 2: Perform Hybrid Search (Cosine Similarity + Keyword Matching)
     const scoredDocs = embeddedDocs.map(doc => {
       const similarity = cosineSimilarity(queryVector, doc.embedding);
+      const textToMatch = `${doc.title} ${doc.content}`;
+      const keywordScore = keywordMatchScore(message, textToMatch);
+      
+      // Compute Hybrid Score: 70% Semantic Vector match + 30% Keyword exact match
+      const hybridScore = (0.7 * similarity) + (0.3 * keywordScore);
+      
       return {
         title: doc.title,
         category: doc.category,
         content: doc.content,
-        similarity
+        similarity: similarity,
+        hybridScore
       };
     });
 
-    // Sort descending by similarity
-    scoredDocs.sort((a, b) => b.similarity - a.similarity);
+    // Sort descending by hybridScore
+    scoredDocs.sort((a, b) => b.hybridScore - a.hybridScore);
 
-    // Similarity threshold (e.g. 0.55 for crop queries)
-    const threshold = 0.55;
-    const matchedDocs = scoredDocs.filter(doc => doc.similarity >= threshold).slice(0, 3);
+    // Hybrid Similarity threshold
+    const threshold = 0.52;
+    const matchedDocs = scoredDocs.filter(doc => doc.hybridScore >= threshold).slice(0, 3);
 
     // Step 3: Construct RAG Prompt
     let contextText = '';
@@ -116,45 +146,64 @@ Guidelines:
 3. Clearly mention that this is general advice and farmers should consult their local state agriculture department or Mandi for regional specificity.`;
     }
 
-    // Step 4: Call Gemini completions (gemini-2.0-flash)
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-    const completionResponse = await fetch(geminiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [
-          {
-            role: 'user',
-            parts: [{ text: `System Instructions:\n${systemPrompt}\n\nFarmer Query: ${message}` }]
-          }
-        ],
-        generationConfig: {
-          temperature: 0.4,
-          maxOutputTokens: 1024
+    // Step 4: Stream response using official GoogleGenAI SDK
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+
+    const result = await model.generateContentStream({
+      contents: [
+        {
+          role: 'user',
+          parts: [{ text: `System Instructions:\n${systemPrompt}\n\nFarmer Query: ${message}` }]
         }
-      })
+      ],
+      generationConfig: {
+        temperature: 0.4,
+        maxOutputTokens: 1024
+      }
     });
 
-    if (!completionResponse.ok) {
-      const errText = await completionResponse.text();
-      console.error('Gemini Completions API Error:', errText);
-      throw new Error(`Completions generation failed: ${completionResponse.status}`);
-    }
+    // Create ReadableStream Response for real-time streaming chunks (SSE format)
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      async start(controller) {
+        try {
+          for await (const chunk of result.stream) {
+            const chunkText = chunk.text();
+            if (chunkText) {
+              controller.enqueue(
+                encoder.encode(`data: ${JSON.stringify({ text: chunkText })}\n\n`)
+              );
+            }
+          }
 
-    const completionData = await completionResponse.json();
-    const answer = completionData.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, failed to generate an answer.";
+          // Emit sources at the end of the stream
+          const sources = matchedDocs.map(d => ({
+            title: d.title,
+            category: d.category,
+            similarity: d.hybridScore
+          }));
+          controller.enqueue(
+            encoder.encode(`data: ${JSON.stringify({ done: true, sources })}\n\n`)
+          );
+        } catch (e) {
+          console.error('Streaming Exception:', e);
+          controller.enqueue(
+            encoder.encode(`data: ${JSON.stringify({ error: e.message })}\n\n`)
+          );
+        } finally {
+          controller.close();
+        }
+      }
+    });
 
-    // Cleaned source list
-    const sources = matchedDocs.map(d => ({
-      title: d.title,
-      category: d.category,
-      similarity: d.similarity
-    }));
-
-    return NextResponse.json({
-      answer,
-      sources
-    }, { status: 200 });
+    return new Response(stream, {
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+      }
+    });
 
   } catch (error) {
     console.error('Crop Assistant API Error:', error);
