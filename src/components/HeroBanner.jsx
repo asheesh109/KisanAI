@@ -52,8 +52,11 @@ export default function HeroBanner() {
               </Button>
             </Link>
             <Link href="/voice-assistant">
-              <Button variant="outline" size="lg" className="px-8 sm:px-10 py-4 border-2 border-border text-foreground font-bold text-base sm:text-lg transition-all duration-300 shadow-md hover:shadow-xl hover:scale-105 active:scale-95 flex items-center justify-center space-x-3 min-w-[220px] sm:min-w-[240px] rounded-xl backdrop-blur-sm">
-                <Mic className="h-5 w-5" />
+<Button
+  variant="outline"
+  size="lg"
+  className="px-8 sm:px-10 py-4  text-foreground font-bold text-base sm:text-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 flex items-center justify-center space-x-3 min-w-[220px] sm:min-w-[240px] rounded-xl backdrop-blur-sm"
+>                <Mic className="h-5 w-5" />
                 <span className="tracking-wide">{t('voiceAssistant')}</span>
               </Button>
             </Link>
