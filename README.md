@@ -692,6 +692,39 @@ By contributing, you agree that your contributions will be licensed under its MI
 ## 🤝 Contributing
 
 This project is designed to help Indian farmers access technology and government benefits. Contributions are welcome!
+### ESLint Rule: Prevent Importing Server Route Files into Client Components
+
+KisanAI enforces an ESLint rule that prevents client-side modules from importing files inside:
+
+```text
+src/app/api/**/route.ts
+```
+
+These files are **server-only route handlers**. Importing types or values directly from them can lead to build failures, especially on case-sensitive file systems.
+
+#### ❌ Incorrect
+
+```ts
+import type { RescheduleResponse } from "@/app/api/calendar/events/reschedule/route";
+```
+
+#### ✅ Correct
+
+Move shared interfaces and types into a shared location such as:
+
+```text
+src/types/
+```
+
+or
+
+```text
+src/lib/types/
+```
+
+and import them from there instead.
+
+This rule is enforced through ESLint using `no-restricted-imports`.
 
 ## 📄 License
 
