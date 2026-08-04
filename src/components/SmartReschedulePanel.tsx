@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import type { CalendarEvent } from './ProfessionalCalendar';
 import type { RescheduleResponse, RescheduledEvent } from '@/types/calendar';
+import type { GET } from "@/app/api/calendar/events/reschedule/route";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

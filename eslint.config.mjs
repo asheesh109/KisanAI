@@ -9,8 +9,28 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-const eslintConfig = [
+export default [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
-];
 
-export default eslintConfig;
+  {
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [
+                "@/app/api/**/route",
+                "@/app/api/**/route.*",
+                "**/app/api/**/route",
+                "**/app/api/**/route.*",
+              ],
+              message:
+                "Do not import from server route files. Move shared types into src/types or src/lib/types.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+];
