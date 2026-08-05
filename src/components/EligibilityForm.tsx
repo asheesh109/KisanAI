@@ -3,6 +3,7 @@
 import React, { useState, useCallback } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { EligibilityFilters } from '@/hooks/useSchemeFilter';
+import Tooltip from '@/components/ui/Tooltip';
 
 interface EligibilityFormProps {
   filters: EligibilityFilters;
@@ -173,8 +174,12 @@ export const EligibilityForm: React.FC<EligibilityFormProps> = ({
         {/* Annual Income */}
         <div className="mb-4">
           <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
-            {translations?.annualIncome || 'Annual Income'}
-          </label>
+          {translations?.annualIncome || 'Annual Income'}
+
+          <Tooltip
+            text="Select your family's approximate yearly income. This helps determine which government schemes you are eligible for."
+          />
+</label>
           <select
             value={filters.annualIncome || ''}
             onChange={(e) => onFilterChange('annualIncome', e.target.value || undefined)}
@@ -245,6 +250,10 @@ export const EligibilityForm: React.FC<EligibilityFormProps> = ({
         <div className="mb-4">
           <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
             {translations?.farmerType || 'Farmer Type'}
+
+            <Tooltip
+              text="Small and marginal farmers generally own less agricultural land and qualify for additional subsidy schemes."
+            />
           </label>
           <select
             value={filters.farmerType || ''}
@@ -269,7 +278,11 @@ export const EligibilityForm: React.FC<EligibilityFormProps> = ({
         <div className="mb-4">
           <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
             {translations?.socialCategory || 'Social Category'}
-          </label>
+
+              <Tooltip
+                text="Some schemes are available only for specific categories such as SC, ST or OBC."
+              />
+              </label>
           <select
             value={filters.socialCategory || ''}
             onChange={(e) => onFilterChange('socialCategory', e.target.value || undefined)}
@@ -287,6 +300,10 @@ export const EligibilityForm: React.FC<EligibilityFormProps> = ({
         <div className="mb-4">
           <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
             {translations?.womenFarmer || 'Are you a woman farmer?'}
+
+            <Tooltip
+              text="Some agricultural welfare schemes provide additional benefits for women farmers."
+            />
           </label>
           <div className="flex gap-4">
             <label className="flex items-center gap-2 cursor-pointer">
@@ -330,7 +347,11 @@ export const EligibilityForm: React.FC<EligibilityFormProps> = ({
           />
           <label htmlFor="aadhaar" className={`cursor-pointer ${labelClass}`}>
             {translations?.aadhaarAvailable || 'Aadhaar Card Available'}
-          </label>
+
+            <Tooltip
+              text="Many schemes require Aadhaar verification before benefits can be claimed."
+            />
+            </label>
         </div>
 
         {/* Bank Account */}
@@ -344,6 +365,10 @@ export const EligibilityForm: React.FC<EligibilityFormProps> = ({
           />
           <label htmlFor="bankAccount" className={`cursor-pointer ${labelClass}`}>
             {translations?.bankAccountLinked || 'Bank Account Linked'}
+
+            <Tooltip
+              text="Government benefits are usually transferred directly to your bank account through DBT."
+            />
           </label>
         </div>
       </div>
