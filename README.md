@@ -417,6 +417,9 @@ cd KisanAI
 # 2. Install dependencies
 npm install
 
+# Generate local demo scheme data
+npm run seed:demo
+
 # 3. Configure environment variables
 cp .env.example .env.local
 # Edit .env.local with your API keys
