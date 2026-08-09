@@ -62,7 +62,7 @@ export default function StatsSection() {
       {/* Background effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/10"></div>
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-primary/20 to-accent/20 dark:from-primary/10 dark:to-accent/10 rounded-full blur-[150px]"></div>
-      
+
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
         {/* Section header */}
         <div className="text-center mb-16 sm:mb-20">
@@ -75,25 +75,25 @@ export default function StatsSection() {
             {getStatTranslation(language, 'ourImpact')}
           </h2>
         </div>
-        
+
         {/* Stats grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           {stats.map((stat, idx) => {
             const Icon = stat.icon;
             const translatedLabel = getStatTranslation(language, stat.label);
-            
+
             return (
-              <div 
-                key={idx} 
+              <div
+                key={idx}
                 className="group relative overflow-hidden rounded-3xl bg-card/80 dark:bg-card/50 backdrop-blur-sm border-2 border-border/50 dark:border-border/30 hover:border-primary/50 dark:hover:border-primary/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/20 dark:hover:shadow-primary/10"
               >
                 {/* Gradient overlay on hover */}
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10 dark:from-primary/20 dark:to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
+
                 {/* Shimmer effect */}
                 <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
-                
-                <div className="relative text-center p-6 sm:p-8 z-10">
+
+                <div className="relative text-center p-6 sm:p-8 z-10 h-full flex flex-col items-center justify-between">
                   {/* Icon container */}
                   <div className="relative inline-block mb-5">
                     <div className="w-16 sm:w-20 h-16 sm:h-20 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-xl group-hover:shadow-2xl group-hover:shadow-primary/30 dark:group-hover:shadow-primary/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
@@ -102,14 +102,14 @@ export default function StatsSection() {
                     {/* Glow effect */}
                     <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary to-accent blur-xl opacity-0 group-hover:opacity-60 transition-opacity duration-500"></div>
                   </div>
-                  
+
                   {/* Stat value */}
                   <div className="text-4xl sm:text-5xl md:text-6xl font-black mb-3 bg-gradient-to-br from-primary via-accent to-primary bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300 break-words">
                     {stat.value}
                   </div>
-                  
-                  {/* Stat label - added break-words and min height for consistency */}
-                  <div className="text-sm sm:text-base font-bold text-muted-foreground group-hover:text-foreground transition-colors duration-300 break-words px-1 min-h-[2.5em] flex items-center justify-center">
+
+                  {/* Stat label */}
+                  <div className="text-sm sm:text-base font-bold text-muted-foreground group-hover:text-foreground transition-colors duration-300 break-words px-1 min-h-[2.5rem] flex items-center justify-center">
                     {translatedLabel}
                   </div>
                 </div>
@@ -117,7 +117,7 @@ export default function StatsSection() {
             );
           })}
         </div>
-        
+
         {/* Bottom decorative line */}
         <div className="mt-16 sm:mt-20 flex justify-center">
           <div className="w-48 h-1 bg-gradient-to-r from-transparent via-primary to-transparent rounded-full"></div>
