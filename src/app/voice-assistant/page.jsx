@@ -332,12 +332,12 @@ export default function VoiceAssistant() {
                     <div
                       className={`max-w-[85%] sm:max-w-xs md:max-w-md px-3 sm:px-4 py-2 rounded-lg ${
                         conversation.type === 'user'
-                          ? 'bg-primary text-primary-foreground'
+                          ? 'bg-green-700 text-white font-semibold tracking-wide'
                           : 'bg-muted text-foreground'
                       }`}
                     >
                       <p className="text-sm whitespace-pre-wrap break-words">{conversation.text}</p>
-                      <p className="text-xs opacity-70 mt-1">
+                      <p className="text-xs opacity-90 mt-1 text-white dark:text-white">
                         {conversation.timestamp.toLocaleTimeString(ttsLang)}
                       </p>
                     </div>
