@@ -332,7 +332,7 @@ export default function VoiceAssistant() {
                     <div
                       className={`max-w-[85%] sm:max-w-xs md:max-w-md px-3 sm:px-4 py-2 rounded-lg ${
                         conversation.type === 'user'
-                          ? 'bg-primary text-white dark:text-white font-medium'
+                          ? 'bg-green-700 text-white font-semibold tracking-wide'
                           : 'bg-muted text-foreground'
                       }`}
                     >
