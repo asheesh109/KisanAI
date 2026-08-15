@@ -34,6 +34,7 @@ const footerTranslations = {
     mainFeatures: 'Main Features',
     support: 'Support',
     contactUs: 'Contact Us',
+    governmentSchemes: 'Government Schemes',
     helpline: 'Helpline',
     address: 'Ministry of Agriculture, New Delhi, India',
     privacy: 'Privacy Policy',
@@ -45,6 +46,7 @@ const footerTranslations = {
     mainFeatures: 'मुख्य विशेषताएं',
     support: 'समर्थन',
     contactUs: 'संपर्क करें',
+    governmentSchemes: 'सरकारी योजनाएं',
     helpline: 'हेल्पलाइन',
     address: 'कृषि मंत्रालय, नई दिल्ली, भारत',
     privacy: 'गोपनीयता नीति',
@@ -56,6 +58,7 @@ const footerTranslations = {
     mainFeatures: 'मुख्य वैशिष्ट्ये',
     support: 'समर्थन',
     contactUs: 'संपर्क साधा',
+    governmentSchemes: 'सरकारी योजना',
     helpline: 'हेल्पलाइन',
     address: 'कृषी मंत्रालय, नवी दिल्ली, भारत',
     privacy: 'गोपनीयता धोरण',
@@ -67,6 +70,7 @@ const footerTranslations = {
     mainFeatures: 'મુખ્ય વિશેષતાઓ',
     support: 'સપોર્ટ',
     contactUs: 'અમારો સંપર્ક કરો',
+    governmentSchemes: 'સરકારી યોજનાઓ',
     helpline: 'હેલ્પલાઇન',
     address: 'કૃષિ મંત્રાલય, નવી દિલ્હી, ભારત',
     privacy: 'ગોપનીયતા નીતિ',
@@ -78,6 +82,7 @@ const footerTranslations = {
     mainFeatures: 'പ്രധാന സവിശേഷതകൾ',
     support: 'പിന്തുണ',
     contactUs: 'ഞങ്ങളെ ബന്ധപ്പെടുക',
+    governmentSchemes: 'സർക്കാർ പദ്ധതികൾ',
     helpline: 'ഹെൽപ്പ്‌ലൈൻ',
     address: 'കാർഷിക മന്ത്രാലയം, ന്യൂ ഡൽഹി, ഇന്ത്യ',
     privacy: 'സ്വകാര്യതാനയം',
@@ -119,7 +124,7 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-card text-foreground py-8 sm:py-12 border-t border-border">
+    <footer className="bg-card text-foreground py-8 sm:py-12 border-t-2 border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Top section with logo and copyright */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-6 sm:mb-8">
@@ -153,7 +158,7 @@ export default function Footer() {
         </div>
         
         {/* Navigation sections */}
-        <div className="mt-6 sm:mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+        <div className="mt-6 sm:mt-8 grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-8">
           {/* Main Features */}
           <div className="space-y-3 sm:space-y-4">
             <h3 className="text-base sm:text-lg font-semibold text-foreground">
@@ -192,6 +197,25 @@ export default function Footer() {
             </ul>
           </div>
           
+          {/* Government Schemes */}
+          <div className="space-y-3 sm:space-y-4">
+            <h3 className="text-base sm:text-lg font-semibold text-foreground">
+              {getFooterTranslation(language, 'governmentSchemes')}
+            </h3>
+            <ul className="space-y-2">
+              {navigation.government.map((item) => (
+                <li key={item.name}>
+                  <Link
+                    href={item.href}
+                    className="text-muted-foreground hover:text-foreground transition-colors text-sm break-words inline-block max-w-full"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* Contact Us */}
           <div className="space-y-3 sm:space-y-4">
             <h3 className="text-base sm:text-lg font-semibold text-foreground">
