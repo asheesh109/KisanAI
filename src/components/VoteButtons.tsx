@@ -81,7 +81,7 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
         disabled={loading}
         className={`flex items-center gap-1 px-3 py-1 rounded transition-colors ${
           userVote === 'upvote'
-            ? 'bg-green-600 text-white'
+            ? 'bg-green-600 text-white border border-green-600'
             : 'bg-white text-green-600 hover:bg-green-100 border border-green-300'
         } disabled:opacity-50`}
       >
@@ -98,7 +98,7 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
         disabled={loading}
         className={`flex items-center gap-1 px-3 py-1 rounded transition-colors ${
           userVote === 'downvote'
-            ? 'bg-red-600 text-white'
+            ? 'bg-red-600 text-white border border-red-600'
             : 'bg-white text-red-600 hover:bg-red-100 border border-red-300'
         } disabled:opacity-50`}
       >
