@@ -1,51 +1,62 @@
-import "./globals.css";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import { ThemeProvider } from "@/components/theme-provider";
-import { LanguageProvider } from "@/contexts/LanguageContext";
-import OfflineBanner from "@/components/OfflineBanner";
+"use client";
+import React, { useState } from 'react';
+import { usePreferences } from '@/contexts/PreferencesContext';
 
-export const metadata = {
-  title: "KisanAI - AI-Powered Farming Assistant | किसान AI सहायक",
-  description: "AI-powered farmer assistant for Indian farmers. Get farming advice, weather updates, market prices, and government scheme information.",
-  manifest: '/manifest.json',
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'black-translucent',
-    title: 'KisanAI',
-  },
-  formatDetection: {
-    telephone: false,
-  },
-};
+export default function UserPreferencesModal() {
+  const { preferences, setPreferences } = usePreferences();
+  const [isOpen, setIsOpen] = useState(false);
+  const [region, setRegion] = useState(preferences.region || '');
 
-export default function RootLayout({ children }) {
+  const handleSave = () => {
+    setPreferences((prev) => ({
+      ...prev,
+      region: region,
+    }));
+    setIsOpen(false);
+  };
+
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#10b981" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="KisanAI" />
-      </head>
-      <body className="antialiased min-h-screen flex flex-col font-sans">
-        <ThemeProvider
-          defaultTheme="system"
-          storageKey="kisanai-theme"
-        >
-          <LanguageProvider>
-            <OfflineBanner />
+    <div className="p-2">
+      <button 
+        onClick={() => setIsOpen(true)}
+        className="px-3 py-1 bg-green-600 text-white rounded-md text-sm hover:bg-green-700 transition"
+      >
+        ⚙️ Local Preferences
+      </button>
+
+      {isOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-80">
+            <h3 className="text-lg font-bold mb-4 dark:text-white">Farmer Preferences</h3>
             
-            <Header />
-            <main className="flex-1">
-              {children}
-            </main>
-            <Footer />
-          </LanguageProvider>
-        </ThemeProvider>
-      </body>
-    </html>
+            <label className="block text-sm font-medium mb-1 dark:text-gray-200">
+              Your Region / State:
+            </label>
+            <input
+              type="text"
+              value={region}
+              onChange={(e) => setRegion(e.target.value)}
+              placeholder="e.g. Uttar Pradesh"
+              className="w-full p-2 border rounded-md mb-4 dark:bg-gray-700 dark:text-white"
+            />
+
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setIsOpen(false)}
+                className="px-3 py-1 text-gray-500 hover:text-gray-700"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                className="px-4 py-1 bg-green-600 text-white rounded-md hover:bg-green-700"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

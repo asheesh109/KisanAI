@@ -143,7 +143,11 @@ export const FarmersExperienceFeed: React.FC = () => {
             disabled={submitting}
           />
 
-          {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
+          {error && (
+              <div className="mt-3 p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 text-red-700 dark:text-red-400 text-sm rounded-lg break-words max-w-full">
+    {error}
+          </div>
+          )}
 
           <div className="flex items-center justify-between mt-4">
             <p className="text-xs text-gray-500">👤 Posted as Guest (no login needed)</p>
