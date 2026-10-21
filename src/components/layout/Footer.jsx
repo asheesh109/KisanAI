@@ -1,8 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { Sprout, Phone, Mail, MapPin } from 'lucide-react'
+import { Sprout, Phone, Mail, MapPin, Settings } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { usePreferences } from '@/contexts/PreferencesContext'
+import UserPreferencesModal from '@/components/UserPreferencesModal'
 
 const navigation = {
   main: [
@@ -27,7 +29,7 @@ const navigation = {
   ],
 }
 
-// Local translations for footer specific content
+// English/Hindi UI labels
 const footerTranslations = {
   en: {
     empoweringFarmers: 'Empowering farmers with AI technology',
@@ -50,78 +52,21 @@ const footerTranslations = {
     privacy: 'गोपनीयता नीति',
     terms: 'सेवा की शर्तें',
     contact: 'संपर्क करें'
-  },
-  mr: {
-    empoweringFarmers: 'शेतकऱ्यांना AI तंत्रज्ञानाद्वारे सक्षम करणे',
-    mainFeatures: 'मुख्य वैशिष्ट्ये',
-    support: 'समर्थन',
-    contactUs: 'संपर्क साधा',
-    helpline: 'हेल्पलाइन',
-    address: 'कृषी मंत्रालय, नवी दिल्ली, भारत',
-    privacy: 'गोपनीयता धोरण',
-    terms: 'सेवा अटी',
-    contact: 'संपर्क साधा'
-  },
-  gu: {
-    empoweringFarmers: 'AI ટેક્નોલોજી સાથે ખેડૂતોને સશક્ત બનાવવું',
-    mainFeatures: 'મુખ્ય વિશેષતાઓ',
-    support: 'સપોર્ટ',
-    contactUs: 'અમારો સંપર્ક કરો',
-    helpline: 'હેલ્પલાઇન',
-    address: 'કૃષિ મંત્રાલય, નવી દિલ્હી, ભારત',
-    privacy: 'ગોપનીયતા નીતિ',
-    terms: 'સેવાની શરતો',
-    contact: 'સંપર્ક કરો'
-  },
-  ml: {
-    empoweringFarmers: 'AI സാങ്കേതികവിദ്യയിലൂടെ കർഷകരെ ശാക്തീകരിക്കുന്നു',
-    mainFeatures: 'പ്രധാന സവിശേഷതകൾ',
-    support: 'പിന്തുണ',
-    contactUs: 'ഞങ്ങളെ ബന്ധപ്പെടുക',
-    helpline: 'ഹെൽപ്പ്‌ലൈൻ',
-    address: 'കാർഷിക മന്ത്രാലയം, ന്യൂ ഡൽഹി, ഇന്ത്യ',
-    privacy: 'സ്വകാര്യതാനയം',
-    terms: 'സേവന വ്യവസ്ഥകൾ',
-    contact: 'ബന്ധപ്പെടുക'
   }
 }
 
-// Function to get footer translation
 const getFooterTranslation = (language, key) => {
-  return footerTranslations[language]?.[key] || footerTranslations.en[key] || key;
+  return footerTranslations[language]?.[key] || footerTranslations.en[key] || key
 }
 
 export default function Footer() {
   const { language, t } = useLanguage()
-
-  // Get shorter navigation names for Malayalam
-  const getNavigationName = (key) => {
-    if (language === 'ml') {
-      const malayalamShortNames = {
-        'home': 'ഹോം',
-        'voiceAssistant': 'വോയ്‌സ് സഹായി',
-        'cropAnalysis': 'വിള വിശകലനം',
-        'weather': 'കാലാവസ്ഥ',
-        'marketPrices': 'വിപണി വിലകൾ',
-        'governmentSchemes': 'സർക്കാർ പദ്ധതികൾ',
-        'help': 'സഹായം',
-        'contact': 'ബന്ധപ്പെടുക',
-        'privacy': 'സ്വകാര്യത',
-        'terms': 'നിബന്ധനകൾ',
-        'PM-KISAN': 'പിഎം-കിസാൻ',
-        'Soil Health Card': 'മണ്ണ് ആരോഗ്യ കാർഡ്',
-        'Kisan Credit Card': 'കിസാൻ ക്രെഡിറ്റ് കാർഡ്',
-        'Fasal Bima Yojana': 'ഫസൽ ബിമ യോജന'
-      }
-      return malayalamShortNames[key] || t(key)
-    }
-    return t(key)
-  }
+  const { preferences } = usePreferences()
 
   return (
     <footer className="bg-card text-foreground py-8 sm:py-12 border-t border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        {/* Top section with logo and copyright */}
+        {/* Top section: Logo, Copyright, and Action Links */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-6 sm:mb-8">
           <div className="flex items-center space-x-2 mb-4 sm:mb-0">
             <Sprout className="h-6 sm:h-8 w-6 sm:w-8 text-primary" />
@@ -130,7 +75,7 @@ export default function Footer() {
           <p className="text-muted-foreground text-center md:text-left text-sm sm:text-base break-words px-2">
             © 2024 KisanAI. {getFooterTranslation(language, 'empoweringFarmers')}
           </p>
-          <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mt-4 sm:mt-0">
+          <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-4 mt-4 sm:mt-0">
             <Link 
               href="#" 
               className="text-muted-foreground hover:text-foreground transition-colors text-sm whitespace-nowrap"
@@ -149,10 +94,13 @@ export default function Footer() {
             >
               {getFooterTranslation(language, 'contact')}
             </Link>
+
+            {/* Preferences Modal Component */}
+            <UserPreferencesModal />
           </div>
         </div>
-        
-        {/* Navigation sections */}
+
+        {/* Navigation Sections */}
         <div className="mt-6 sm:mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
           {/* Main Features */}
           <div className="space-y-3 sm:space-y-4">
@@ -166,13 +114,13 @@ export default function Footer() {
                     href={item.href} 
                     className="text-muted-foreground hover:text-foreground transition-colors text-sm break-words inline-block max-w-full"
                   >
-                    {getNavigationName(item.name)}
+                    {t(item.name)}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
-          
+
           {/* Support */}
           <div className="space-y-3 sm:space-y-4">
             <h3 className="text-base sm:text-lg font-semibold text-foreground">
@@ -185,14 +133,14 @@ export default function Footer() {
                     href={item.href} 
                     className="text-muted-foreground hover:text-foreground transition-colors text-sm break-words inline-block max-w-full"
                   >
-                    {getNavigationName(item.name)}
+                    {t(item.name)}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
-          
-          {/* Contact Us */}
+
+          {/* Contact Details */}
           <div className="space-y-3 sm:space-y-4">
             <h3 className="text-base sm:text-lg font-semibold text-foreground">
               {getFooterTranslation(language, 'contactUs')}
@@ -216,13 +164,19 @@ export default function Footer() {
                   {getFooterTranslation(language, 'address')}
                 </span>
               </div>
+
+              {/* Display Saved Region Preference */}
+              {preferences?.region && (
+                <div className="flex items-center space-x-2 text-emerald-600 font-medium pt-2">
+                  <Settings className="h-4 w-4 flex-shrink-0" />
+                  <span>Region: {preferences.region}</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        
-
-        {/* Bottom note */}
+        {/* Bottom Note */}
         <div className="mt-8 pt-6 border-t border-border text-center">
           <p className="text-xs text-muted-foreground break-words">
             {t('governmentInitiativeNote') || 'An initiative to support farmers with modern technology.'}
