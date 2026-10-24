@@ -1,5 +1,5 @@
 'use client'
-
+import UserPreferencesModal from "@/components/UserPreferencesModal";
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { Menu, X, Sprout, Globe, Sun, Moon } from 'lucide-react'
