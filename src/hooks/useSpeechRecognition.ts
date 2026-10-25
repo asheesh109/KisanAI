@@ -2,24 +2,37 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react'
 
-export const useSpeechRecognition = (options = {}) => {
+interface SpeechRecognitionOptions {
+  lang?: string
+  continuous?: boolean
+  interimResults?: boolean
+}
+
+// Extend global window interface for Web Speech API
+declare global {
+  interface Window {
+    SpeechRecognition: any
+    webkitSpeechRecognition: any
+  }
+}
+
+export const useSpeechRecognition = (options: SpeechRecognitionOptions = {}) => {
   const { lang = 'en-IN', continuous = false, interimResults = true } = options
 
-  const [isListening, setIsListening] = useState(false)
-  const [transcript, setTranscript] = useState('')
-  const [confidence, setConfidence] = useState(0)
-  const [error, setError] = useState(null)
-  const [isSupported, setIsSupported] = useState(false)
+  const [isListening, setIsListening] = useState<boolean>(false)
+  const [transcript, setTranscript] = useState<string>('')
+  const [confidence, setConfidence] = useState<number>(0)
+  const [error, setError] = useState<string | null>(null)
+  const [isSupported, setIsSupported] = useState<boolean>(false)
 
-  const recognitionRef = useRef(null)
-  const interimTranscriptRef = useRef('')
+  const recognitionRef = useRef<any>(null)
+  const interimTranscriptRef = useRef<string>('')
 
   // Initialize Speech Recognition on mount
   useEffect(() => {
-    // Check if browser supports Web Speech API
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition
 
-    if (!SpeechRecognition) {
+    if (!SpeechRecognitionAPI) {
       setIsSupported(false)
       setError('Speech Recognition not supported in this browser')
       return
@@ -27,7 +40,7 @@ export const useSpeechRecognition = (options = {}) => {
 
     setIsSupported(true)
 
-    const recognition = new SpeechRecognition()
+    const recognition = new SpeechRecognitionAPI()
     recognition.continuous = continuous
     recognition.interimResults = interimResults
     recognition.lang = lang
@@ -40,24 +53,24 @@ export const useSpeechRecognition = (options = {}) => {
       interimTranscriptRef.current = ''
     }
 
-    recognition.onresult = (event) => {
+    recognition.onresult = (event: any) => {
       let interimTranscript = ''
       let finalTranscript = ''
       let maxConfidence = 0
 
       for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcript = event.results[i][0].transcript
-        const confidence = event.results[i][0].confidence
+        const currentTranscript = event.results[i][0].transcript
+        const currentConfidence = event.results[i][0].confidence
 
         // Track highest confidence
-        if (confidence > maxConfidence) {
-          maxConfidence = confidence
+        if (currentConfidence > maxConfidence) {
+          maxConfidence = currentConfidence
         }
 
         if (event.results[i].isFinal) {
-          finalTranscript += transcript + ' '
+          finalTranscript += currentTranscript + ' '
         } else {
-          interimTranscript += transcript
+          interimTranscript += currentTranscript
         }
       }
 
@@ -66,7 +79,7 @@ export const useSpeechRecognition = (options = {}) => {
       setConfidence(maxConfidence)
     }
 
-    recognition.onerror = (event) => {
+    recognition.onerror = (event: any) => {
       console.error('Speech recognition error:', event.error)
       setError(event.error)
       setIsListening(false)

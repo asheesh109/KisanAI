@@ -34,7 +34,7 @@ export default function Home() {
     }
   };
 
-  const currentAbout = aboutContent[language] || aboutContent.en;
+ const currentAbout = aboutContent[language as keyof typeof aboutContent] || aboutContent.en;
 
   return (
     <div className="min-h-screen">
